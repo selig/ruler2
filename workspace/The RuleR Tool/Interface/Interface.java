@@ -195,14 +195,5 @@ public class Interface {
 	      mainFrame.add(ObjectLabel);
 	      mainFrame.setVisible(true);	      
 	   }
-
-	   /*private class ButtonClickListener implements ActionListener{
-	      public void actionPerformed(ActionEvent e) {
-	         String command = e.getActionCommand();  
-	         if( command.equals( "Add" ))  {
-	            statusLabel.setText("Added Rule "+ RuleNameArea.getText());
-	         }  	
-	      }		
-	   }*/
 	
 }
