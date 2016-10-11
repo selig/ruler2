@@ -1,0 +1,5 @@
+com.android.ide.eclipse.adt.attrSort=logical
+com.android.ide.eclipse.adt.forceErrorNativeLibInJar=false
+com.android.ide.eclipse.adt.resAutoRefresh=false
+com.android.ide.eclipse.adt.skipPostCompileOnFileSave=false
+eclipse.preferences.version=1

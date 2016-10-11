@@ -1,0 +1,24 @@
+import java.util.ArrayList;
+
+
+public class Rule {
+	
+	private final int ruleID;
+	private final String ruleName;
+	private final int ruleModifier;
+	private Object[] ruleParameter;
+	private ArrayList<Rule_Binding>[] ruleBinding;
+	
+	
+	public Rule(int id,String name,int modifier) {
+		ruleID = id;
+		ruleName = name;
+		ruleModifier = modifier;
+	}
+	
+	public String toString() {
+		return ruleID + " " + ruleName + " " + ruleModifier;
+	}
+	
+
+}
