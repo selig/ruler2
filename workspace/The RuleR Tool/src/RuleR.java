@@ -5,9 +5,9 @@ public class RuleR {
 		
 		System.out.println("Hello");
 		
-		Rule myRule = new Rule(1,"rule1",1);
+		//Rule myRule = new Rule(1,"rule1",1);
 		
-		System.out.println(myRule);
+		//System.out.println(myRule);
 		
 	}
 

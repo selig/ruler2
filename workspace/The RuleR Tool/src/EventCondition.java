@@ -1,4 +1,4 @@
 
-public class Event_Condition {
+public class EventCondition {
 
 }

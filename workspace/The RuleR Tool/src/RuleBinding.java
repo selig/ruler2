@@ -1,4 +1,4 @@
 
-public class Rule_Binding {
+public class RuleBinding {
 
 }

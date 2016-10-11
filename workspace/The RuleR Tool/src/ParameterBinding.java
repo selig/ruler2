@@ -1,5 +1,5 @@
 
-public class Parameter_Binding {
+public class ParameterBinding {
 	
 	
 

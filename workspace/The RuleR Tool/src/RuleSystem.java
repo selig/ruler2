@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 
 
-public class Rule_System {
+public class RuleSystem {
 	
 	private ArrayList<Rule> list;
 	
 	
-	public Rule_System() {
+	public RuleSystem() {
 		list = new ArrayList<Rule>();
 	}
 

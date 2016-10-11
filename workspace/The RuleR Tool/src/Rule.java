@@ -5,50 +5,50 @@ public class Rule {
 	
 	private final int ruleID;
 	private final String ruleName;
-	private final int ruleModifier;
-	private Object[] ruleParameter;
-	private ArrayList<Rule_Binding>[] ruleBinding;
+	public enum Modifier {Always, Step, Skip, Fail}
+	private final Modifier ruleModifier;
+	private String[] ruleParameter;
+	private ArrayList<RuleBinding>[] ruleBinding;
 	
 	
-	public Rule(int id,String name,int modifier) {
+	public Rule(int id,String name,String mod, String parameter) {
 		ruleID = id;
 		ruleName = name;
-		ruleModifier = modifier;
+		switch(mod) {
+		case "Always":
+			ruleModifier = Modifier.Always;
+		break;
+		case "Skip":
+			ruleModifier = Modifier.Skip;
+			break;
+		case "Step":
+			ruleModifier = Modifier.Step;
+			break;
+		default:
+			ruleModifier = Modifier.Fail;
+		}
+		ruleParameter = parameter.trim().split(",");
 	}
 	
 	public String toString() {
-		return ruleModifierString(ruleModifier) + " " + ruleName;
+		return ruleModifier + " " + ruleName + "("+ getParameters() +")";
 	}
 
-	private String ruleModifierString(int modifier) {
+	private String getParameters() {
 		
-		switch (modifier) {
-		case 1:
-			return "always";
-		case 2:
-			return "state";
-		case 3:
-			return "step";
-		default:
-			return "unknown";
+		try {
+			
+			String all = "";
+			
+			for(String par : ruleParameter) {
+				all += par + ", ";
+			}
+				
+			all = all.substring(0, all.length()-2);
+			
+			return all;
+		} catch(Exception e){
+			return "";
 		}
-		
 	}
-	
-	public static int modifierToInt(String modifier) {
-		switch (modifier) {
-		case "always":
-			return 1;
-		case "state":
-			return 2;
-		case "step":
-			return 3;
-		case "":
-			return -1;
-		default:
-			return 0;
-		}		
-	}
-	
-
 }

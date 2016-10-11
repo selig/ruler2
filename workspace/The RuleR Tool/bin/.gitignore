@@ -12,3 +12,12 @@
 /gui2$1.class
 /gui2$2.class
 /gui2.class
+/RuleSystem.class
+/ActiveRuleSet.class
+/EventCondition.class
+/ParameterBinding.class
+/RuleActivation.class
+/RuleBinding.class
+/Rule$Modifier.class
+/Interface$3.class
+/Interface$eventPanele.class

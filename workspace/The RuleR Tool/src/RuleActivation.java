@@ -1,4 +1,4 @@
 
-public class Rule_Activation {
+public class RuleActivation {
 
 }
