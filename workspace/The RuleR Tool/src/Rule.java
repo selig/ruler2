@@ -1,19 +1,26 @@
 import java.util.ArrayList;
 
+import sun.security.action.GetBooleanAction;
+
 
 public class Rule {
+	public enum Modifier {Always, Step, Skip, Fail}
+	public enum ExtraModifier {Start, Forbidden, Assert, None}
+	
 	
 	private final int ruleID;
+	private final int ruleNameID;
 	private final String ruleName;
-	public enum Modifier {Always, Step, Skip, Fail}
+	private final ExtraModifier extraModifier;
 	private final Modifier ruleModifier;
 	private String[] ruleParameter;
-	private ArrayList<RuleBinding>[] ruleBinding;
+	private ArrayList<RuleBinding> ruleBinding;
 	
 	
-	public Rule(int id,String name,String mod, String parameter) {
-		ruleID = id;
+	public Rule(String name,String mod, String extMod, String parameter) {
+		ruleID = GlobalVariables.getNextRuleID();
 		ruleName = name;
+		ruleNameID = GlobalFunctions.hashName(ruleName);
 		switch(mod) {
 		case "Always":
 			ruleModifier = Modifier.Always;
@@ -27,11 +34,27 @@ public class Rule {
 		default:
 			ruleModifier = Modifier.Fail;
 		}
+		
+		switch(extMod) {
+		case "Start":
+			extraModifier = ExtraModifier.Start;
+		break;
+		case "Forbidden":
+			extraModifier = ExtraModifier.Forbidden;
+			break;
+		case "Assert":
+			extraModifier = ExtraModifier.Assert;
+			break;
+		default:
+			extraModifier = ExtraModifier.None;
+		}
+		
 		ruleParameter = parameter.trim().split(",");
+		ruleBinding = new ArrayList<RuleBinding>();
 	}
 	
 	public String toString() {
-		return ruleModifier + " " + ruleName + "("+ getParameters() +")";
+		return extraModifier + " " +ruleModifier + " " + ruleName + "("+ getParameters() +") { " + getRuleBindingsString() + " }";
 	}
 
 	private String getParameters() {
@@ -50,5 +73,31 @@ public class Rule {
 		} catch(Exception e){
 			return "";
 		}
+	}
+
+	public void addRuleBinding(RuleBinding ruleBinding) {
+		this.ruleBinding.add(ruleBinding);
+	}
+	
+	public String getRuleBindingsString() {
+		String bindingString = "";
+		
+		for(RuleBinding binding : ruleBinding) {
+			bindingString+= "[" + binding.toString() + "]";
+		}
+		
+		return bindingString;
+	}
+
+	public int getRuleID() {
+		return ruleID;
+	}
+
+	public Integer getRuleNameID() {
+		return ruleNameID;
+	}
+
+	public String getRuleName() {
+		return ruleName;
 	}
 }
