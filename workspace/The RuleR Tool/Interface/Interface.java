@@ -1,11 +1,16 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import javax.swing.*;
 
 
 public class Interface {
+	
+	private static long startTime = 0;
+	private static long finishTime = 0;
+	
 	
 	private static String RULE_EVENT_ERROR = "There was some error while initialising rule event";
 	
@@ -21,15 +26,15 @@ public class Interface {
 	
 
 	private JFrame mainFrame;
-    private JLabel ruleModifierLabel;
+    //private JLabel ruleModifierLabel;
     private JLabel ruleNameLabel;
     private JLabel ruleParameterLabel;
-    private JLabel ruleEventLabel;
-    private JLabel ruleConseqLabel;
+    //private JLabel ruleEventLabel;
+    //private JLabel ruleConseqLabel;
     private JLabel headerLabel;
     private JLabel statusLabel;
     private JPanel controlPanel;
-    private JPanel controlPanel2;
+    //private JPanel controlPanel2;
     private JPanel controlPanel4;
     private JPanel controlPanel5;
     private JPanel fieldPanel;
@@ -66,7 +71,7 @@ public class Interface {
  	      headerLabel = new JLabel("",JLabel.CENTER );
  	      statusLabel = new JLabel("",JLabel.CENTER); 
  	      
- 	      ruleModifierLabel = new JLabel("Rule Modifier",JLabel.LEFT);
+ 	      //ruleModifierLabel = new JLabel("Rule Modifier",JLabel.LEFT);
  	      ruleNameLabel = new JLabel("Rule Name",JLabel.LEFT);
  	      ruleParameterLabel = new JLabel("Rule Parameter",JLabel.LEFT);
  	      
@@ -213,18 +218,7 @@ public class Interface {
     
 	private void AddRule() {
 		
-		/*for (Component c : inside.getComponents()) {
-	    	  System.out.println(">" + c);
-	    	  if (c instanceof eventPanele) {
-	    		  RuleBinding binding = ((eventPanele) c).ruleBinding(1);
-	    		  if(binding == null) eventError();
-	    		  //else myRule.addRuleBinding(binding);
-	    	  }
-		  }
-		
-		end();*/
-		
-		
+		time();
 		
 		String ruleName = RuleNameArea.getText();
   	  
@@ -294,10 +288,23 @@ public class Interface {
 
 	private void showRules(){
 	      headerLabel.setText("Rule Added"); 
-	      ObjectLabel.setText(ObjectLabel.getText() + " | " + ruleSystem.getRules());      
+	      ObjectLabel.setText(/*ObjectLabel.getText() + " | " +*/ ruleSystem.getRules() + "<! "+time() +" !>");      
 	   }
 
+	private String time() {
+		finishTime = System.currentTimeMillis();
+		
+		long time = finishTime - startTime;
+		
+		startTime = System.currentTimeMillis();
+		
+		return (time)+"ms";
+	}
+
 	protected void end() {
+		
+		System.out.println(time());
+		
 		System.exit(0);	
 	}
 	
@@ -363,8 +370,8 @@ public class Interface {
 		    
 		
 		    add(eventPanel);
-		    add(eventPanel2);
 		    add(eventPanel3);
+		    add(eventPanel2);
 		    add(eventPanel4Container);
 		    add(eventPanel5);
 		}
@@ -375,7 +382,12 @@ public class Interface {
 			String eventName = eventNameArea.getText();
 			String eventParameterString = eventParameterArea.getText();
 			
-			int eventParameterCount = eventParameterString.split(",").length;
+			/*
+			 * Add Check that parameters are not the same
+			 * isDuplicate(); 
+			 * */
+			
+			String[] eventParameterCount = eventParameterString.trim().split(",");
 			
 			
 			//System.out.println("--> " + eventName + " " + eventParameterString + " " + eventParameterCount);
@@ -428,7 +440,11 @@ public class Interface {
 		public ConsequentRule getConsequentRule() {
 			
 			String consequentNameString = eventConsequentArea.getText();
-			int eventConsequentParameters = eventConsequentParameterArea.getText().split(",").length;
+			String[] eventConsequentParameters = eventConsequentParameterArea.getText().trim().split(",");
+			
+			/*
+			 * Add Check that parameters are not the same 
+			 * */
 			
 			if(!consequentNameString.equals(""))
 				return new ConsequentRule(consequentNameString, eventConsequentParameters);
