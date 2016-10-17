@@ -381,28 +381,26 @@ public class Interface {
 			
 			String eventName = eventNameArea.getText();
 			String eventParameterString = eventParameterArea.getText();
+			String eventConditionString = eventConditionArea.getText();
 			
 			/*
 			 * Add Check that parameters are not the same
 			 * isDuplicate(); 
 			 * */
 			
-			String[] eventParameterCount = eventParameterString.trim().split(",");
-			
-			
-			//System.out.println("--> " + eventName + " " + eventParameterString + " " + eventParameterCount);
+			String[] eventParameters = eventParameterString.trim().split(",");
+			String[] eventConditions = eventConditionString.trim().split(",");
 			
 			ArrayList<ConsequentRule> consequentRules = new ArrayList<ConsequentRule>();
 			
 			for (Component c : eventPanel4Container.getComponents()) {
-		    	  //System.out.println(">" + c);
 		    	  if (c instanceof consequentPanel) {
 				  	ConsequentRule consequent = ((consequentPanel) c).getConsequentRule();
 	    		  	if(consequent != null) consequentRules.add(consequent);
 		    	  }
 			}
 			
-			if(eventName.length() > 0 )	return new RuleBinding(RuleID,eventName,eventName.length(),eventParameterCount,consequentRules);
+			if(eventName.length() > 0 )	return new RuleBinding(RuleID,eventName,eventName.length(),eventParameters,eventConditions,consequentRules);
 			else return null;
 		}
 		

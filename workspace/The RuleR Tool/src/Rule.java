@@ -19,7 +19,7 @@ public class Rule {
 	private final Modifier ruleModifier;
 	private final Parameter[] parameterArray;
 	private int[] ruleParameterIndexes;
-	private String[] ruleParameter;
+	private String[] ruleParameterStrings;
 	private ArrayList<RuleBinding> ruleBinding;
 	
 	
@@ -29,7 +29,7 @@ public class Rule {
 		ruleNameID = GlobalFunctions.hashName(ruleName);
 		ruleModifier = getModifier(mod);		
 		extraModifier = getExtraModifier(extMod);
-		ruleParameter = parameter.trim().split(COMMA);
+		ruleParameterStrings = parameter.trim().split(COMMA);
 		ruleBinding = new ArrayList<RuleBinding>();
 		parameterArray = getParameterArray();
 	}
@@ -38,16 +38,28 @@ public class Rule {
 		
 		ArrayList<Parameter> parameters = new ArrayList<Parameter>();
 		
-		for(String param : ruleParameter) {
+		// Get different parameters from Rule
+		for(String param : ruleParameterStrings) {
 			parameters.add(new Parameter(param));
 		}
-	
+		
+		// Get different parameters from Event Parameters
 		for(RuleBinding ruleBind : ruleBinding) {
 			for(String param : ruleBind.getEventParamArray()) {
-				if(GlobalFunctions.exists(param, ruleParameter)) continue;
+				if(GlobalFunctions.exists(param, ruleParameterStrings)) continue;
 				else parameters.add(new Parameter(param));
 			}
 		}
+		*/
+		// Get different parameters from Event Conditions
+		for(RuleBinding ruleBind : ruleBinding) {
+			for(String param : ruleBind.getEventParamArray()) {
+				if(GlobalFunctions.exists(param, ruleParameterStrings)) continue;
+				else parameters.add(new Parameter(param));
+			}
+		}
+		
+		// Get different parameters from Consequent Rule Parameters
 		
 		int numOfParameters = parameters.size();
 		
@@ -57,10 +69,10 @@ public class Rule {
 			tempParamArray[i] = parameters.get(i);
 		}
 		
-		ruleParameterIndexes = new int[ruleParameter.length];
+		ruleParameterIndexes = new int[ruleParameterStrings.length];
 		
 		for(int i=0; i< ruleParameterIndexes.length;i++) {
-			ruleParameterIndexes[i] = GlobalFunctions.getParamIndex(ruleParameter[i],tempParamArray);
+			ruleParameterIndexes[i] = GlobalFunctions.getParamIndex(ruleParameterStrings[i],tempParamArray);
 		}
 		
 		for(RuleBinding ruleBind : ruleBinding) {
@@ -68,10 +80,6 @@ public class Rule {
 		}
 		
 		return tempParamArray;
-	}
-
-	public String toString() {
-		return extraModifier + " " +ruleModifier + " " + ruleName + "("+ GlobalFunctions.getParameters(ruleParameter) +") { " + getRuleBindingsString() + " }";
 	}
 
 	private ExtraModifier getExtraModifier(String extMod) {
@@ -126,4 +134,9 @@ public class Rule {
 	public String getRuleName() {
 		return ruleName;
 	}
+	
+	public String toString() {
+		return extraModifier + " " +ruleModifier + " " + ruleName + "("+ GlobalFunctions.getParameters(ruleParameterStrings) +") { " + getRuleBindingsString() + " }";
+	}
+
 }

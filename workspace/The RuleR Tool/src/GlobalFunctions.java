@@ -18,7 +18,7 @@ public class GlobalFunctions {
 			if(string.equals(array[i].getName())) return i;
 		}
 				
-		return 0;
+		return -1;
 	}
 	
 	public static String getParameters(String[] array) {
@@ -31,11 +31,15 @@ public class GlobalFunctions {
 				finalString += arrayString + ", ";
 			}
 				
-			finalString = finalString.substring(0, finalString.length()-2);
+			finalString = subStringLast(finalString,2);
 			
 			return finalString;
 		} catch(Exception e){
 			return "";
 		}
+	}
+	
+	public static String subStringLast(String string, int length) {
+		return string.substring(0, string.length()-length);
 	}
 }

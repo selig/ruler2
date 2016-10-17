@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 import sun.awt.GlobalCursorManager;
+import sun.font.CreatedFontTracker;
 
 
 public class RuleBinding {
@@ -11,21 +12,18 @@ public class RuleBinding {
 	private final String eventName;
 	private String[] eventParameterStrings;
 	private int[] eventParameterIndexes;
-	private EventCondition[] eventConditions;
+	private Condition[] eventConditions;
 	private ArrayList<ConsequentRule> consequentRules;
 	
 	
-	public RuleBinding(int ruleID,String eventName, int event,String[] par, ArrayList<ConsequentRule> consequentRules) {
+	public RuleBinding(int ruleID,String eventName, int event,String[] par, String[] conditions, ArrayList<ConsequentRule> consequentRules) {
 		this.ruleBindingID = GlobalVariables.getNextBindingCount();
 		this.ruleID = ruleID;
 		this.event = event;
 		this.eventName = eventName;
-		this.consequentRules = consequentRules;
 		this.eventParameterStrings = par;
-	}
-	
-	public String toString() {
-		return eventName + "(" + GlobalFunctions.getParameters(eventParameterStrings) + ")<" + /*eventConditions.toString()*/"-" + "> ¬> " + getConsequentRulesString() + " \n";  
+		this.eventConditions = createConditions(conditions);
+		this.consequentRules = consequentRules;
 	}
 
 	private String getConsequentRulesString() {
@@ -52,7 +50,7 @@ public class RuleBinding {
 		}
 		
 		// Initialise event Conditions
-		for(EventCondition eventCondition : eventConditions) {
+		for(Condition eventCondition : eventConditions) {
 			eventCondition.initializeParameterIndexes(tempParamArray);
 		}
 		
@@ -62,4 +60,32 @@ public class RuleBinding {
 		}
 	}
 	
+	private Condition[] createConditions(String[] conditions) {
+		Condition[] tempConditionArrayConditions = new Condition[conditions.length];
+		
+		int i = 0;
+		
+		for(String condition : conditions) {
+			tempConditionArrayConditions[i] = new Condition(condition);
+			i++;
+		}
+		
+		return tempConditionArrayConditions;
+	}
+	
+	private String getEventConditions() {
+		String finalString = "";
+		
+		for(Condition condition : eventConditions) {
+			finalString += condition.toString() + ", ";
+		}
+		
+		finalString = GlobalFunctions.subStringLast(finalString,2);
+
+		return finalString;
+	}
+	
+	public String toString() {
+		return eventName + "(" + GlobalFunctions.getParameters(eventParameterStrings) + ")<" + getEventConditions() + "> ¬> " + getConsequentRulesString() + " \n";
+	}
 }
