@@ -388,8 +388,8 @@ public class Interface {
 			 * isDuplicate(); 
 			 * */
 			
-			String[] eventParameters = eventParameterString.trim().split(",");
-			String[] eventConditions = eventConditionString.trim().split(",");
+			String[] eventParameters = GlobalFunctions.removeWhiteSpaces(eventParameterString).split(",");
+			String[] eventConditions = GlobalFunctions.removeWhiteSpaces(eventConditionString).split(",");
 			
 			ArrayList<ConsequentRule> consequentRules = new ArrayList<ConsequentRule>();
 			
@@ -438,7 +438,7 @@ public class Interface {
 		public ConsequentRule getConsequentRule() {
 			
 			String consequentNameString = eventConsequentArea.getText();
-			String[] eventConsequentParameters = eventConsequentParameterArea.getText().trim().split(",");
+			String[] eventConsequentParameters = GlobalFunctions.removeWhiteSpaces(eventConsequentParameterArea.getText()).split(",");
 			
 			/*
 			 * Add Check that parameters are not the same 

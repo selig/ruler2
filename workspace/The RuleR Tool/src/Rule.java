@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import sun.font.CreatedFontTracker;
 import sun.security.action.GetBooleanAction;
@@ -8,8 +9,8 @@ public class Rule {
 	
 	private static String COMMA = ",";
 	
-	public enum Modifier {Always, Step, Skip, Fail}
-	public enum ExtraModifier {Start, Forbidden, Assert, None}
+	public enum Modifier {Always, Step, Skip, Fail};
+	public enum ExtraModifier {Start, Forbidden, Assert, None};
 	
 	
 	private final int ruleID;
@@ -17,7 +18,8 @@ public class Rule {
 	private final String ruleName;
 	private final ExtraModifier extraModifier;
 	private final Modifier ruleModifier;
-	private final Parameter[] parameterArray;
+	private final Parameter[] parameters;
+	private HashMap<Integer, Variable> ruleVariables;
 	private int[] ruleParameterIndexes;
 	private String[] ruleParameterStrings;
 	private ArrayList<RuleBinding> ruleBinding;
@@ -29,9 +31,25 @@ public class Rule {
 		ruleNameID = GlobalFunctions.hashName(ruleName);
 		ruleModifier = getModifier(mod);		
 		extraModifier = getExtraModifier(extMod);
-		ruleParameterStrings = parameter.trim().split(COMMA);
+		ruleParameterStrings = GlobalFunctions.removeWhiteSpaces(parameter).split(COMMA);
 		ruleBinding = new ArrayList<RuleBinding>();
-		parameterArray = getParameterArray();
+		ruleVariables = new HashMap<Integer,Variable>();
+		parameters = getParameterArray();
+	}
+	
+	public void addVariable(Variable newVariable) {
+		ruleVariables.put(newVariable.getKey(), newVariable);
+	}
+	
+	public boolean containsVariable(String variableName) {
+		
+		Integer key = new Integer(GlobalFunctions.hashName(variableName));
+		
+		return ruleVariables.containsKey(key);
+	}
+	
+	public Variable getVariable(Integer key) {
+		return ruleVariables.get(key);		
 	}
 	
 	private Parameter[] getParameterArray() {
@@ -40,22 +58,22 @@ public class Rule {
 		
 		// Get different parameters from Rule
 		for(String param : ruleParameterStrings) {
-			parameters.add(new Parameter(param));
+			parameters.add(new Parameter(param, this));
 		}
 		
 		// Get different parameters from Event Parameters
 		for(RuleBinding ruleBind : ruleBinding) {
 			for(String param : ruleBind.getEventParamArray()) {
 				if(GlobalFunctions.exists(param, ruleParameterStrings)) continue;
-				else parameters.add(new Parameter(param));
+				else parameters.add(new Parameter(param, this));
 			}
 		}
-		*/
+		//*/
 		// Get different parameters from Event Conditions
 		for(RuleBinding ruleBind : ruleBinding) {
 			for(String param : ruleBind.getEventParamArray()) {
 				if(GlobalFunctions.exists(param, ruleParameterStrings)) continue;
-				else parameters.add(new Parameter(param));
+				else parameters.add(new Parameter(param, this));
 			}
 		}
 		

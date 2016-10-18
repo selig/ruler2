@@ -14,13 +14,19 @@ public class GlobalFunctions {
 
 	public static int getParamIndex(String string, Parameter[] array) {
 		
+		string = removeWhiteSpaces(string);
+		
 		for(int i=0;i<array.length;i++){
-			if(string.equals(array[i].getName())) return i;
+			if(string.equals(array[i].toString())) return i;
 		}
 				
 		return -1;
 	}
 	
+	public static String removeWhiteSpaces(String string) {
+		return string.replace("\\s", "");
+	}
+
 	public static String getParameters(String[] array) {
 		
 		try {

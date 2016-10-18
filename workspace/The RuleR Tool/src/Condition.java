@@ -57,7 +57,7 @@ public class Condition {
 	private String[] getParametersToStringArray(String conditionString) {
 		
 		if(conditionType == ONE) {
-			return conditionString.trim().split(getOperatorString());
+			return GlobalFunctions.removeWhiteSpaces(conditionString).split(getOperatorString());
 		} else return null;
 	}
 
@@ -85,7 +85,7 @@ public class Condition {
 			for(int i=0;i<conditionParamIndexes.length;i++) {
 				paramIndex = GlobalFunctions.getParamIndex(conditionParameterStrings[i],tempParamArray);
 				
-				if(paramIndex < 0) {
+				/*if(paramIndex < 0) {
 					try {
 						conditionParameterStrings[i]);
 					} catch (Exception e) {
@@ -93,7 +93,7 @@ public class Condition {
 					}
 				} else {
 					conditionParamIndexes[i] = paramIndex;
-				}
+				}*/
 			}		
 		}
 	}
