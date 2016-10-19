@@ -5,100 +5,89 @@ public class Condition {
 	private static int TWO = 2;
 	private static int THREE = 3;
 	private static int FOUR = 4;
+	
+	private final static String GREATERTHAN = ">";
+	private final static String LESSTHAN = "<";
+	private final static String EQUALS = "=";
+	private final static String NOTEQUAL = "!=";
+	
+	private enum CompareOperation{greaterThan, lessThan, equals, notEqual};
+	private enum ConditionType{compare,rule};
 
 	private final String condition;
-	/*
-	 * This variable holds value of condition type
-	 * 1 - equation
-	 * 2 - rule
-	 */
-	private final int conditionType;
-	/*
-	 * This variable holds value of the operation type if condition type is 1
-	 *  0 - (no operation)
-	 *  1 - > (Greater Than)
-	 *  2 - < (Less Than)
-	 *  3 - = (Equals)
-	 *  4 - != (Not Equal)
-	 */
-	private int conditionOperator;
+	private final ConditionType conditionType;
+	private final CompareOperation conditionOperator;
 	private String[] conditionParameterStrings;
 	private int[] conditionParamIndexes;
 	
 	
 	public Condition(String condition) {
-		
-		System.out.println(condition);
-		
 		this.condition = condition;
-		this.conditionType = getConditionType(condition);
+		this.conditionOperator= getConditionOperation(condition);
+		this.conditionType = setConditionType();
 		this.conditionParameterStrings = getParametersToStringArray(condition);
 	}
 	
-	private int getConditionType(String conditionString) {
+	private ConditionType setConditionType() {
+		return conditionOperator == null ? ConditionType.rule : ConditionType.compare;
+	}
+
+	private CompareOperation getConditionOperation(String conditionString) {
 		
-		if(conditionString.contains(">")) {
-			this.conditionOperator = ONE;
-			return ONE;
-		} else if(conditionString.contains("<")) {
-			this.conditionOperator = TWO;
-			return ONE;
-		} else if(conditionString.contains("=") /*|| conditionString.contains("==")*/ ) {
-			this.conditionOperator = THREE;
-			return ONE;
-		} else if(conditionString.contains("!=")) {
-			this.conditionOperator = FOUR;
-			return ONE;
+		if(conditionString.contains(GREATERTHAN)) {
+			return CompareOperation.greaterThan;
+		} else if(conditionString.contains(LESSTHAN)) {
+			return CompareOperation.lessThan;
+		} else if(conditionString.contains(EQUALS) /*|| conditionString.contains("==")*/ ) {
+			return CompareOperation.equals;
+		} else if(conditionString.contains(NOTEQUAL)) {
+			return CompareOperation.notEqual;
 		} else {
-			return TWO;
+			return null;
 		}
 	}
 	
 	private String[] getParametersToStringArray(String conditionString) {
 		
-		if(conditionType == ONE) {
+		if(conditionType == ConditionType.compare) {
 			return GlobalFunctions.removeWhiteSpaces(conditionString).split(getOperatorString());
 		} else return null;
 	}
 
 	private String getOperatorString() {
 		switch (this.conditionOperator) {
-		case 1:
-			return ">";
-		case 2:
-			return "<";
-		case 3:
-			return "=";
-		case 4:
-			return "!=";
+		case greaterThan:
+			return GREATERTHAN;
+		case lessThan:
+			return LESSTHAN;
+		case equals:
+			return EQUALS;
+		case notEqual:
+			return NOTEQUAL;
 		default:
 			return "";
 		}
 	}
 
 	public void initializeParameterIndexes(Parameter[] tempParamArray) {
-		if (conditionType == ONE) {
+		if (conditionType == ConditionType.compare) {
 			conditionParamIndexes = new int[conditionParameterStrings.length];
-			
-			int paramIndex;
-			
+						
 			for(int i=0;i<conditionParamIndexes.length;i++) {
-				paramIndex = GlobalFunctions.getParamIndex(conditionParameterStrings[i],tempParamArray);
-				
-				/*if(paramIndex < 0) {
-					try {
-						conditionParameterStrings[i]);
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-				} else {
-					conditionParamIndexes[i] = paramIndex;
-				}*/
-			}		
+				conditionParamIndexes[i] = GlobalFunctions.getParamIndex(conditionParameterStrings[i],tempParamArray);
+			}
+			
+			// to remove link for GC to free up memory
+			conditionParameterStrings = null;
 		}
 	}
 	
 	public String toString() {
 		return this.condition;
+	}
+
+	
+	public String[] getParameterArray() {
+		return this.conditionParameterStrings;
 	}
 }

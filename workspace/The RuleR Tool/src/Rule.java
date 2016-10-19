@@ -25,14 +25,14 @@ public class Rule {
 	private ArrayList<RuleBinding> ruleBinding;
 	
 	
-	public Rule(String name,String mod, String extMod, String parameter) {
+	public Rule(String name,String mod, String extMod, String parameter, ArrayList<RuleBinding> bindings) {
 		ruleID = GlobalVariables.getNextRuleID();
 		ruleName = name;
 		ruleNameID = GlobalFunctions.hashName(ruleName);
 		ruleModifier = getModifier(mod);		
 		extraModifier = getExtraModifier(extMod);
 		ruleParameterStrings = GlobalFunctions.removeWhiteSpaces(parameter).split(COMMA);
-		ruleBinding = new ArrayList<RuleBinding>();
+		ruleBinding = bindings;
 		ruleVariables = new HashMap<Integer,Variable>();
 		parameters = getParameterArray();
 	}
@@ -63,23 +63,37 @@ public class Rule {
 		
 		// Get different parameters from Event Parameters
 		for(RuleBinding ruleBind : ruleBinding) {
-			for(String param : ruleBind.getEventParamArray()) {
-				if(GlobalFunctions.exists(param, ruleParameterStrings)) continue;
-				else parameters.add(new Parameter(param, this));
-			}
-		}
-		//*/
-		// Get different parameters from Event Conditions
-		for(RuleBinding ruleBind : ruleBinding) {
-			for(String param : ruleBind.getEventParamArray()) {
-				if(GlobalFunctions.exists(param, ruleParameterStrings)) continue;
-				else parameters.add(new Parameter(param, this));
+			String[] allParameters;
+			
+			if((allParameters = ruleBind.getEventParamArray()) != null) {
+			
+				for(String param : allParameters) {
+					System.out.println("--> Parameter : " + param);
+					if(GlobalFunctions.exists(param, parameters)) continue;
+					else parameters.add(new Parameter(param, this));
+				}
+				
+				// Get different parameters from Conditions
+				for(Condition condition : ruleBind.getEventConditionsArray()) {
+					
+					String[] allconditions;
+					
+					if((allconditions = condition.getParameterArray()) != null)
+						for(String param : allconditions) {
+							System.out.println("-- --> Parameter : " + param);
+							if(GlobalFunctions.exists(param, parameters)) continue;
+							else parameters.add(new Parameter(param, this));
+						}
+				}
+				
+				// Get different parameters from Consequent Rule Parameters
 			}
 		}
 		
-		// Get different parameters from Consequent Rule Parameters
 		
 		int numOfParameters = parameters.size();
+		
+		System.out.println("--> There are " + numOfParameters + " in this rule");
 		
 		Parameter[] tempParamArray = new Parameter[numOfParameters];
 		

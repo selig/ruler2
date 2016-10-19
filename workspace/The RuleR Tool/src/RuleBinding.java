@@ -7,7 +7,7 @@ import sun.font.CreatedFontTracker;
 public class RuleBinding {
 	
 	private final int ruleBindingID;
-	private final int ruleID;
+	//private final int ruleID;
 	private final int event;
 	private final String eventName;
 	private String[] eventParameterStrings;
@@ -16,9 +16,9 @@ public class RuleBinding {
 	private ArrayList<ConsequentRule> consequentRules;
 	
 	
-	public RuleBinding(int ruleID,String eventName, int event,String[] par, String[] conditions, ArrayList<ConsequentRule> consequentRules) {
+	public RuleBinding(String eventName, int event,String[] par, String[] conditions, ArrayList<ConsequentRule> consequentRules) {
 		this.ruleBindingID = GlobalVariables.getNextBindingCount();
-		this.ruleID = ruleID;
+		//this.ruleID = ruleID;
 		this.event = event;
 		this.eventName = eventName;
 		this.eventParameterStrings = par;
@@ -61,6 +61,9 @@ public class RuleBinding {
 	}
 	
 	private Condition[] createConditions(String[] conditions) {
+		
+		if(conditions == null) return null;
+		
 		Condition[] tempConditionArrayConditions = new Condition[conditions.length];
 		
 		int i = 0;
@@ -71,6 +74,10 @@ public class RuleBinding {
 		}
 		
 		return tempConditionArrayConditions;
+	}
+	
+	public Condition[] getEventConditionsArray() {
+		return this.eventConditions;
 	}
 	
 	private String getEventConditions() {

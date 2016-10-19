@@ -21,6 +21,7 @@ public class Parameter {
 	
 	private Integer[] parameterVariables = new Integer[2];
 	private Operator parameterOperation = null;
+	private final String name;
 	private final Rule rule;
 	
 	/**
@@ -30,14 +31,24 @@ public class Parameter {
 	public Parameter(String name, Rule rule) {
 		
 		this.rule = rule;
+		this.name = GlobalFunctions.removeWhiteSpaces(name);
 		
 		parameterOperation = operation(name);
 		
-		String[] splitName = GlobalFunctions.removeWhiteSpaces(name).split(getRegexChar(parameterOperation));
+		String charToSplit;
+		String[] splitName;
+		
+		if((charToSplit = getRegexChar(parameterOperation)) != null)
+			splitName = GlobalFunctions.removeWhiteSpaces(name).split(charToSplit);
+		else {
+			splitName = new String[1];
+			splitName[0] = name;
+		}
 		
 		int index = 0;
 		
 		for(String variableName : splitName){
+			
 			if(rule.containsVariable(variableName)) {
 				parameterVariables[index] = GlobalFunctions.hashName(variableName);
 			} else {
@@ -62,7 +73,7 @@ public class Parameter {
 	}
 
 	private String getRegexChar(Operator operator) {
-		if(operator == null) return "";
+		if(operator == null) return null;
 		switch (operator) {
 		case plus:
 			return PLUS_REGEX;
@@ -113,6 +124,9 @@ public class Parameter {
 			return null;
 	}
 	
+	public String getName() {
+		return this.name;
+	}
 	
 	public String toString() {
 		if (parameterOperation == null) {

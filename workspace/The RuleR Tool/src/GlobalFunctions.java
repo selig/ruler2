@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 public class GlobalFunctions {
 
@@ -5,9 +7,10 @@ public class GlobalFunctions {
 		return ruleName.hashCode();
 	}
 	
-	public static boolean exists(String string, String[] stringArray) {
-		for(String stringFromArray : stringArray) {
-			if(string.equals(stringFromArray)) return true;
+	public static boolean exists(String string, ArrayList<Parameter> parameters) {
+		for(Parameter stringFromArray : parameters) {
+			System.out.println(string +" vs "+ stringFromArray.getName());
+			if(string.equals(stringFromArray.getName())) return true;
 		}
 		return false;
 	}
@@ -24,7 +27,7 @@ public class GlobalFunctions {
 	}
 	
 	public static String removeWhiteSpaces(String string) {
-		return string.replace("\\s", "");
+		return string.replaceAll("\\s+", "");
 	}
 
 	public static String getParameters(String[] array) {

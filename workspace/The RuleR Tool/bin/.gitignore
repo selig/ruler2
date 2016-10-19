@@ -1,3 +1,5 @@
+/Variable.class
+/VariableNumber.class
 /ActiveRuleSet.class
 /Condition.class
 /ConsequentRule.class
@@ -11,6 +13,7 @@
 /Interface$eventPanele$1.class
 /Interface$eventPanele.class
 /Interface.class
+/Parameter$Operator.class
 /Parameter.class
 /ParameterBinding.class
 /Rule$ExtraModifier.class
@@ -23,6 +26,6 @@
 /gui2$1.class
 /gui2$2.class
 /gui2.class
-/Variable.class
-/VariableNumber.class
-/Parameter$Operator.class
+/EventCondition$CompareOperation.class
+/Condition$CompareOperation.class
+/Condition$ConditionType.class

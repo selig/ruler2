@@ -236,16 +236,18 @@ public class Interface {
   		  
   		  RuleNameArea.setBackground(Color.WHITE);
   		  
-      	  Rule myRule = new Rule(ruleName, ruleModifier,selectedExtraModifier, ruleParameters);
-      	  
+      	  ArrayList<RuleBinding> ruleBindigsArrayList = new ArrayList<RuleBinding>();
+  		  
       	  for (Component c : inside.getComponents()) {
 	    	  //System.out.println(">" + c);
 	    	  if (c instanceof eventPanele) {
-			  	RuleBinding binding = ((eventPanele) c).ruleBinding(myRule.getRuleID());
+			  	RuleBinding binding = ((eventPanele) c).ruleBinding();
     		  	if(binding == null) eventError();
-    		  	else myRule.addRuleBinding(binding);
+    		  	else ruleBindigsArrayList.add(binding);
 	    	  }
 		  }
+      	  
+      	Rule myRule = new Rule(ruleName, ruleModifier,selectedExtraModifier, ruleParameters, ruleBindigsArrayList);
 
       	  ruleSystem.addNewRule(myRule);
       	  
@@ -377,7 +379,7 @@ public class Interface {
 		}
 		
 		
-		public RuleBinding ruleBinding(int RuleID) {
+		public RuleBinding ruleBinding() {
 			
 			String eventName = eventNameArea.getText();
 			String eventParameterString = eventParameterArea.getText();
@@ -400,7 +402,7 @@ public class Interface {
 		    	  }
 			}
 			
-			if(eventName.length() > 0 )	return new RuleBinding(RuleID,eventName,eventName.length(),eventParameters,eventConditions,consequentRules);
+			if(eventName.length() > 0 )	return new RuleBinding(eventName,eventName.length(),eventParameters,eventConditions,consequentRules);
 			else return null;
 		}
 		
