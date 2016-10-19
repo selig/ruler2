@@ -1,13 +1,8 @@
 import java.util.ArrayList;
 
-import sun.awt.GlobalCursorManager;
-import sun.font.CreatedFontTracker;
-
 
 public class RuleBinding {
 	
-	private final int ruleBindingID;
-	//private final int ruleID;
 	private final int event;
 	private final String eventName;
 	private String[] eventParameterStrings;
@@ -16,16 +11,18 @@ public class RuleBinding {
 	private ArrayList<ConsequentRule> consequentRules;
 	
 	
-	public RuleBinding(String eventName, int event,String[] par, String[] conditions, ArrayList<ConsequentRule> consequentRules) {
-		this.ruleBindingID = GlobalVariables.getNextBindingCount();
-		//this.ruleID = ruleID;
-		this.event = event;
+	public RuleBinding(String eventName,String[] par, String[] conditions, ArrayList<ConsequentRule> consequentRules) {
+		this.event = GlobalFunctions.hashName(eventName);
 		this.eventName = eventName;
 		this.eventParameterStrings = par;
 		this.eventConditions = createConditions(conditions);
 		this.consequentRules = consequentRules;
 	}
 
+	public boolean isThisEvent(String newEventName) {
+		return this.event == GlobalFunctions.hashName(newEventName);
+	}
+	
 	private String getConsequentRulesString() {
 		String consequentRuleString = "";
 		
@@ -37,7 +34,7 @@ public class RuleBinding {
 		
 		return consequentRuleString;
 	}
-
+	
 	public String[] getEventParamArray() {
 		return eventParameterStrings;
 	}

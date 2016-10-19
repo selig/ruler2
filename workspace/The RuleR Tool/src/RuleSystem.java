@@ -14,8 +14,14 @@ public class RuleSystem {
 		list = new HashMap<Integer,Rule>();
 	}
 
-	public void addNewRule(Rule myRule) {
-		list.put(myRule.getRuleNameID(), myRule);
+	public boolean addNewRule(Rule myRule) {
+		Integer key = myRule.getRuleNameID();
+		if(!list.containsKey(key)) {
+			list.put(key, myRule);
+			return true;
+		}
+		else
+		   return false;
 	}
 	
 	public String getRules() {
@@ -30,6 +36,7 @@ public class RuleSystem {
 	    
 	    // Display elements
 	    while(i.hasNext()) {
+	       @SuppressWarnings("rawtypes")
 	       Map.Entry ruleElement = (Map.Entry)i.next();
 	       allRules += "<"+ruleElement.getValue().toString()+"> ; ";
 	    }
@@ -37,6 +44,10 @@ public class RuleSystem {
 		return allRules;
 	}
 
+	public String getOneRule(Integer key) {
+		return "<"+list.get(key).toString()+">";
+	}
+	
 	public static int getRuleID(String name) {
 		Rule rule = list.get(GlobalFunctions.hashName(name));
 		if(rule == null) return -1;
@@ -54,6 +65,10 @@ public class RuleSystem {
 		Rule rule = list.get(ruleID);
 		if(rule == null) return null;
 		else return rule.getRuleName();
+	}
+
+	public int getNumberOfRules() {
+		return list.size();
 	}
 
 }

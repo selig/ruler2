@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Time;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -11,8 +10,10 @@ public class Interface {
 	private static long startTime = 0;
 	private static long finishTime = 0;
 	
-	
-	private static String RULE_EVENT_ERROR = "There was some error while initialising rule event";
+	private static final String RULE_EXIST = "This RULE with same PARAMETERS already exists";
+	private static final String RULE_EVENT_ERROR = "There was some error while initialising rule event";
+	private static final String THEREARE = "There are ";
+	private static final String RULESINRULESYSTEM = " rules in Rule System";
 	
 	private static String RULE_NAME = "Open";
 	private static String RULE_PARAM = "file";
@@ -31,24 +32,27 @@ public class Interface {
     private JLabel ruleParameterLabel;
     //private JLabel ruleEventLabel;
     //private JLabel ruleConseqLabel;
-    private JLabel headerLabel;
-    private JLabel statusLabel;
     private JPanel controlPanel;
     //private JPanel controlPanel2;
     private JPanel controlPanel4;
-    private JPanel controlPanel5;
     private JPanel fieldPanel;
     private JPanel fieldPanel2;
     private JPanel fieldPanel1;
     private JPanel fieldPanel3;
-    private JLabel ObjectLabel;
     private ButtonGroup modifierGroup;
     private ButtonGroup extraModifierGroup;
     private JPanel inside;
+    private JPanel ruleSystemInside;
     private JScrollPane scrollFrame;
-    private JPanel topPanel;
+    private JScrollPane ruleSystemScrollFrame;
     private JTextArea RuleNameArea;
     private JTextArea RuleParameterArea;
+    private JComponent panel1;
+    private JComponent panel2;
+    private JComponent panel3;
+    private JComponent panel4;
+    private JTabbedPane TabbedPane;
+    private JLabel ruleSystemGUIHeader; 
     
     
     public Interface(){
@@ -66,152 +70,8 @@ public class Interface {
     private void prepareGUI(){
  	      mainFrame = new JFrame("Java SWING Examples");
  	      mainFrame.setSize(1000,800);
- 	      mainFrame.setLayout(new FlowLayout());
-    
- 	      headerLabel = new JLabel("",JLabel.CENTER );
- 	      statusLabel = new JLabel("",JLabel.CENTER); 
- 	      
- 	      //ruleModifierLabel = new JLabel("Rule Modifier",JLabel.LEFT);
- 	      ruleNameLabel = new JLabel("Rule Name",JLabel.LEFT);
- 	      ruleParameterLabel = new JLabel("Rule Parameter",JLabel.LEFT);
- 	      
- 	      RuleNameArea = new JTextArea(RULE_NAME,2,10);
- 	      RuleParameterArea = new JTextArea(RULE_PARAM,2,10);
-	 
- 	      //statusLabel.setSize(350,100);
- 	      mainFrame.addWindowListener(new WindowAdapter() {
- 	         public void windowClosing(WindowEvent windowEvent){
- 		        System.exit(0);
- 	         }        
- 	      });
- 	      
- 	      topPanel = new JPanel();
- 	      topPanel.setLayout(new FlowLayout());
- 	      //topPanel.setBackground(Color.yellow);
- 	      topPanel.add(headerLabel);
- 	      
- 	      controlPanel = new JPanel();
- 	      controlPanel.setLayout(new FlowLayout());
- 	      
- 	      JRadioButton startButton = new JRadioButton("Start");
- 	      startButton.setMnemonic(KeyEvent.VK_P);
- 	      startButton.setActionCommand("Start");
- 	      JRadioButton forbiddenButton = new JRadioButton("Forbidden");
- 	      forbiddenButton.setMnemonic(KeyEvent.VK_P);
- 	      forbiddenButton.setActionCommand("Forbidden");
- 	      JRadioButton assertButton = new JRadioButton("Assert");
- 	      assertButton.setMnemonic(KeyEvent.VK_P);
- 	      assertButton.setActionCommand("Assert");
- 	      JRadioButton noneButton = new JRadioButton("None");
- 	      noneButton.setMnemonic(KeyEvent.VK_P);
- 	      noneButton.setActionCommand("None");
-	 
- 	      //Group the radio buttons.
- 	      extraModifierGroup = new ButtonGroup();
- 	      extraModifierGroup.add(startButton);
- 	      extraModifierGroup.add(forbiddenButton);
- 	      extraModifierGroup.add(assertButton);
- 	      extraModifierGroup.add(noneButton);
- 	      
- 	      fieldPanel1 = new JPanel();
-	      fieldPanel1.setLayout(new GridLayout(0,1));
-	      fieldPanel1.add(startButton);
-	      fieldPanel1.add(forbiddenButton);
-	      fieldPanel1.add(assertButton);
-	      fieldPanel1.add(noneButton);
- 	      
- 	      JRadioButton alwaysButton = new JRadioButton("Always");
-	      alwaysButton.setMnemonic(KeyEvent.VK_P);
-	      alwaysButton.setActionCommand("Always");
-	      JRadioButton stepButton = new JRadioButton("Step");
-	      stepButton.setMnemonic(KeyEvent.VK_P);
-	      stepButton.setActionCommand("Step");
-	      JRadioButton skipButton = new JRadioButton("Skip");
-	      skipButton.setMnemonic(KeyEvent.VK_P);
-	      skipButton.setActionCommand("Skip");
-	 
-	      //Group the radio buttons.
-	      modifierGroup = new ButtonGroup();
-	      modifierGroup.add(alwaysButton);
-	      modifierGroup.add(stepButton);
-	      modifierGroup.add(skipButton);
- 	      
- 	      
- 	      fieldPanel = new JPanel();
- 	      fieldPanel.setLayout(new GridLayout(0,1));
- 	      fieldPanel.add(alwaysButton);
- 	      fieldPanel.add(stepButton);
- 	      fieldPanel.add(skipButton);
- 	      
- 	      
- 	      fieldPanel2 = new JPanel();
- 	      fieldPanel2.setLayout(new GridLayout(0,1));
- 	      fieldPanel2.add(ruleNameLabel);
- 	      fieldPanel2.add(RuleNameArea);
- 	      
- 	      
- 	      fieldPanel3 = new JPanel();
- 	      fieldPanel3.setLayout(new GridLayout(0,1));
- 	      fieldPanel3.add(ruleParameterLabel);
- 	      fieldPanel3.add(RuleParameterArea);
- 	      	      
- 	      controlPanel.add(fieldPanel);
- 	      controlPanel.add(fieldPanel1);
- 	      controlPanel.add(fieldPanel2);
- 	      controlPanel.add(fieldPanel3);
- 	      
- 	      
- 	     
- 	      inside = new JPanel();
- 	      inside.setLayout(new GridLayout(0,1));
- 	      scrollFrame = new JScrollPane(inside);
- 	      scrollFrame.setPreferredSize(new Dimension(1000,600));
- 	      inside.setAutoscrolls(true);
- 	      	     
- 	      inside.add(controlPanel);
- 	      
- 	      JButton newEventButton = new JButton("+ New Event");
- 	      newEventButton.setActionCommand("Add");
- 	      newEventButton.addActionListener(new ActionListener() {
- 	          public void actionPerformed(ActionEvent e) {
- 	        	  JPanel controlPanels = new JPanel();
- 	    	      controlPanels.setLayout(new FlowLayout());
- 	    	      controlPanels.setBackground(Color.red);
- 	        	  
- 	        	  inside.add(new eventPanele());
- 	        	  inside.revalidate();
- 	        	  inside.repaint();
- 	          }
- 	      });
- 	      
- 	      controlPanel4 = new JPanel();
- 	      controlPanel4.setLayout(new FlowLayout());
- 	      
- 	      JButton addButton = new JButton("Add");
- 	      addButton.setActionCommand("Add");
- 	      addButton.addActionListener(new ActionListener() {
- 	          public void actionPerformed(ActionEvent e) {
- 	        	  AddRule();
- 	          }
- 	        });  
- 	      
- 	      controlPanel4.add(newEventButton);
- 	      controlPanel4.add(addButton);
- 	      
- 	      ObjectLabel = new JLabel("",JLabel.LEFT);
- 	      ObjectLabel.setLayout(new GridLayout(0,3));
- 	      
- 	      controlPanel5 = new JPanel();
- 	      controlPanel5.setLayout(new FlowLayout());
- 	      controlPanel5.setPreferredSize(new Dimension(1000, 100));
- 	      
- 	      controlPanel5.add(ObjectLabel);
- 	      
- 	      mainFrame.add(topPanel);
- 	      mainFrame.add(scrollFrame);
- 	      mainFrame.add(controlPanel4);
- 	      mainFrame.add(controlPanel5);
- 	      mainFrame.setVisible(true);  
+ 	      mainFrame.add(new Tabbed(), BorderLayout.CENTER);
+ 	      mainFrame.setVisible(true); 
  	   }
  	   
 	 
@@ -226,7 +86,7 @@ public class Interface {
 		
   	  	        	  
   	  	if(!ruleName.equals("") && selectedModifier) {
-  		  headerLabel.setBackground(Color.WHITE);
+  		  //headerLabel.setBackground(Color.WHITE);
   		  
   		  String ruleModifier = modifierGroup.getSelection().getActionCommand();
   		  String ruleParameters = RuleParameterArea.getText();
@@ -240,58 +100,66 @@ public class Interface {
   		  
       	  for (Component c : inside.getComponents()) {
 	    	  //System.out.println(">" + c);
-	    	  if (c instanceof eventPanele) {
-			  	RuleBinding binding = ((eventPanele) c).ruleBinding();
-    		  	if(binding == null) eventError();
+	    	  if (c instanceof EventForm) {
+			  	RuleBinding binding = ((EventForm) c).ruleBinding();
+    		  	if(binding == null) {
+    		  		error(RULE_EVENT_ERROR);
+    		  		return;
+    		  	}
     		  	else ruleBindigsArrayList.add(binding);
+    		  	
+    		  	inside.remove(c);
+    		  	inside.revalidate();
+	        	inside.repaint();
 	    	  }
 		  }
       	  
       	Rule myRule = new Rule(ruleName, ruleModifier,selectedExtraModifier, ruleParameters, ruleBindigsArrayList);
 
-      	  ruleSystem.addNewRule(myRule);
+      	  if(!ruleSystem.addNewRule(myRule)) {
+      		  error(RULE_EXIST);
+      		  return;
+  	  	  }
       	  
-          statusLabel.setText( "Added Rule "+ruleName);
-            
-	      showRules();
+          //statusLabel.setText( "Added Rule "+ruleName);
+      	  success("Rule " + ruleName + " added successfully");
+      	  updateRuleSystemGUI(myRule.getRuleNameID());
 	  	}
 	  	else {
-  		  initialiseError();
   		  
   		  if(ruleName.equals("")){
   			  RuleNameArea.setBackground(Color.RED);
-  			  addError("Rule Name is empty");
+  			error("Rule Name is empty");
   		  }else {RuleNameArea.setBackground(Color.WHITE);}
   		  
   		  if (!selectedModifier) {
-  			emptyRuleModifier();
+  			error("Rule Modifier is not selected");
   		  }
 	  	}
 	}
 
-	private void initialiseError() {
-		headerLabel.setOpaque(true);
-		headerLabel.setBackground(Color.RED);
-		headerLabel.setText("");		
+	private void success(String successMessage) {
+		JOptionPane.showMessageDialog(mainFrame,
+				successMessage);
 	}
 	
-	private void addError(String newMessage) {
-		headerLabel.setText(headerLabel.getText() + " " + newMessage);
-	}
 	
-	private void eventError() {
-		initialiseError();
-		headerLabel.setText(headerLabel.getText() + " " + RULE_EVENT_ERROR);
+	private void error(String errorMessage) {
+		JOptionPane.showMessageDialog(mainFrame,
+			    errorMessage + " Please fix the problem",
+			    "Inane error",
+			    JOptionPane.ERROR_MESSAGE);
 	}
 
-	private void emptyRuleModifier() {
-	   addError(" Rule Modifier is not selected");
+	private void updateRuleSystemGUI(Integer ruleNameID){
+	      //headerLabel.setText("Rule Added"); 
+	      //ObjectLabel.setText(/*ObjectLabel.getText() + " | " +*/ ruleSystem.getRules() + "<! "+time() +" !>");      
+		ruleSystemInside.add(new RuleString(ruleSystem.getOneRule(ruleNameID)));
+		ruleSystemInside.revalidate();
+		ruleSystemInside.repaint();
+		
+		ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM); 
 	}
-
-	private void showRules(){
-	      headerLabel.setText("Rule Added"); 
-	      ObjectLabel.setText(/*ObjectLabel.getText() + " | " +*/ ruleSystem.getRules() + "<! "+time() +" !>");      
-	   }
 
 	private String time() {
 		finishTime = System.currentTimeMillis();
@@ -311,7 +179,7 @@ public class Interface {
 	}
 	
 	
-	class eventPanele extends JPanel {
+	class EventForm extends JPanel {
 	   
 	   private JPanel eventPanel;
 	   private JPanel eventPanel2;
@@ -325,7 +193,9 @@ public class Interface {
 	   private JTextArea eventConditionArea;
 	   private JTextArea eventParameterArea;
 		
-	   public eventPanele() {
+	   public EventForm() {
+		    super(new FlowLayout());
+		    //super(new GridLayout(1, 1));
 			
 			eventName = new JLabel("Event Name",JLabel.LEFT);
 			eventCondition = new JLabel("Event Condition",JLabel.LEFT);
@@ -355,7 +225,7 @@ public class Interface {
 		    eventPanel4Container.setLayout(new GridLayout(0,1));
 		    eventPanel4Container.setBackground(Color.blue);
 		    
-		    eventPanel4Container.add(new consequentPanel());
+		    eventPanel4Container.add(new ConsequentRuleForm());
 		    
 		    eventPanel5 = new JPanel();
 		    eventPanel5.setLayout(new GridLayout(0,1));
@@ -363,7 +233,7 @@ public class Interface {
 		    newConsequentButton.addActionListener(new ActionListener() {
 		    	@Override
 				public void actionPerformed(ActionEvent e) {  
-		    		eventPanel4Container.add(new consequentPanel());
+		    		eventPanel4Container.add(new ConsequentRuleForm());
 		    		eventPanel4Container.revalidate();
 		    		eventPanel4Container.repaint();					
 				}
@@ -396,19 +266,19 @@ public class Interface {
 			ArrayList<ConsequentRule> consequentRules = new ArrayList<ConsequentRule>();
 			
 			for (Component c : eventPanel4Container.getComponents()) {
-		    	  if (c instanceof consequentPanel) {
-				  	ConsequentRule consequent = ((consequentPanel) c).getConsequentRule();
+		    	  if (c instanceof ConsequentRuleForm) {
+				  	ConsequentRule consequent = ((ConsequentRuleForm) c).getConsequentRule();
 	    		  	if(consequent != null) consequentRules.add(consequent);
 		    	  }
 			}
 			
-			if(eventName.length() > 0 )	return new RuleBinding(eventName,eventName.length(),eventParameters,eventConditions,consequentRules);
+			if(eventName.length() > 0 )	return new RuleBinding(eventName,eventParameters,eventConditions,consequentRules);
 			else return null;
 		}
 		
 	}
 	
-	class consequentPanel extends JPanel {
+	class ConsequentRuleForm extends JPanel {
 		
 		private JPanel eventPanel4;
 		private JLabel eventConsequent;
@@ -416,7 +286,7 @@ public class Interface {
 		private JTextArea eventConsequentArea;
 		private JTextArea eventConsequentParameterArea;
 		
-		public consequentPanel() {
+		public ConsequentRuleForm() {
 
 			eventConsequent = new JLabel("Event Consequent",JLabel.LEFT);
 			eventConsequentParameter = new JLabel("Event Consequent Parameter",JLabel.LEFT);
@@ -449,6 +319,249 @@ public class Interface {
 			if(!consequentNameString.equals(""))
 				return new ConsequentRule(consequentNameString, eventConsequentParameters);
 			else return null;
+		}
+	}
+
+	class Tabbed extends JPanel {
+	    
+		public Tabbed() {
+	        super(new GridLayout(1, 1));
+	        
+	        TabbedPane = new JTabbedPane();
+	        ImageIcon icon = null;// = createImageIcon("images/middle.gif");
+	        
+	        panel1 = new AddRules();
+	        TabbedPane.addTab("Add Rules", icon, panel1,
+	                "Add Rules");
+	        TabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+	        
+	        panel2 = new RuleSystemGUI();
+	        TabbedPane.addTab("View Rules", icon, panel2,
+	                "Does twice as much nothing");
+	        TabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
+	        
+	        panel3 = makeTextPanel("Panel #3");
+	        TabbedPane.addTab("Tab 3", icon, panel3,
+	                "Still does nothing");
+	        TabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
+	        
+	        panel4 = makeTextPanel(
+	                "Panel #4 (has a preferred size of 410 x 50).");
+	        panel4.setPreferredSize(new Dimension(410, 50));
+	        TabbedPane.addTab("Tab 4", icon, panel4,
+	                "Does nothing at all");
+	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
+	        
+	        //Add the Tabbed pane to this panel.
+	        add(TabbedPane);
+	        
+	        //The following line enables to use scrolling Tabbed.
+	        TabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+	    }
+	    
+	    protected JComponent makeTextPanel(String text) {
+	        JPanel panel = new JPanel(false);
+	        JLabel filler = new JLabel(text);
+	        filler.setHorizontalAlignment(JLabel.CENTER);
+	        panel.setLayout(new GridLayout(1, 1));
+	        panel.add(filler);
+	        return panel;
+	    }
+	    
+	    /** Returns an ImageIcon, or null if the path was invalid. */
+	    /*protected static ImageIcon createImageIcon(String path) {
+	        java.net.URL imgURL = Tabbed.class.getResource(path);
+	        if (imgURL != null) {
+	            return new ImageIcon(imgURL);
+	        } else {
+	            System.err.println("Couldn't find file: " + path);
+	            return null;
+	        }
+	    }*/
+	}
+
+	class AddRules extends JPanel {
+		
+		public AddRules() {
+			super(new FlowLayout());			
+
+			add(new RuleForm());
+			add(new RuleButtons());
+		}
+	}
+	
+	class RuleForm extends JPanel {
+		
+		public RuleForm() {
+			//super(new GridLayout(1, 1));
+			super(new FlowLayout());
+			
+			ruleNameLabel = new JLabel("Rule Name",JLabel.LEFT);
+	 	    ruleParameterLabel = new JLabel("Rule Parameter",JLabel.LEFT);
+	 	      
+	 	    RuleNameArea = new JTextArea(RULE_NAME,2,10);
+	 	    RuleParameterArea = new JTextArea(RULE_PARAM,2,10);
+	 	    
+	 	    controlPanel = new JPanel();
+	 	    //controlPanel.setLayout(new GridLayout(1,4));
+	 	    controlPanel.setLayout(new FlowLayout());
+	 	      
+	 	      JRadioButton startButton = new JRadioButton("Start");
+	 	      startButton.setMnemonic(KeyEvent.VK_P);
+	 	      startButton.setActionCommand("Start");
+	 	      JRadioButton forbiddenButton = new JRadioButton("Forbidden");
+	 	      forbiddenButton.setMnemonic(KeyEvent.VK_P);
+	 	      forbiddenButton.setActionCommand("Forbidden");
+	 	      JRadioButton assertButton = new JRadioButton("Assert");
+	 	      assertButton.setMnemonic(KeyEvent.VK_P);
+	 	      assertButton.setActionCommand("Assert");
+	 	      JRadioButton noneButton = new JRadioButton("None");
+	 	      noneButton.setMnemonic(KeyEvent.VK_P);
+	 	      noneButton.setActionCommand("None");
+		 
+	 	      //Group the radio buttons.
+	 	      extraModifierGroup = new ButtonGroup();
+	 	      extraModifierGroup.add(startButton);
+	 	      extraModifierGroup.add(forbiddenButton);
+	 	      extraModifierGroup.add(assertButton);
+	 	      extraModifierGroup.add(noneButton);
+	 	      
+	 	      fieldPanel1 = new JPanel();
+		      fieldPanel1.setLayout(new GridLayout(0,1));
+		      fieldPanel1.add(startButton);
+		      fieldPanel1.add(forbiddenButton);
+		      fieldPanel1.add(assertButton);
+		      fieldPanel1.add(noneButton);
+	 	      
+	 	      JRadioButton alwaysButton = new JRadioButton("Always");
+		      alwaysButton.setMnemonic(KeyEvent.VK_P);
+		      alwaysButton.setActionCommand("Always");
+		      JRadioButton stepButton = new JRadioButton("Step");
+		      stepButton.setMnemonic(KeyEvent.VK_P);
+		      stepButton.setActionCommand("Step");
+		      JRadioButton skipButton = new JRadioButton("Skip");
+		      skipButton.setMnemonic(KeyEvent.VK_P);
+		      skipButton.setActionCommand("Skip");
+		 
+		      //Group the radio buttons.
+		      modifierGroup = new ButtonGroup();
+		      modifierGroup.add(alwaysButton);
+		      modifierGroup.add(stepButton);
+		      modifierGroup.add(skipButton);
+	 	      
+	 	      
+	 	      fieldPanel = new JPanel();
+	 	      fieldPanel.setLayout(new GridLayout(0,1));
+	 	      fieldPanel.add(alwaysButton);
+	 	      fieldPanel.add(stepButton);
+	 	      fieldPanel.add(skipButton);
+	 	      
+	 	      
+	 	      fieldPanel2 = new JPanel();
+	 	      fieldPanel2.setLayout(new GridLayout(0,1));
+	 	      fieldPanel2.add(ruleNameLabel);
+	 	      fieldPanel2.add(RuleNameArea);
+	 	      
+	 	      
+	 	      fieldPanel3 = new JPanel();
+	 	      fieldPanel3.setLayout(new GridLayout(0,1));
+	 	      fieldPanel3.add(ruleParameterLabel);
+	 	      fieldPanel3.add(RuleParameterArea);
+	 	      
+	 	     JButton newEventButton = new JButton("+ New Event");
+	 	      newEventButton.setActionCommand("Add");
+	 	      newEventButton.addActionListener(new ActionListener() {
+	 	          public void actionPerformed(ActionEvent e) {
+	 	        	  
+	 	        	  inside.add(new EventForm());
+	 	        	  inside.revalidate();
+	 	        	  inside.repaint();
+	 	          }
+	 	      });
+	 	      
+	 	      	      
+	 	      controlPanel.add(fieldPanel);
+	 	      controlPanel.add(fieldPanel1);
+	 	      controlPanel.add(fieldPanel2);
+	 	      controlPanel.add(fieldPanel3);
+	 	      controlPanel.add(newEventButton);
+	 	      
+	 	      inside = new JPanel();
+	 	      inside.setLayout(new GridLayout(0,1));
+	 	      //inside.setLayout(new FlowLayout());
+	 	      scrollFrame = new JScrollPane(inside);
+	 	      scrollFrame.setPreferredSize(new Dimension(1000,600));
+	 	      inside.setAutoscrolls(true);
+	 	      	     
+	 	      inside.add(controlPanel);
+	 	      
+	 	      add(scrollFrame);
+			
+		}
+		
+	}
+
+	class RuleButtons extends JPanel {
+		
+		public RuleButtons() {
+			super(new GridLayout(1, 1));
+	 	      
+	 	      controlPanel4 = new JPanel();
+	 	      controlPanel4.setLayout(new FlowLayout());
+	 	      
+	 	      JButton addButton = new JButton("Add Rule");
+	 	      addButton.setActionCommand("Add");
+	 	      addButton.addActionListener(new ActionListener() {
+	 	          public void actionPerformed(ActionEvent e) {
+	 	        	  AddRule();
+	 	          }
+	 	        });  
+	 	      
+	 	      //controlPanel4.add(newEventButton);
+	 	      controlPanel4.add(addButton);
+	 	      
+	 	      controlPanel4.setPreferredSize(new Dimension(1000, 100));
+	 	      
+	 	      add(controlPanel4);
+		}
+		
+	}
+
+	class RuleSystemGUI extends JPanel {
+		
+		public RuleSystemGUI() {
+			
+			ruleSystemGUIHeader = new JLabel(THEREARE + 0 + RULESINRULESYSTEM,JLabel.LEFT);
+			
+			ruleSystemInside = new JPanel();
+			ruleSystemInside.setLayout(new GridLayout(0,1));
+			ruleSystemScrollFrame = new JScrollPane(ruleSystemInside);
+			ruleSystemScrollFrame.setPreferredSize(new Dimension(1000,600));
+	 	    ruleSystemInside.setAutoscrolls(true);
+	 	    
+	 	    add(ruleSystemGUIHeader);
+	 	    add(ruleSystemScrollFrame);
+	 	    
+		}
+		
+	}
+	
+	class RuleString extends JPanel {
+		
+		private JLabel ruleString;
+		private JPanel rulePanel;
+		
+		public RuleString(String Rule) {
+			super(new GridLayout(0,1));
+			
+			ruleString = new JLabel(Rule,JLabel.LEFT);
+			
+			rulePanel = new JPanel();
+			rulePanel.setLayout(new FlowLayout());
+			
+			rulePanel.add(ruleString);
+			
+			add(rulePanel);
 		}
 	}
 }

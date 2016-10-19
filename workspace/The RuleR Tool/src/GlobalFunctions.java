@@ -9,7 +9,6 @@ public class GlobalFunctions {
 	
 	public static boolean exists(String string, ArrayList<Parameter> parameters) {
 		for(Parameter stringFromArray : parameters) {
-			System.out.println(string +" vs "+ stringFromArray.getName());
 			if(string.equals(stringFromArray.getName())) return true;
 		}
 		return false;

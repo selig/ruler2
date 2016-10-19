@@ -1,17 +1,16 @@
-import java.lang.reflect.Array;
-
-
+/**
+ * The class to represent Consequent rule
+ * 
+ * @author mbax2md4
+ */
 public class ConsequentRule {
 
-	private final int consequentRuleID;
 	private final String ruleName;
 	private final int ruleID;
 	private int[] consequentRuleParameterIndexes;
 	private String[] consequentRuleParameterStrings;
 	
 	public ConsequentRule(String name,String[] param) {
-		
-		this.consequentRuleID = GlobalVariables.getConsequentRuleID();
 		this.ruleID = GlobalFunctions.hashName(name);
 		this.ruleName = name;
 		this.consequentRuleParameterStrings = param;

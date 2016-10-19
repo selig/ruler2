@@ -1,9 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import sun.font.CreatedFontTracker;
-import sun.security.action.GetBooleanAction;
-
 
 public class Rule {
 	
@@ -28,7 +25,7 @@ public class Rule {
 	public Rule(String name,String mod, String extMod, String parameter, ArrayList<RuleBinding> bindings) {
 		ruleID = GlobalVariables.getNextRuleID();
 		ruleName = name;
-		ruleNameID = GlobalFunctions.hashName(ruleName);
+		ruleNameID = GlobalFunctions.hashName(name+parameter);
 		ruleModifier = getModifier(mod);		
 		extraModifier = getExtraModifier(extMod);
 		ruleParameterStrings = GlobalFunctions.removeWhiteSpaces(parameter).split(COMMA);
@@ -68,7 +65,6 @@ public class Rule {
 			if((allParameters = ruleBind.getEventParamArray()) != null) {
 			
 				for(String param : allParameters) {
-					System.out.println("--> Parameter : " + param);
 					if(GlobalFunctions.exists(param, parameters)) continue;
 					else parameters.add(new Parameter(param, this));
 				}
@@ -93,7 +89,7 @@ public class Rule {
 		
 		int numOfParameters = parameters.size();
 		
-		System.out.println("--> There are " + numOfParameters + " in this rule");
+		//System.out.println("--> There are " + numOfParameters + " in this rule");
 		
 		Parameter[] tempParamArray = new Parameter[numOfParameters];
 		
@@ -114,6 +110,10 @@ public class Rule {
 		return tempParamArray;
 	}
 
+	public Parameter getParameter(int index) {
+		return parameters[index];
+	}
+	
 	private ExtraModifier getExtraModifier(String extMod) {
 		
 		switch(extMod) {
