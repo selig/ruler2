@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -70,5 +71,56 @@ public class RuleSystem {
 	public int getNumberOfRules() {
 		return list.size();
 	}
+	
+public void addPredifinedRules() {
+		
+		String RuleString ="<None Step Open(file) { [write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file) ] }>";
+		
+		String[] RuleAndEvent = RuleString.split("{");
+		
+		String[] RuleInfo = RuleAndEvent[0].replaceAll("<", "").split(" ");
+		
+		String extraModifier = RuleInfo[0];
+		String modifier = RuleInfo[1];
+		String ruleName = RuleInfo[2].split("(")[0];
+		String ruleParameters = RuleInfo[2].split("(")[1].replaceAll(")", "");
+		
+		
+		String[] Events = RuleAndEvent[1].replace("\\s+", "").split("][");
+		
+		ArrayList<RuleBinding> ruleBindings = new ArrayList<RuleBinding>();
+		
+		for(String event : Events) {
+			String[] eventSplit = event.split("¬>");
+			
+			String eventName = eventSplit[0].split("(")[0];
+			
+			String[] eventParameters = eventSplit[0].split("(")[1].split("<")[0].replaceAll(")","").split(",");
+			
+			String[] eventConditions = eventSplit[0].split("(")[1].split("<")[1].replaceAll(">","").split(",");
+			
+			String[] consRules = eventSplit[1].split(",");
+			
+
+			ArrayList<ConsequentRule> consequentRules = new ArrayList<ConsequentRule>();
+			
+			for(String cons : consRules) {
+				
+				String consequentName = eventSplit[1].split("(")[0];
+				
+				String[] consequentParameters = eventSplit[1].split("(")[1].replaceAll(")", "").split(",");
+				
+				consequentRules.add(new ConsequentRule(consequentName, consequentParameters));
+			}
+
+			ruleBindings.add(new RuleBinding(eventName, eventParameters, eventConditions, consequentRules));
+		}
+		
+		
+		this.addNewRule(new Rule(ruleName, modifier, extraModifier, ruleParameters, ruleBindings));
+			
+		
+	}
+
 
 }
