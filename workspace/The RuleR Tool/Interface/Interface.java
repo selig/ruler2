@@ -10,8 +10,9 @@ public class Interface {
 	private static long startTime = 0;
 	private static long finishTime = 0;
 	
-	private static final String RULE_EXIST = "This RULE with same PARAMETERS already exists";
-	private static final String RULE_EVENT_ERROR = "There was some error while initialising rule event";
+	private static final String RULE_EXIST = "This RULE with same PARAMETERS already exists.";
+	private static final String RULE_EVENT_ERROR = "There was some error while initialising rule event.";
+	private static final String START_RULE_PARAMETER = "Parameters are empty on Start rule.";
 	private static final String THEREARE = "There are ";
 	private static final String RULESINRULESYSTEM = " rules in Rule System";
 	
@@ -84,46 +85,52 @@ public class Interface {
   	  
 		boolean selectedModifier = modifierGroup.getSelection() != null;
 		
+		String selectedExtraModifier = extraModifierGroup.getSelection() != null 
+					 ? extraModifierGroup.getSelection().getActionCommand() : "None";
+		String ruleParameters = RuleParameterArea.getText();
   	  	        	  
   	  	if(!ruleName.equals("") && selectedModifier) {
-  		  //headerLabel.setBackground(Color.WHITE);
-  		  
-  		  String ruleModifier = modifierGroup.getSelection().getActionCommand();
-  		  String ruleParameters = RuleParameterArea.getText();
-  		  String selectedExtraModifier = extraModifierGroup.getSelection() != null 
-  				  						 ? extraModifierGroup.getSelection().getActionCommand() : "None";
-    	  
-  		  
-  		  RuleNameArea.setBackground(Color.WHITE);
-  		  
-      	  ArrayList<RuleBinding> ruleBindigsArrayList = new ArrayList<RuleBinding>();
-  		  
-      	  for (Component c : inside.getComponents()) {
-	    	  //System.out.println(">" + c);
-	    	  if (c instanceof EventForm) {
-			  	RuleBinding binding = ((EventForm) c).ruleBinding();
-    		  	if(binding == null) {
-    		  		error(RULE_EVENT_ERROR);
-    		  		return;
-    		  	}
-    		  	else ruleBindigsArrayList.add(binding);
-    		  	
-    		  	inside.remove(c);
-    		  	inside.revalidate();
-	        	inside.repaint();
-	    	  }
-		  }
-      	  
-      	Rule myRule = new Rule(ruleName, ruleModifier,selectedExtraModifier, ruleParameters, ruleBindigsArrayList);
-
-      	  if(!ruleSystem.addNewRule(myRule)) {
-      		  error(RULE_EXIST);
-      		  return;
-  	  	  }
-      	  
-          //statusLabel.setText( "Added Rule "+ruleName);
-      	  success("Rule " + ruleName + " added successfully");
-      	  updateRuleSystemGUI(myRule.getRuleNameID());
+  	  		
+  	  		System.out.println(selectedExtraModifier +" <" + ruleParameters + ">");
+  	  		if(selectedExtraModifier.equals("Start") && ruleParameters.equals("")) {
+  	  			error(START_RULE_PARAMETER);
+  	  			return;
+  	  		}
+  	  	
+	  		  //headerLabel.setBackground(Color.WHITE);
+	  		  
+	  	  	  String ruleModifier = modifierGroup.getSelection().getActionCommand();	
+	  		  RuleNameArea.setBackground(Color.WHITE);
+	  		  
+	      	  ArrayList<RuleBinding> ruleBindigsArrayList = new ArrayList<RuleBinding>();
+	  		  
+	      	  for (Component c : inside.getComponents()) {
+		    	  //System.out.println(">" + c);
+		    	  if (c instanceof EventForm) {
+				  	RuleBinding binding = ((EventForm) c).ruleBinding();
+	    		  	if(binding == null) {
+	    		  		error(RULE_EVENT_ERROR);
+	    		  		return;
+	    		  	}
+	    		  	else ruleBindigsArrayList.add(binding);
+	    		  	
+	    		  	inside.remove(c);
+	    		  	inside.revalidate();
+		        	inside.repaint();
+		    	  }
+			  }
+	      	  
+	      	Rule myRule = new Rule(ruleName, ruleModifier,selectedExtraModifier, ruleParameters, ruleBindigsArrayList);
+	
+	      	  if(!ruleSystem.addNewRule(myRule)) {
+	      		  error(RULE_EXIST);
+	      		  return;
+	  	  	  }
+	      	  
+	          //statusLabel.setText( "Added Rule "+ruleName);
+	      	  success("Rule " + ruleName + " added successfully");
+	      	  updateRuleSystemGUI(myRule.getRuleNameID());
+  	  	
 	  	}
 	  	else {
   		  
