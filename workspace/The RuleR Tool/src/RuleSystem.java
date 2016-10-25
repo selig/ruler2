@@ -25,9 +25,9 @@ public class RuleSystem {
 		   return false;
 	}
 	
-	public String getRules() {
+	public String[] getRules() {
 		
-		String allRules = "";
+		String[] allRules = new String[list.size()];
 		
 		// Get a set of the entries
 	    Set<Entry<Integer, Rule>> set = list.entrySet();
@@ -35,11 +35,14 @@ public class RuleSystem {
 	    // Get an iterator
 	    Iterator<Entry<Integer, Rule>> i = set.iterator();
 	    
+	    int index = 0;
+	    
 	    // Display elements
 	    while(i.hasNext()) {
 	       @SuppressWarnings("rawtypes")
 	       Map.Entry ruleElement = (Map.Entry)i.next();
-	       allRules += "<"+ruleElement.getValue().toString()+"> ; ";
+	       allRules[index] = "<"+ruleElement.getValue().toString()+">";
+	       index++;
 	    }
 		
 		return allRules;
@@ -72,45 +75,56 @@ public class RuleSystem {
 		return list.size();
 	}
 	
-public void addPredifinedRules() {
+public void addPredifinedRules(String RuleString) {
 		
-		String RuleString ="<None Step Open(file) { [write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file) ] }>";
+		//String RuleString ="<None Step Open(file) { [write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file) ] }>";
 		
-		String[] RuleAndEvent = RuleString.split("{");
+		String[] RuleAndEvent = RuleString.split("\\{");
 		
 		String[] RuleInfo = RuleAndEvent[0].replaceAll("<", "").split(" ");
 		
 		String extraModifier = RuleInfo[0];
 		String modifier = RuleInfo[1];
-		String ruleName = RuleInfo[2].split("(")[0];
-		String ruleParameters = RuleInfo[2].split("(")[1].replaceAll(")", "");
+		String ruleName = RuleInfo[2].split("\\(")[0];
+		String ruleParameters = RuleInfo[2].split("\\(")[1].replaceAll("\\)", "");
 		
 		
-		String[] Events = RuleAndEvent[1].replace("\\s+", "").split("][");
+		String[] Events = RuleAndEvent[1].replace("\\s+", "").split("\\]\\[");
 		
 		ArrayList<RuleBinding> ruleBindings = new ArrayList<RuleBinding>();
 		
 		for(String event : Events) {
 			String[] eventSplit = event.split("¬>");
 			
-			String eventName = eventSplit[0].split("(")[0];
+			String eventName = eventSplit[0].split("\\(")[0];
 			
-			String[] eventParameters = eventSplit[0].split("(")[1].split("<")[0].replaceAll(")","").split(",");
+			String[] eventParameters = eventSplit[0].split("\\(")[1].split("<")[0].replaceAll("\\)","").split(",");
 			
-			String[] eventConditions = eventSplit[0].split("(")[1].split("<")[1].replaceAll(">","").split(",");
+			String[] eventConditions = eventSplit[0].split("\\(")[1].split("<")[1].replaceAll(">","").split(",");
 			
 			String[] consRules = eventSplit[1].split(",");
 			
+			System.out.println("--> " + consRules);
 
 			ArrayList<ConsequentRule> consequentRules = new ArrayList<ConsequentRule>();
 			
 			for(String cons : consRules) {
 				
-				String consequentName = eventSplit[1].split("(")[0];
+				String consequentName = eventSplit[1].split("\\(")[0];
 				
-				String[] consequentParameters = eventSplit[1].split("(")[1].replaceAll(")", "").split(",");
+				try {
+				String[] consequentParameters = eventSplit[1].split("\\(")[1].replaceAll("\\)", "").split(",");
 				
 				consequentRules.add(new ConsequentRule(consequentName, consequentParameters));
+				} catch(Exception e) {
+					
+					String[] consequentParameters = new String[0];
+					
+					consequentName = eventSplit[1].split("\\]")[0];
+					//System.out.println("-- -- --> " + consequentName);
+					
+					consequentRules.add(new ConsequentRule(consequentName, consequentParameters));
+				}
 			}
 
 			ruleBindings.add(new RuleBinding(eventName, eventParameters, eventConditions, consequentRules));

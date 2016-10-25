@@ -7,6 +7,11 @@ import javax.swing.*;
 
 public class Interface {
 	
+	//Simple rule set 
+	private static final String rule1 = "<None Always Open(file) { [open(file)<> ¬> isOpen(file)] }>";
+	private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
+	
+	
 	private static long startTime = 0;
 	private static long finishTime = 0;
 	
@@ -64,6 +69,11 @@ public class Interface {
        Interface Interface = new Interface();
        
        ruleSystem = new RuleSystem();
+       
+       ruleSystem.addPredifinedRules(rule1);
+       ruleSystem.addPredifinedRules(rule2);
+       
+       Interface.updateRuleSystemGUI();
        
        //Interface.showEventDemo();       
     }
@@ -161,11 +171,22 @@ public class Interface {
 	private void updateRuleSystemGUI(Integer ruleNameID){
 	      //headerLabel.setText("Rule Added"); 
 	      //ObjectLabel.setText(/*ObjectLabel.getText() + " | " +*/ ruleSystem.getRules() + "<! "+time() +" !>");      
+		//System.out.println(ruleSystem.getOneRule(ruleNameID));
 		ruleSystemInside.add(new RuleString(ruleSystem.getOneRule(ruleNameID)));
 		ruleSystemInside.revalidate();
 		ruleSystemInside.repaint();
 		
 		ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM); 
+	}
+	
+	private void updateRuleSystemGUI(){
+		
+		for(String rule : ruleSystem.getRules()) {
+			ruleSystemInside.add(new RuleString(rule));
+			ruleSystemInside.revalidate();
+			ruleSystemInside.repaint();
+			ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM);
+		}
 	}
 
 	private String time() {

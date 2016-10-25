@@ -11,15 +11,16 @@ public class ConsequentRule {
 	private String[] consequentRuleParameterStrings;
 	
 	public ConsequentRule(String name,String[] param) {
+		name = GlobalFunctions.removeWhiteSpaces(name);
 		this.ruleID = GlobalFunctions.hashName(name);
 		this.ruleName = name;
 		this.consequentRuleParameterStrings = param;
 	}
 	
 	public String toString() {
-		if(RuleSystem.getRuleName(ruleID) == null)
-			return  this.ruleName + "(" + GlobalFunctions.getParameters(consequentRuleParameterStrings) + ")";
-		else return  RuleSystem.getRuleName(ruleID) + "(" + GlobalFunctions.getParameters(consequentRuleParameterStrings) + ")";
+		if(this.ruleName.toLowerCase().equals("fail") || this.ruleName.toLowerCase().equals("ok"))
+			return this.ruleName;
+		return  this.ruleName + "(" + GlobalFunctions.getParameters(consequentRuleParameterStrings) + ")";
 	}
 
 	public void initializeParameterIndexes(Parameter[] tempParamArray) {
