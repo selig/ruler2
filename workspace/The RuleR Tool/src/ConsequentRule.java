@@ -6,13 +6,13 @@
 public class ConsequentRule {
 
 	private final String ruleName;
-	private final int ruleID;
+	//private final int ruleID;
 	private int[] consequentRuleParameterIndexes;
 	private String[] consequentRuleParameterStrings;
 	
 	public ConsequentRule(String name,String[] param) {
 		name = GlobalFunctions.removeWhiteSpaces(name);
-		this.ruleID = GlobalFunctions.hashName(name);
+		//this.ruleID = GlobalFunctions.hashName(name);
 		this.ruleName = name;
 		this.consequentRuleParameterStrings = param;
 	}
@@ -29,6 +29,26 @@ public class ConsequentRule {
 		for(int i=0;i<consequentRuleParameterIndexes.length;i++) {
 			consequentRuleParameterIndexes[i] = GlobalFunctions.getParamIndex(consequentRuleParameterStrings[i],tempParamArray);
 		}	
+	}
+
+	public String getRuleName() {
+		return ruleName;
+	}
+
+	public int[] getConsequentRuleParameterIndexes() {
+		return consequentRuleParameterIndexes;
+	}
+
+	public String[] getConsequentRuleParameterStrings() {
+		return consequentRuleParameterStrings;
+	}
+	
+	public boolean isFail() {
+		return this.ruleName.toLowerCase().equals("fail");
+	}
+
+	public boolean isOK() {
+		return this.ruleName.toLowerCase().equals("ok");
 	}
 
 }

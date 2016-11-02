@@ -11,8 +11,8 @@ public class Condition {
 	private final static String EQUALS = "=";
 	private final static String NOTEQUAL = "!=";
 	
-	private enum CompareOperation{greaterThan, lessThan, equals, notEqual};
-	private enum ConditionType{compare,rule};
+	public enum CompareOperation{greaterThan, lessThan, equals, notEqual};
+	public enum ConditionType{compare,rule};
 
 	private final String condition;
 	private final ConditionType conditionType;
@@ -85,8 +85,19 @@ public class Condition {
 	public String toString() {
 		return this.condition;
 	}
-
 	
+	public String getCondition() {
+		return condition;
+	}
+
+	public ConditionType getConditionType() {
+		return conditionType;
+	}
+
+	public CompareOperation getConditionOperator() {
+		return conditionOperator;
+	}
+
 	public String[] getParameterArray() {
 		return this.conditionParameterStrings;
 	}

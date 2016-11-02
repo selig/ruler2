@@ -20,6 +20,7 @@ public class Interface {
 	private static final String START_RULE_PARAMETER = "Parameters are empty on Start rule.";
 	private static final String THEREARE = "There are ";
 	private static final String RULESINRULESYSTEM = " rules in Rule System";
+	private static final String RULESINACTIVERULESET = " Active Rules in Active Rule Set";
 	
 	private static String RULE_NAME = "Open";
 	private static String RULE_PARAM = "file";
@@ -30,6 +31,7 @@ public class Interface {
 	private static String CONSEQUENT_PARAM = "file";
 	
 	public static RuleSystem ruleSystem;
+	public static ActiveRuleSet activeRuleSet;
 	
 
 	private JFrame mainFrame;
@@ -49,8 +51,10 @@ public class Interface {
     private ButtonGroup extraModifierGroup;
     private JPanel inside;
     private JPanel ruleSystemInside;
+    private JPanel activeRuleSetInside;
     private JScrollPane scrollFrame;
     private JScrollPane ruleSystemScrollFrame;
+    private JScrollPane activeRuleSetScrollFrame;
     private JTextArea RuleNameArea;
     private JTextArea RuleParameterArea;
     private JComponent panel1;
@@ -59,6 +63,7 @@ public class Interface {
     private JComponent panel4;
     private JTabbedPane TabbedPane;
     private JLabel ruleSystemGUIHeader; 
+    private JLabel activeRuleSetGUIHeader; 
     
     
     public Interface(){
@@ -73,6 +78,12 @@ public class Interface {
        ruleSystem.addPredifinedRules(rule1);
        ruleSystem.addPredifinedRules(rule2);
        
+       activeRuleSet = new ActiveRuleSet();
+       
+       ruleSystem.activateRules(activeRuleSet);
+       
+       System.out.println(activeRuleSet.getNumberOfActivations());
+       
        Interface.updateRuleSystemGUI();
        
        //Interface.showEventDemo();       
@@ -84,8 +95,6 @@ public class Interface {
  	      mainFrame.add(new Tabbed(), BorderLayout.CENTER);
  	      mainFrame.setVisible(true); 
  	   }
- 	   
-	 
     
 	private void AddRule() {
 		
@@ -181,11 +190,26 @@ public class Interface {
 	
 	private void updateRuleSystemGUI(){
 		
+		ruleSystemInside.removeAll();
+		ruleSystemInside.revalidate();
+		ruleSystemInside.repaint();
+		
+		activeRuleSetInside.removeAll();
+		activeRuleSetInside.revalidate();
+		activeRuleSetInside.repaint();
+		
 		for(String rule : ruleSystem.getRules()) {
 			ruleSystemInside.add(new RuleString(rule));
 			ruleSystemInside.revalidate();
 			ruleSystemInside.repaint();
 			ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM);
+		}
+		
+		for(String activation : activeRuleSet.getActivations()) {
+			activeRuleSetInside.add(new RuleString(activation));
+			activeRuleSetInside.revalidate();
+			activeRuleSetInside.repaint();
+			activeRuleSetGUIHeader.setText(THEREARE + activeRuleSet.getNumberOfActivations() + RULESINACTIVERULESET);
 		}
 	}
 
@@ -306,6 +330,13 @@ public class Interface {
 		
 	}
 	
+	public static JPanel CreateNewInside(){
+		JPanel insider = new JPanel();
+		insider.setLayout(new GridLayout(0,1));
+		return insider;
+	}
+	
+	
 	class ConsequentRuleForm extends JPanel {
 		
 		private JPanel eventPanel4;
@@ -368,8 +399,8 @@ public class Interface {
 	                "Does twice as much nothing");
 	        TabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 	        
-	        panel3 = makeTextPanel("Panel #3");
-	        TabbedPane.addTab("Tab 3", icon, panel3,
+	        panel3 = new ActiveRuleSetGUI();
+	        TabbedPane.addTab("Active Rule Set", icon, panel3,
 	                "Still does nothing");
 	        TabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
 	        
@@ -561,8 +592,7 @@ public class Interface {
 			
 			ruleSystemGUIHeader = new JLabel(THEREARE + 0 + RULESINRULESYSTEM,JLabel.LEFT);
 			
-			ruleSystemInside = new JPanel();
-			ruleSystemInside.setLayout(new GridLayout(0,1));
+			ruleSystemInside = CreateNewInside();
 			ruleSystemScrollFrame = new JScrollPane(ruleSystemInside);
 			ruleSystemScrollFrame.setPreferredSize(new Dimension(1000,600));
 	 	    ruleSystemInside.setAutoscrolls(true);
@@ -570,6 +600,33 @@ public class Interface {
 	 	    add(ruleSystemGUIHeader);
 	 	    add(ruleSystemScrollFrame);
 	 	    
+		}
+		
+		public void recreate(){
+			this.revalidate();
+			this.repaint();
+		}
+	}
+	
+	class ActiveRuleSetGUI extends JPanel {
+		
+		public ActiveRuleSetGUI() {
+			
+			activeRuleSetGUIHeader = new JLabel(THEREARE + 0 + RULESINACTIVERULESET,JLabel.LEFT);
+			
+			activeRuleSetInside = CreateNewInside();
+			activeRuleSetScrollFrame = new JScrollPane(activeRuleSetInside);
+			activeRuleSetScrollFrame.setPreferredSize(new Dimension(1000,600));
+	 	    activeRuleSetInside.setAutoscrolls(true);
+	 	    
+	 	    add(activeRuleSetGUIHeader);
+	 	    add(activeRuleSetScrollFrame);
+	 	    
+		}
+		
+		public void recreate(){
+			this.revalidate();
+			this.repaint();
 		}
 		
 	}

@@ -58,6 +58,10 @@ public class RuleSystem {
 		else return rule.getRuleID();
 	}
 	
+	public Rule getRule(String name) {
+		return list.get(GlobalFunctions.hashName(name));
+	}
+	
 	public static int getRuleID(Integer key) {
 		Rule rule = list.get(key);
 		if(rule == null) return -1;
@@ -75,7 +79,15 @@ public class RuleSystem {
 		return list.size();
 	}
 	
-public void addPredifinedRules(String RuleString) {
+	public void activateRules(ActiveRuleSet activeRuleSet) {
+			for(Rule rule : list.values()){
+				if(rule.getRuleModifier() == Rule.Modifier.Always || rule.getExtraModifier()== Rule.ExtraModifier.Start){
+					activeRuleSet.addNewActivation(rule.getRuleID(), new RuleActivation(rule, ""));
+				}
+			}	
+	}
+	
+	public void addPredifinedRules(String RuleString) {
 		
 		//String RuleString ="<None Step Open(file) { [write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file) ] }>";
 		
@@ -135,6 +147,4 @@ public void addPredifinedRules(String RuleString) {
 			
 		
 	}
-
-
 }

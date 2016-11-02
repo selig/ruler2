@@ -23,6 +23,7 @@ public class Parameter {
 	private Operator parameterOperation = null;
 	private final String name;
 	private final Rule rule;
+	//private final paramType;
 	
 	/**
 	 * Constructor for Parameter
@@ -32,6 +33,7 @@ public class Parameter {
 		
 		this.rule = rule;
 		this.name = GlobalFunctions.removeWhiteSpaces(name);
+		//this.paramType = newParamType;s
 		
 		parameterOperation = operation(name);
 		

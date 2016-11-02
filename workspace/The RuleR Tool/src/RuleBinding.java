@@ -73,11 +73,7 @@ public class RuleBinding {
 		return tempConditionArrayConditions;
 	}
 	
-	public Condition[] getEventConditionsArray() {
-		return this.eventConditions;
-	}
-	
-	private String getEventConditions() {
+	private String getEventConditionsString() {
 		String finalString = "";
 		
 		for(Condition condition : eventConditions) {
@@ -89,7 +85,23 @@ public class RuleBinding {
 		return finalString;
 	}
 	
+	public Condition[] getEventConditions() {
+		return this.eventConditions;
+	}
+	
+	public String getEventName() {
+		return eventName;
+	}
+
+	public ArrayList<ConsequentRule> getConsequentRules() {
+		return consequentRules;
+	}
+
+	public int[] getEventParameterIndexes() {
+		return eventParameterIndexes;
+	}
+
 	public String toString() {
-		return eventName + "(" + GlobalFunctions.getParameters(eventParameterStrings) + ")<" + getEventConditions() + "> ¬> " + getConsequentRulesString() + " \n";
+		return eventName + "(" + GlobalFunctions.getParameters(eventParameterStrings) + ")<" + getEventConditionsString() + "> ¬> " + getConsequentRulesString() + " \n";
 	}
 }

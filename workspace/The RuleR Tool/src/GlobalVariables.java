@@ -4,6 +4,8 @@ public class GlobalVariables {
 	private static int bindingID = 0;
 	private static int ruleID = 0;
 	private static int consequentRuleID = 0;
+	private static int activeRuleSetID = 0;
+	
 	
 	public GlobalVariables() {
 		
@@ -23,7 +25,9 @@ public class GlobalVariables {
 		consequentRuleID++;
 		return consequentRuleID;
 	}
-	
-	
 
+	public static int getNextActiveRuleSetID() {
+		activeRuleSetID++;
+		return activeRuleSetID;
+	}
 }

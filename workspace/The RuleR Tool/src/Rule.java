@@ -70,7 +70,7 @@ public class Rule {
 				}
 				
 				// Get different parameters from Conditions
-				for(Condition condition : ruleBind.getEventConditionsArray()) {
+				for(Condition condition : ruleBind.getEventConditions()) {
 					
 					String[] allconditions;
 					
@@ -167,6 +167,22 @@ public class Rule {
 		return ruleName;
 	}
 	
+	public int[] getRuleParameterIndexes() {
+		return ruleParameterIndexes;
+	}
+	
+	public ExtraModifier getExtraModifier() {
+		return extraModifier;
+	}
+
+	public Modifier getRuleModifier() {
+		return ruleModifier;
+	}
+	
+	public ArrayList<RuleBinding> getRuleBinding() {
+		return ruleBinding;
+	}
+
 	public String toString() {
 		return extraModifier + " " +ruleModifier + " " + ruleName + "("+ GlobalFunctions.getParameters(ruleParameterStrings) +") { " + getRuleBindingsString() + " }";
 	}
