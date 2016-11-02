@@ -4,13 +4,16 @@
  *
  */
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Update {
 	
 	public static boolean update(Event event){
+		
 		ActiveRuleSet activeRuleSet = Interface.activeRuleSet;
+		
+		ArrayList<RuleActivation> tempActivations = new ArrayList<RuleActivation>();
+		
 		for(RuleActivation activation : activeRuleSet.getArrayOfRuleActivations()){
 			// search rule with the event() (some fancy eficient way)
 			
@@ -53,7 +56,6 @@ public class Update {
 						}
 					}
 					*/
-					ArrayList<RuleActivation> tempActivations = new ArrayList<RuleActivation>();
 					for(ConsequentRule consequentRule : binding.getConsequentRules()){
 						// Check if Consequence is Fail
 						if(consequentRule.isFail()) return false;
@@ -83,6 +85,9 @@ public class Update {
 		}
 		
 		// Add New Activations
+		for(RuleActivation activation : tempActivations){
+			activeRuleSet.addNewActivation(activation.getRule().getRuleID(), activation);
+		}
 		
 		return true;
 	}
