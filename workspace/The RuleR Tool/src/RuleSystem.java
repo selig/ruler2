@@ -108,7 +108,7 @@ public class RuleSystem {
 		for(String event : Events) {
 			String[] eventSplit = event.split("¬>");
 			
-			String eventName = eventSplit[0].split("\\(")[0];
+			String eventName = GlobalFunctions.removeWhiteSpaces(eventSplit[0]).split("\\(")[0].replaceAll("\\[", "");
 			
 			String[] eventParameters = eventSplit[0].split("\\(")[1].split("<")[0].replaceAll("\\)","").split(",");
 			

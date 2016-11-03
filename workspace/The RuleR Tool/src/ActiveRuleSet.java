@@ -25,7 +25,11 @@ public class ActiveRuleSet {
 	}
 	
 	public RuleActivation[] getArrayOfRuleActivations() {
-		return  (RuleActivation[]) ruleActivations.values().toArray();
+		return  (RuleActivation[]) ruleActivations.values().toArray(new RuleActivation[0]);
+	}
+	
+	public boolean activeRuleExist(String RuleName){
+		return this.ruleActivations.get(GlobalFunctions.hashName(RuleName)) != null;
 	}
 	
 	public String[] getActivations() {

@@ -16,13 +16,15 @@ public class Update {
 		
 		for(RuleActivation activation : activeRuleSet.getArrayOfRuleActivations()){
 			// search rule with the event() (some fancy efficient way)
-			
+			System.out.println("Rule Activation: " + activation.getRule().getRuleName());
 			boolean activationFired = false;
 			
 			Rule rule = activation.getRule();
 			rulebindingloop: for(RuleBinding binding : rule.getRuleBinding()){
+				System.out.println("  Match: " + event.getEvent() + " vs " + binding.getEventName());
 				if(event.getEvent().equals(binding.getEventName())){
 					activationFired = true;
+					System.out.println("    True. ActivationFired: " + activationFired);
 					
 					// Parameters
 					Map<Integer, ParameterBinding> parameterValues = activation.getParameterBindings();
@@ -33,6 +35,7 @@ public class Update {
 					int[] bindingParam = binding.getEventParameterIndexes();
 					
 					if(eventParam.length == bindingParam.length) {
+						System.out.println("      Parameter Length Ok");
 						int i=0;
 						
 						for(int index : bindingParam){
@@ -44,14 +47,30 @@ public class Update {
 							
 							i++;				
 						}	
-					} else continue;
+					} else {
+						System.out.println("      Parameter Length Not OK");
+						continue;
+					}
 					
 					// Conditions
 					for(Condition condition : binding.getEventConditions()){
+						System.out.println("      Condition");
 						if(condition.getConditionType() == Condition.ConditionType.rule){
+							System.out.println("        Rule");
 							// Deal with Rule condition
-/* ******* */							
+							// Get rule
+							String ruleName = condition.getCondition();
+							
+							// Does rule exist in ActiveRuleSet
+							if(! activeRuleSet.activeRuleExist(ruleName)) {
+								System.out.println("          Rule Does not exist");
+								continue rulebindingloop;
+							} else {
+								System.out.println("          Rule Does exist");
+							}
+							
 						} else {
+							System.out.println("        Normal");
 							//Deal with Conditions
 							// Get Condition Parameter Indexes
 							int[] conditionParameters = condition.getParameterIndexes();
@@ -88,42 +107,65 @@ public class Update {
 							}
 							
 							// Get Condition result
-							if(!condition.isTrue(parameterBindings[0].getParameterValue(), parameterBindings[1].getParameterValue()))
+							if(!condition.isTrue(parameterBindings[0].getParameterValue(), parameterBindings[1].getParameterValue())) {
+								System.out.println("          Condition Not ok");
 								continue rulebindingloop;
+							} else {
+								System.out.println("          Condition OK");
+							}
 							
 						}
 					}
 					
 					for(ConsequentRule consequentRule : binding.getConsequentRules()){
+						System.out.println("      Consequent Rule");
 						// Check if Consequence is Fail
-						if(consequentRule.isFail()) return false;
+						if(consequentRule.isFail()) {
+							System.out.println("        Fail");
+							return false;
+						}
 						
 						// Check if is a rule
-						if(!consequentRule.isOK())
+						if(!consequentRule.isOK()) {
+							System.out.println("++++++++Rule Add");
 							// Add new RuleActivation to tempArray
 							tempActivations.add(new RuleActivation(consequentRule.getRuleName()
 										, parameterValues));
+						} else {
+							System.out.println("        Rule - OK");
+						}
 					}
 					
 					
 					
 					
 				}
-				else continue;
+				else {
+					System.out.println("    False");
+					continue;
+				}
 			}
 			// Check (and Delete) Activation
 			Rule.Modifier modifier = rule.getRuleModifier();
 			if(modifier != Rule.Modifier.Always) {
-				if(modifier == Rule.Modifier.Skip && !activationFired) continue;
+				System.out.println("  Modifier Not Always"); 
+				if(modifier == Rule.Modifier.Skip && !activationFired) {
+					System.out.println("    Do not delete");
+					continue;
+				}
 				else {
+					System.out.println("    Delete");
 					// Delete Activation
 					activeRuleSet.deleteActivation(activation);
 				}
+			} else {
+				System.out.println("  Modifier Always"); 
 			}
 		}
 		
 		// Add New Activations
 		for(RuleActivation activation : tempActivations){
+			System.out.println("Add New Activation + + + + ");
 			activeRuleSet.addNewActivation(activation.getRule().getRuleID(), activation);
 		}
 		

@@ -36,7 +36,8 @@ public class Interface {
 
 	private JFrame mainFrame;
     //private JLabel ruleModifierLabel;
-    private JLabel ruleNameLabel;
+	private JLabel ruleNameLabel;
+    private JLabel eventLabel;
     private JLabel ruleParameterLabel;
     //private JLabel ruleEventLabel;
     //private JLabel ruleConseqLabel;
@@ -47,6 +48,7 @@ public class Interface {
     private JPanel fieldPanel2;
     private JPanel fieldPanel1;
     private JPanel fieldPanel3;
+    private JPanel eventPanel;
     private ButtonGroup modifierGroup;
     private ButtonGroup extraModifierGroup;
     private JPanel inside;
@@ -56,14 +58,18 @@ public class Interface {
     private JScrollPane ruleSystemScrollFrame;
     private JScrollPane activeRuleSetScrollFrame;
     private JTextArea RuleNameArea;
+    private JTextArea eventArea;
     private JTextArea RuleParameterArea;
     private JComponent panel1;
     private JComponent panel2;
     private JComponent panel3;
     private JComponent panel4;
+    private JComponent panel5;
     private JTabbedPane TabbedPane;
     private JLabel ruleSystemGUIHeader; 
-    private JLabel activeRuleSetGUIHeader; 
+    private JLabel activeRuleSetGUIHeader;
+    public static Interface Interface;
+    
     
     
     public Interface(){
@@ -71,7 +77,7 @@ public class Interface {
     }
     
     public static void main(String[] args){
-       Interface Interface = new Interface();
+       Interface = new Interface();
        
        ruleSystem = new RuleSystem();
        
@@ -85,6 +91,7 @@ public class Interface {
        System.out.println(activeRuleSet.getNumberOfActivations());
        
        Interface.updateRuleSystemGUI();
+       Interface.activeRuleGUI();
        
        //Interface.showEventDemo();       
     }
@@ -167,6 +174,7 @@ public class Interface {
 	private void success(String successMessage) {
 		JOptionPane.showMessageDialog(mainFrame,
 				successMessage);
+		System.out.println("Suc: " + successMessage);
 	}
 	
 	
@@ -175,6 +183,7 @@ public class Interface {
 			    errorMessage + " Please fix the problem",
 			    "Inane error",
 			    JOptionPane.ERROR_MESSAGE);
+		System.out.println("Err: " + errorMessage);
 	}
 
 	private void updateRuleSystemGUI(Integer ruleNameID){
@@ -194,16 +203,19 @@ public class Interface {
 		ruleSystemInside.revalidate();
 		ruleSystemInside.repaint();
 		
-		activeRuleSetInside.removeAll();
-		activeRuleSetInside.revalidate();
-		activeRuleSetInside.repaint();
-		
 		for(String rule : ruleSystem.getRules()) {
 			ruleSystemInside.add(new RuleString(rule));
 			ruleSystemInside.revalidate();
 			ruleSystemInside.repaint();
 			ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM);
 		}
+	}
+	
+	private void activeRuleGUI(){
+		
+		activeRuleSetInside.removeAll();
+		activeRuleSetInside.revalidate();
+		activeRuleSetInside.repaint();
 		
 		for(String activation : activeRuleSet.getActivations()) {
 			activeRuleSetInside.add(new RuleString(activation));
@@ -404,12 +416,18 @@ public class Interface {
 	                "Still does nothing");
 	        TabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
 	        
-	        panel4 = makeTextPanel(
-	                "Panel #4 (has a preferred size of 410 x 50).");
+	        panel4 = new AddEventGUI();
 	        panel4.setPreferredSize(new Dimension(410, 50));
-	        TabbedPane.addTab("Tab 4", icon, panel4,
+	        TabbedPane.addTab("Add Event", icon, panel4,
 	                "Does nothing at all");
 	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
+	        
+	        panel5 = makeTextPanel(
+	                "Panel #4 (has a preferred size of 410 x 50).");
+	        panel5.setPreferredSize(new Dimension(410, 50));
+	        TabbedPane.addTab("Log", icon, panel5,
+	                "Does nothing at all");
+	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_5);
 	        
 	        //Add the Tabbed pane to this panel.
 	        add(TabbedPane);
@@ -647,6 +665,48 @@ public class Interface {
 			rulePanel.add(ruleString);
 			
 			add(rulePanel);
+		}
+	}
+	
+	class AddEventGUI extends JPanel {
+		
+		private JLabel ruleString;
+		private JPanel rulePanel;
+		
+		public AddEventGUI() {
+			super(new GridLayout(0,1));
+			
+			eventLabel = new JLabel("Event",JLabel.LEFT);
+			eventArea = new JTextArea("open(file)",2,10);
+			
+			eventPanel = new JPanel();
+			eventPanel.setLayout(new FlowLayout());
+			eventPanel.add(eventLabel);
+			eventPanel.add(eventArea);
+			
+			JButton addButton = new JButton("Trigger Event");
+ 	        addButton.setActionCommand("event");
+ 	        addButton.addActionListener(new ActionListener() {
+ 	          public void actionPerformed(ActionEvent e) {
+ 	        	 String event = eventArea.getText();
+ 	        	 
+ 	        	 System.out.println("Event: " + event);
+ 	        	 
+ 	        	 /*String eventName = event.split("(")[0];
+ 	        	 String[] eventParameters = event.replaceAll(")", "").split("(")[1].split(",");
+ 	        	 */
+ 	        	 if(Update.update(new Event(event)))
+ 	        		Interface.success("True");
+ 	        	 else
+ 	        		Interface.error("False");
+ 	        	 
+ 	        	 Interface.activeRuleGUI();
+ 	          }
+ 	        });  
+	 	      
+ 	        eventPanel.add(addButton);
+			
+			add(eventPanel);
 		}
 	}
 }
