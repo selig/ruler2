@@ -11,5 +11,8 @@ public class VariableNumber extends Variable {
 	public int getValue() {
 		return this.value;
 	}
-
+	
+	public boolean isNumber() {
+		return true;
+	}
 }

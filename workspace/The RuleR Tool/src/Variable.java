@@ -16,4 +16,12 @@ public class Variable {
 	public String getName() {
 		return this.name;
 	}
+	
+	public boolean isNumber() {
+		return false;
+	}
+	
+	public int getValue() {
+		return 0;
+	}
 }

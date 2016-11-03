@@ -19,7 +19,7 @@ public class Parameter {
 	
 	private enum Operator{plus,minus,multiply,divide};
 	
-	private Integer[] parameterVariables = new Integer[2];
+	private Integer[] parameterVariables;
 	private Operator parameterOperation = null;
 	private final String name;
 	private final Rule rule;
@@ -32,30 +32,43 @@ public class Parameter {
 	public Parameter(String name, Rule rule) {
 		
 		this.rule = rule;
+		
+		// parameter; like param+1 
 		this.name = GlobalFunctions.removeWhiteSpaces(name);
 		//this.paramType = newParamType;s
 		
+		// Get operator such as +
 		parameterOperation = operation(name);
 		
-		String charToSplit;
+		String OperatorCharToSplit;
 		String[] splitName;
 		
-		if((charToSplit = getRegexChar(parameterOperation)) != null)
-			splitName = GlobalFunctions.removeWhiteSpaces(name).split(charToSplit);
+		// Split parameter String by operator if exists one
+		if((OperatorCharToSplit = getRegexChar(parameterOperation)) != null)
+			splitName = GlobalFunctions.removeWhiteSpaces(name).split(OperatorCharToSplit);
 		else {
 			splitName = new String[1];
 			splitName[0] = name;
 		}
 		
+		// Create parameterVariables array of indexes
+		parameterVariables = new Integer[splitName.length];
+		
+		
 		int index = 0;
 		
+		// For each parameter
 		for(String variableName : splitName){
-			
+			// If array of variables in Rule contains this variable name
 			if(rule.containsVariable(variableName)) {
+				// Assign index as hashName of variable
 				parameterVariables[index] = GlobalFunctions.hashName(variableName);
 			} else {
+				// Otherwise, create new instance of variable
 				Variable newVariable = createVariableInstance(variableName);
+				// Assign index as hashName of variable
 				parameterVariables[index] = newVariable.getKey();
+				// Add variable to the Rule array
 				rule.addVariable(newVariable);
 			}
 			index++;
@@ -130,12 +143,35 @@ public class Parameter {
 		return this.name;
 	}
 	
+	public Integer[] getParameterVariables() {
+		return parameterVariables;
+	}
+	
+	public Rule getRule() {
+		return this.rule;
+	}
+
 	public String toString() {
 		if (parameterOperation == null) {
 			return this.rule.getVariable(parameterVariables[0]).getName();
 		} else return this.rule.getVariable(parameterVariables[0]).getName() 
 						 + getChar(parameterOperation) 
 						 + this.rule.getVariable(parameterVariables[1]).getName();
+	}
+
+	public int getVariableValue(int result, int number) {
+		switch(parameterOperation){
+			case plus:
+				return result - number;
+			case minus:
+				return result + number;
+			case multiply:
+				return result / number;
+			case divide:
+				return result * number;
+			default:
+			 	return -1;
+		}
 	}
 	
 }

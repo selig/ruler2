@@ -5,15 +5,26 @@ public class RuleActivation {
 	
 	private final Rule rule;
 	private final Map<Integer,ParameterBinding> parameterBindings;
+	private Map<Integer,VariableBinding> variableBinding;
 	
 	public RuleActivation(Rule newRuleName, String parameters) {
 		this.rule = newRuleName;
-		this.parameterBindings = getParameterBindingSet(newRuleName,parameters);		
+		initialiseVariableBinding();
+		this.parameterBindings = getParameterBindingSet(newRuleName,parameters);
 	}
-
+	
 	public RuleActivation(String ruleName, Map<Integer,ParameterBinding> parameters) {
 		this.rule = Interface.ruleSystem.getRule(ruleName);
+		initialiseVariableBinding();
 		this.parameterBindings = getParameterBindingSet(this.rule,parameters);
+	}
+	
+	private void initialiseVariableBinding() {
+		variableBinding = new HashMap<Integer, VariableBinding>();	
+	}
+	
+	public void addVariableBinding(VariableBinding newVariableBinding) {
+		variableBinding.put(newVariableBinding.getKey(), newVariableBinding);
 	}
 
 	private Map<Integer,ParameterBinding> getParameterBindingSet(Rule rule,String parameters) {
@@ -36,7 +47,7 @@ public class RuleActivation {
 				Parameter param = rule.getParameter(index);
 				
 				// Create and add new ParameterBinding to temp Set
-				tempSet.put(index,new ParameterBinding(param, parametersArray[i]));
+				tempSet.put(index,new ParameterBinding(param, parametersArray[i], this));
 				
 				i++;				
 			}			
@@ -62,7 +73,7 @@ public class RuleActivation {
 			Parameter param = rule.getParameter(index);
 			
 			// Create and add new ParameterBinding to temp Set
-			tempSet.put(index,new ParameterBinding(param, parameters.get(index).getParameterValue()));
+			tempSet.put(index,new ParameterBinding(param, parameters.get(index).getParameterValue(), this));
 			
 			i++;				
 		}

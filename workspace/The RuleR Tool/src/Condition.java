@@ -101,4 +101,9 @@ public class Condition {
 	public String[] getParameterArray() {
 		return this.conditionParameterStrings;
 	}
+	
+	public int[] getParameterIndexes() {
+		return this.conditionParamIndexes;
+	}
+	
 }

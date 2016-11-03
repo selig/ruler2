@@ -19,7 +19,6 @@ public class Update {
 			
 			boolean activationFired = false;
 			
-			ArrayList<Rule> rulesWithEvent = new ArrayList<Rule>();
 			Rule rule = activation.getRule();
 			for(RuleBinding binding : rule.getRuleBinding()){
 				if(event.getEvent().equals(binding.getEventName())){
@@ -41,21 +40,26 @@ public class Update {
 							Parameter param = rule.getParameter(index);
 							
 							// Create and add new ParameterBinding to temp Set
-							parameterValues.put(index,new ParameterBinding(param, eventParam[i]));
+							parameterValues.put(index,new ParameterBinding(param, eventParam[i],activation));
 							
 							i++;				
 						}	
 					} else continue;
 					
 					// Conditions
-					/*for(Condition condition : binding.getEventConditions()){
+					for(Condition condition : binding.getEventConditions()){
 						if(condition.getConditionType() == Condition.ConditionType.rule){
-							//Deal with Conditions
-						} else {
 							// Deal with Rule condition
+							
+						} else {
+							//Deal with Conditions
+							// Get Condition Parameter Indexes
+							int[] conditionParameters = condition.getParameterIndexes();
+							
+							
 						}
 					}
-					*/
+					
 					for(ConsequentRule consequentRule : binding.getConsequentRules()){
 						// Check if Consequence is Fail
 						if(consequentRule.isFail()) return false;
