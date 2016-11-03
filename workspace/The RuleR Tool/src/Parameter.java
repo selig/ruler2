@@ -174,4 +174,19 @@ public class Parameter {
 		}
 	}
 	
+	public Integer getParameterValue(int var1, int var2) {
+		switch(parameterOperation){
+		case plus:
+			return var1 + var2;
+		case minus:
+			return var1 - var2;
+		case multiply:
+			return var1 / var2;
+		case divide:
+			return var1 * var2;
+		default:
+		 	return null;
+	}
+	}
+	
 }

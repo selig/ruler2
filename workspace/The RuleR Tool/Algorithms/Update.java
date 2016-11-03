@@ -15,12 +15,12 @@ public class Update {
 		ArrayList<RuleActivation> tempActivations = new ArrayList<RuleActivation>();
 		
 		for(RuleActivation activation : activeRuleSet.getArrayOfRuleActivations()){
-			// search rule with the event() (some fancy eficient way)
+			// search rule with the event() (some fancy efficient way)
 			
 			boolean activationFired = false;
 			
 			Rule rule = activation.getRule();
-			for(RuleBinding binding : rule.getRuleBinding()){
+			rulebindingloop: for(RuleBinding binding : rule.getRuleBinding()){
 				if(event.getEvent().equals(binding.getEventName())){
 					activationFired = true;
 					
@@ -50,12 +50,46 @@ public class Update {
 					for(Condition condition : binding.getEventConditions()){
 						if(condition.getConditionType() == Condition.ConditionType.rule){
 							// Deal with Rule condition
-							
+/* ******* */							
 						} else {
 							//Deal with Conditions
 							// Get Condition Parameter Indexes
 							int[] conditionParameters = condition.getParameterIndexes();
 							
+							ParameterBinding[] parameterBindings = new ParameterBinding[conditionParameters.length];
+							
+							for(int i=0;i>parameterBindings.length;i++) {
+								parameterBindings[i] = activation.getParameterBinding(conditionParameters[i]);
+							}
+							
+							int i=0;
+							for(ParameterBinding paramBinding : parameterBindings){
+								if(paramBinding == null) {
+									// Get Parameter from Rules
+									Parameter parameter1 = rule.getParameter(conditionParameters[0]);
+									
+									// Get Parameter Variable indexes
+									Integer[] varIndexes1 = parameter1.getParameterVariables();
+									
+									// Get Variable1 value
+									int variable1Value = activation.getVariableValue(varIndexes1[0]);
+									
+									// Get Variable1 value
+									int variable2Value = activation.getVariableValue(varIndexes1[1]);
+									
+									// Get parameter 1 value
+									int param1Value = parameter1.getParameterValue(variable1Value, variable2Value);
+									
+									parameterValues.put(conditionParameters[0],new ParameterBinding(parameter1,param1Value+"",activation));
+									
+									parameterBindings[i] = parameterValues.get(conditionParameters[0]);
+								}
+								i++;
+							}
+							
+							// Get Condition result
+							if(!condition.isTrue(parameterBindings[0].getParameterValue(), parameterBindings[1].getParameterValue()))
+								continue rulebindingloop;
 							
 						}
 					}

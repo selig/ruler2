@@ -1,11 +1,6 @@
 
 public class Condition {
 	
-	private static int ONE = 1;
-	private static int TWO = 2;
-	private static int THREE = 3;
-	private static int FOUR = 4;
-	
 	private final static String GREATERTHAN = ">";
 	private final static String LESSTHAN = "<";
 	private final static String EQUALS = "=";
@@ -104,6 +99,34 @@ public class Condition {
 	
 	public int[] getParameterIndexes() {
 		return this.conditionParamIndexes;
+	}
+
+	public boolean isTrue(String parameterValue, String parameterValue2) {
+		// try to convert to int
+		try{
+			int param1 = Integer.parseInt(parameterValue);
+			int param2 = Integer.parseInt(parameterValue2);
+			
+			switch (this.conditionOperator) {
+			case greaterThan:
+				return param1 > param2;
+			case lessThan:
+				return param1 < param2;
+			case equals:
+				return param1 == param2;
+			case notEqual:
+				return param1 != param2;
+			default:
+				return false;
+			}
+			
+		} catch(NumberFormatException e){
+			// It must be text thus only equal is available
+			if(this.conditionOperator == CompareOperation.equals) {
+				return parameterValue.equals(parameterValue2);
+			}
+			else return false;
+		}
 	}
 	
 }

@@ -66,16 +66,13 @@ public class RuleActivation {
 		// Get parameter Array of the rule
 		int[] parameterIndexes = rule.getRuleParameterIndexes();
 			
-		int i=0;
 		// For Each Index
 		for(int index : parameterIndexes){
 			// Get Parameter
 			Parameter param = rule.getParameter(index);
 			
 			// Create and add new ParameterBinding to temp Set
-			tempSet.put(index,new ParameterBinding(param, parameters.get(index).getParameterValue(), this));
-			
-			i++;				
+			tempSet.put(index,new ParameterBinding(param, parameters.get(index).getParameterValue(), this));				
 		}
 		
 		return tempSet;	
@@ -92,5 +89,13 @@ public class RuleActivation {
 	@Override
 	public String toString() {
 		return this.rule.getRuleName() + " [" + parameterBindings.size() + "]";
+	}
+
+	public ParameterBinding getParameterBinding(int key) {
+		return parameterBindings.get(key);
+	}
+
+	public int getVariableValue(Integer key) {
+		return variableBinding.get(key).getVariableValueInt();
 	}
 }
