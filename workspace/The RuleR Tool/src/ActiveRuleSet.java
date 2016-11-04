@@ -18,7 +18,7 @@ public class ActiveRuleSet {
 		/*
 		 * 
 		 * What happens if the same rule activation is added to the hashmap?
-		 * later, how to recognise if the activation is for the same..
+		 * later, how to recognise if the activation is for the same object..
 		 * 
 		 */
 		this.ruleActivations.put(key, newRuleActivation);
@@ -30,7 +30,7 @@ public class ActiveRuleSet {
 	
 	public boolean activeRuleExist(String RuleName){
 		int key = GlobalFunctions.hashName(RuleName);
-		System.out.println("Find active rule " + RuleName + " " + key);
+		System.out.println("-------   Find active rule " + RuleName + " " + key);
 		return this.ruleActivations.get(key) != null;
 	}
 	

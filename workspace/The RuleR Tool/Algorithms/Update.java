@@ -179,7 +179,7 @@ public class Update {
 		
 		// Add New Activations
 		for(RuleActivation activation : tempActivations){
-			System.out.println("Add New Activation + + " + activation.getRule() + " " + activation.getRule().getRuleNameID() );
+			System.out.println("Add New Activation + + " + activation.getRule().getRuleName() + " " + activation.getRule().getRuleNameID() );
 			activeRuleSet.addNewActivation(activation.getRule().getRuleNameID(), activation);
 		}
 		

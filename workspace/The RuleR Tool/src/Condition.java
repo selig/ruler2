@@ -21,14 +21,16 @@ public class Condition {
 	public Condition(String condition) {
 		this.condition = GlobalFunctions.removeWhiteSpaces(condition);
 		
-		if(!this.condition.equals(""))
+		if(!this.condition.equals("")) {
 			this.conditionNegation = this.condition.substring(0, 1).equals("!") ? ConditionNegate.yes : ConditionNegate.no;
+			this.condition = this.condition.replaceAll("!", "");
+		}
 		else
 			this.conditionNegation = null;
 		
-		this.conditionOperator= getConditionOperation(condition);
+		this.conditionOperator= getConditionOperation(this.condition);
 		this.conditionType = setConditionType();
-		this.conditionParameterStrings = getParametersToStringArray(condition);
+		this.conditionParameterStrings = getParametersToStringArray(this.condition);
 	}
 	
 	private ConditionType setConditionType() {
