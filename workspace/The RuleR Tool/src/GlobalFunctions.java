@@ -4,7 +4,14 @@ import java.util.ArrayList;
 public class GlobalFunctions {
 
 	public static int hashName(String ruleName) {
-		return ruleName.hashCode();
+		final int prime = 31;
+		final int prime2 = 13;
+		char[] characters = ruleName.toCharArray();
+		int hashKey = 0;
+		for(char character : characters) {
+			hashKey += (int)((character * prime) / prime2);
+		}
+		return hashKey;
 	}
 	
 	public static boolean exists(String string, ArrayList<Parameter> parameters) {

@@ -9,6 +9,10 @@ import java.util.Map;
 public class Update {
 	
 	public static boolean update(Event event){
+
+		System.out.println("");
+		System.out.println("-----------------------------------");
+		System.out.println("");
 		
 		ActiveRuleSet activeRuleSet = Interface.activeRuleSet;
 		
@@ -61,15 +65,25 @@ public class Update {
 							// Get rule
 							String ruleName = condition.getCondition();
 							
-							// Does rule exist in ActiveRuleSet
-							if(! activeRuleSet.activeRuleExist(ruleName)) {
-								System.out.println("          Rule Does not exist");
-								continue rulebindingloop;
-							} else {
-								System.out.println("          Rule Does exist");
-							}
+							boolean existanceOfRule = activeRuleSet.activeRuleExist(ruleName);
+							System.out.println("          Result of Search - "+ existanceOfRule);
 							
-						} else {
+							if(condition.getConditionNegation() == Condition.ConditionNegate.yes) {
+								if(!existanceOfRule) {
+									System.out.println("          Rule Condition Accepted (yes)");
+								} else {
+									System.out.println("          Rule Condition Not Accepted (yes)");
+									continue rulebindingloop;
+								}
+							} else {
+								if(existanceOfRule) {
+									System.out.println("          Rule Condition Accepted (no)");
+								} else {
+									System.out.println("          Rule Condition Not Accepted (no)");
+									continue rulebindingloop;
+								}
+							}
+						} else if(condition.getConditionType() == Condition.ConditionType.compare){
 							System.out.println("        Normal");
 							//Deal with Conditions
 							// Get Condition Parameter Indexes
@@ -129,7 +143,7 @@ public class Update {
 						if(!consequentRule.isOK()) {
 							System.out.println("++++++++Rule Add");
 							// Add new RuleActivation to tempArray
-							tempActivations.add(new RuleActivation(consequentRule.getRuleName()
+							tempActivations.add(new RuleActivation(consequentRule.getRuleName()+event.getEventParametersSize()
 										, parameterValues));
 						} else {
 							System.out.println("        Rule - OK");
@@ -165,9 +179,13 @@ public class Update {
 		
 		// Add New Activations
 		for(RuleActivation activation : tempActivations){
-			System.out.println("Add New Activation + + + + ");
-			activeRuleSet.addNewActivation(activation.getRule().getRuleID(), activation);
+			System.out.println("Add New Activation + + " + activation.getRule() + " " + activation.getRule().getRuleNameID() );
+			activeRuleSet.addNewActivation(activation.getRule().getRuleNameID(), activation);
 		}
+		
+		System.out.println("");
+		System.out.println("-----------------------------------");
+		System.out.println("");
 		
 		return true;
 	}

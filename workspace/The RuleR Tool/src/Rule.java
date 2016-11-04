@@ -10,7 +10,7 @@ public class Rule {
 	public enum ExtraModifier {Start, Forbidden, Assert, None};
 	
 	
-	private final int ruleID;
+	//private final int ruleID;
 	private final int ruleNameID;
 	private final String ruleName;
 	private final ExtraModifier extraModifier;
@@ -23,12 +23,12 @@ public class Rule {
 	
 	
 	public Rule(String name,String mod, String extMod, String parameter, ArrayList<RuleBinding> bindings) {
-		ruleID = GlobalVariables.getNextRuleID();
+		//ruleID = GlobalVariables.getNextRuleID();
 		ruleName = name;
-		ruleNameID = GlobalFunctions.hashName(name+parameter);
 		ruleModifier = getModifier(mod);		
 		extraModifier = getExtraModifier(extMod);
 		ruleParameterStrings = GlobalFunctions.removeWhiteSpaces(parameter).split(COMMA);
+		ruleNameID = GlobalFunctions.hashName(name+ruleParameterStrings.length);
 		ruleBinding = bindings;
 		ruleVariables = new HashMap<Integer,Variable>();
 		parameters = getParameterArray();
@@ -76,7 +76,7 @@ public class Rule {
 					
 					if((allconditions = condition.getParameterArray()) != null)
 						for(String param : allconditions) {
-							System.out.println("-- --> Parameter : " + param);
+							//System.out.println("-- --> Parameter : " + param);
 							if(GlobalFunctions.exists(param, parameters)) continue;
 							else parameters.add(new Parameter(param, this));
 						}
@@ -155,9 +155,9 @@ public class Rule {
 		return bindingString;
 	}
 
-	public int getRuleID() {
+	/*public int getRuleID() {
 		return ruleID;
-	}
+	}*/
 
 	public Integer getRuleNameID() {
 		return ruleNameID;

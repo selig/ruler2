@@ -28,4 +28,8 @@ public class Event {
 	public String[] getEventParameters() {
 		return eventParameters;
 	}
+
+	public int getEventParametersSize() {
+		return eventParameters.length;
+	}
 }

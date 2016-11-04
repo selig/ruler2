@@ -16,6 +16,7 @@ public class RuleSystem {
 	}
 
 	public boolean addNewRule(Rule myRule) {
+		//System.out.println("Add new Rule \"" + myRule.getRuleName() + "\" With hashCode " + myRule.getRuleNameID());
 		Integer key = myRule.getRuleNameID();
 		if(!list.containsKey(key)) {
 			list.put(key, myRule);
@@ -55,17 +56,19 @@ public class RuleSystem {
 	public static int getRuleID(String name) {
 		Rule rule = list.get(GlobalFunctions.hashName(name));
 		if(rule == null) return -1;
-		else return rule.getRuleID();
+		else return rule.getRuleNameID();
 	}
 	
 	public Rule getRule(String name) {
-		return list.get(GlobalFunctions.hashName(name));
+		int key = GlobalFunctions.hashName(name);
+		//System.out.println("Get Rule \"" + name +"\" with hashCode " + key);
+		return list.get(key);
 	}
 	
 	public static int getRuleID(Integer key) {
 		Rule rule = list.get(key);
 		if(rule == null) return -1;
-		else return rule.getRuleID();
+		else return rule.getRuleNameID();
 	}
 
 	
@@ -82,7 +85,7 @@ public class RuleSystem {
 	public void activateRules(ActiveRuleSet activeRuleSet) {
 			for(Rule rule : list.values()){
 				if(rule.getRuleModifier() == Rule.Modifier.Always || rule.getExtraModifier()== Rule.ExtraModifier.Start){
-					activeRuleSet.addNewActivation(rule.getRuleID(), new RuleActivation(rule, ""));
+					activeRuleSet.addNewActivation(rule.getRuleNameID(), new RuleActivation(rule, ""));
 				}
 			}	
 	}
@@ -112,11 +115,11 @@ public class RuleSystem {
 			
 			String[] eventParameters = eventSplit[0].split("\\(")[1].split("<")[0].replaceAll("\\)","").split(",");
 			
-			String[] eventConditions = eventSplit[0].split("\\(")[1].split("<")[1].replaceAll(">","").split(",");
+			String[] eventConditions = eventSplit[0].split("<")[1].replaceAll(">","").split(",");
 			
 			String[] consRules = eventSplit[1].split(",");
 			
-			System.out.println("--> " + consRules);
+			////System.out.println("--> " + consRules);
 
 			ArrayList<ConsequentRule> consequentRules = new ArrayList<ConsequentRule>();
 			
@@ -133,7 +136,7 @@ public class RuleSystem {
 					String[] consequentParameters = new String[0];
 					
 					consequentName = eventSplit[1].split("\\]")[0];
-					//System.out.println("-- -- --> " + consequentName);
+					////System.out.println("-- -- --> " + consequentName);
 					
 					consequentRules.add(new ConsequentRule(consequentName, consequentParameters));
 				}

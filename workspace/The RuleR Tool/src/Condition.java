@@ -7,24 +7,46 @@ public class Condition {
 	private final static String NOTEQUAL = "!=";
 	
 	public enum CompareOperation{greaterThan, lessThan, equals, notEqual};
-	public enum ConditionType{compare,rule};
+	public enum ConditionType{compare,rule,none};
+	public enum ConditionNegate{yes,no};
 
-	private final String condition;
+	private String condition;
 	private final ConditionType conditionType;
 	private final CompareOperation conditionOperator;
+	private final ConditionNegate conditionNegation;
 	private String[] conditionParameterStrings;
 	private int[] conditionParamIndexes;
 	
 	
 	public Condition(String condition) {
-		this.condition = condition;
+		this.condition = GlobalFunctions.removeWhiteSpaces(condition);
+		
+		if(!this.condition.equals(""))
+			this.conditionNegation = this.condition.substring(0, 1).equals("!") ? ConditionNegate.yes : ConditionNegate.no;
+		else
+			this.conditionNegation = null;
+		
 		this.conditionOperator= getConditionOperation(condition);
 		this.conditionType = setConditionType();
 		this.conditionParameterStrings = getParametersToStringArray(condition);
 	}
 	
 	private ConditionType setConditionType() {
-		return conditionOperator == null ? ConditionType.rule : ConditionType.compare;
+		if(conditionOperator != null){
+			return ConditionType.compare;
+		}
+		else {
+			if(this.condition.equals("")) {
+				return ConditionType.none;
+			}
+			else {
+				System.out.println(this.condition);
+				// If it is rule, convert condition to Rule Name for ruleNameID
+				this.condition = this.condition.split("\\(")[0] + 
+							this.condition.replaceAll("\\)", "").split("\\(")[1].split(",").length;
+				return ConditionType.rule;
+			}
+		}
 	}
 
 	private CompareOperation getConditionOperation(String conditionString) {
@@ -101,7 +123,13 @@ public class Condition {
 		return this.conditionParamIndexes;
 	}
 
+	public ConditionNegate getConditionNegation() {
+		return conditionNegation;
+	}
+
 	public boolean isTrue(String parameterValue, String parameterValue2) {
+		
+		boolean result;
 		// try to convert to int
 		try{
 			int param1 = Integer.parseInt(parameterValue);
@@ -109,23 +137,29 @@ public class Condition {
 			
 			switch (this.conditionOperator) {
 			case greaterThan:
-				return param1 > param2;
+				result = param1 > param2;
 			case lessThan:
-				return param1 < param2;
+				result = param1 < param2;
 			case equals:
-				return param1 == param2;
+				result = param1 == param2;
 			case notEqual:
-				return param1 != param2;
+				result = param1 != param2;
 			default:
-				return false;
+				result = false;
 			}
 			
 		} catch(NumberFormatException e){
 			// It must be text thus only equal is available
 			if(this.conditionOperator == CompareOperation.equals) {
-				return parameterValue.equals(parameterValue2);
+				result = parameterValue.equals(parameterValue2);
 			}
-			else return false;
+			else result = false;
+		}
+		
+		if(getConditionNegation() == conditionNegation.yes) {
+			return !result;
+		} else {
+			return result;
 		}
 	}
 	

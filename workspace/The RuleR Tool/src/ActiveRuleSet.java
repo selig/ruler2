@@ -29,7 +29,9 @@ public class ActiveRuleSet {
 	}
 	
 	public boolean activeRuleExist(String RuleName){
-		return this.ruleActivations.get(GlobalFunctions.hashName(RuleName)) != null;
+		int key = GlobalFunctions.hashName(RuleName);
+		System.out.println("Find active rule " + RuleName + " " + key);
+		return this.ruleActivations.get(key) != null;
 	}
 	
 	public String[] getActivations() {
@@ -60,6 +62,6 @@ public class ActiveRuleSet {
 	}
 
 	public void deleteActivation(RuleActivation activation) {
-		ruleActivations.remove(activation.getRule().getRuleID());		
+		ruleActivations.remove(activation.getRule().getRuleNameID());		
 	}
 }

@@ -4,10 +4,11 @@
 /Condition.class
 /ConsequentRule.class
 /Event.class
-/EventCondition.class
 /GlobalFunctions.class
 /GlobalVariables.class
 /Interface$ActiveRuleSetGUI.class
+/Interface$AddEventGUI$1.class
+/Interface$AddEventGUI.class
 /Interface$AddRules.class
 /Interface$ConsequentRuleForm.class
 /Interface$EventForm$1.class
@@ -32,7 +33,6 @@
 /RuleSystem.class
 /Update.class
 /Variable.class
-/VariableNumber.class
 /VariableBinding.class
-/Interface$AddEventGUI.class
-/Interface$AddEventGUI$1.class
+/VariableNumber.class
+/Condition$ConditionNegate.class
