@@ -1,5 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -8,8 +14,10 @@ import javax.swing.*;
 public class Interface {
 	
 	//Simple rule set 
-	private static final String rule1 = "<None Always Open(file) { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
-	private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
+	//private static final String rule1 = "<None Always Open(file) { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
+	//private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
+	public static File RULE_FILE = null;
+	public static File EVENTS_FILE = null;
 	
 	
 	private static long startTime = 0;
@@ -37,7 +45,8 @@ public class Interface {
 	private JFrame mainFrame;
     //private JLabel ruleModifierLabel;
 	private JLabel ruleNameLabel;
-    private JLabel eventLabel;
+	private JLabel eventLabel;
+    private JLabel eventLabe2;
     private JLabel ruleParameterLabel;
     //private JLabel ruleEventLabel;
     //private JLabel ruleConseqLabel;
@@ -49,6 +58,7 @@ public class Interface {
     private JPanel fieldPanel1;
     private JPanel fieldPanel3;
     private JPanel eventPanel;
+    private JPanel eventPane2;
     private ButtonGroup modifierGroup;
     private ButtonGroup extraModifierGroup;
     private JPanel inside;
@@ -58,7 +68,7 @@ public class Interface {
     private JScrollPane ruleSystemScrollFrame;
     private JScrollPane activeRuleSetScrollFrame;
     private JTextArea RuleNameArea;
-    private JTextArea eventArea;
+    private JTextArea eventArea;    
     private JTextArea RuleParameterArea;
     private JComponent panel1;
     private JComponent panel2;
@@ -91,17 +101,7 @@ public class Interface {
        
        ruleSystem = new RuleSystem();
        
-       ruleSystem.addPredifinedRules(rule1);
-       ruleSystem.addPredifinedRules(rule2);
-       
        activeRuleSet = new ActiveRuleSet();
-       
-       ruleSystem.activateRules(activeRuleSet);
-       
-       System.out.println(activeRuleSet.getNumberOfActivations());
-       
-       Interface.updateRuleSystemGUI();
-       Interface.activeRuleGUI();
        
        //Interface.showEventDemo();       
     }
@@ -207,7 +207,7 @@ public class Interface {
 		ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM); 
 	}
 	
-	private void updateRuleSystemGUI(){
+	public void updateRuleSystemGUI(){
 		
 		ruleSystemInside.removeAll();
 		ruleSystemInside.revalidate();
@@ -221,7 +221,7 @@ public class Interface {
 		}
 	}
 	
-	private void activeRuleGUI(){
+	public void activeRuleGUI(){
 		
 		activeRuleSetInside.removeAll();
 		activeRuleSetInside.revalidate();
@@ -243,6 +243,38 @@ public class Interface {
 		startTime = System.currentTimeMillis();
 		
 		return (time)+"ms";
+	}
+	
+	
+	public static ArrayList<String> readFile(File fileName) {
+		
+		ArrayList<String> lines = new ArrayList<String>();
+		FileReader file = null;
+		
+		try {
+			file = new FileReader(fileName);
+			
+			BufferedReader input = new BufferedReader(file);
+			
+			String line;
+			while((line = input.readLine()) != null) {
+				lines.add(line);
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				file.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return lines;
 	}
 
 	protected static void end() {
@@ -605,6 +637,7 @@ public class Interface {
 	 	        });  
 	 	      
 	 	      //controlPanel4.add(newEventButton);
+	 	      controlPanel4.add(new FileChooser("rule"));
 	 	      controlPanel4.add(addButton);
 	 	      
 	 	      controlPanel4.setPreferredSize(new Dimension(1000, 100));
@@ -680,9 +713,6 @@ public class Interface {
 	
 	class AddEventGUI extends JPanel {
 		
-		private JLabel ruleString;
-		private JPanel rulePanel;
-		
 		public AddEventGUI() {
 			super(new GridLayout(0,1));
 			
@@ -715,8 +745,53 @@ public class Interface {
  	        });  
 	 	      
  	        eventPanel.add(addButton);
+ 	        
+ 	        /*eventLabe2 = new JLabel("Event",JLabel.LEFT);
+			eventArea2 = new JTextArea("open(file)",2,10);
+			*/
+			eventPane2 = new JPanel();
+			eventPane2.setLayout(new FlowLayout());
+			eventPane2.add(new FileChooser("event"));
+			
+			JButton runFile = new JButton("Run From File");
+			runFile.setActionCommand("runFile");
+			runFile.addActionListener(new ActionListener() {
+ 	          public void actionPerformed(ActionEvent e) {
+ 	        	 System.out.println("Button pressed");
+ 	        	 if(EVENTS_FILE != null){
+
+ 	 	        	 System.out.println("Button pressed. Runing");
+ 	 	        	 
+ 	        		ArrayList<String> events = readFile(EVENTS_FILE);
+ 	        		boolean result = false;
+ 	        		for(String event : events) {
+	 	        		if(Update.update(new Event(event))) {
+	 	        			System.out.println("true");
+	 	 	        		result = true;
+	 	        		}
+	 	 	        	 else {
+	 	 	        		System.out.println("false");
+	 	 	        		result = false;
+	 	 	        		break;
+	 	 	        	 }
+	 	 	        	 
+	 	 	        	 Interface.activeRuleGUI();
+ 	        		}
+ 	        		
+ 	        		Interface.activeRuleGUI();
+ 	        		
+ 	        		if(result)
+ 	 	        		Interface.success("True");
+ 	 	        	 else
+ 	 	        		Interface.error("False");
+ 	        	 } else 
+ 	 	        	 System.out.println("Button pressed. not running");
+ 	          }
+ 	        });  
+ 	       eventPane2.add(runFile);
 			
 			add(eventPanel);
+			add(eventPane2);
 		}
 	}
 }

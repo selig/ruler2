@@ -1,0 +1,3 @@
+open(file)
+close(file)
+close(file2)

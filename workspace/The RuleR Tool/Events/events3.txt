@@ -1,0 +1,3 @@
+open(file)
+anything(a)
+close(file)

@@ -1,0 +1,2 @@
+<None Always Open(file) { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>
+<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>
