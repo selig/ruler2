@@ -1,13 +1,16 @@
 /ActiveRuleSet.class
 /Condition$CompareOperation.class
+/Condition$ConditionNegate.class
 /Condition$ConditionType.class
 /Condition.class
 /ConsequentRule.class
 /Event.class
+/FileChooser.class
 /GlobalFunctions.class
 /GlobalVariables.class
 /Interface$ActiveRuleSetGUI.class
 /Interface$AddEventGUI$1.class
+/Interface$AddEventGUI$2.class
 /Interface$AddEventGUI.class
 /Interface$AddRules.class
 /Interface$ConsequentRuleForm.class
@@ -35,7 +38,4 @@
 /Variable.class
 /VariableBinding.class
 /VariableNumber.class
-/Condition$ConditionNegate.class
-/FileChooser.class
 /FileChooser$1.class
-/Interface$AddEventGUI$2.class

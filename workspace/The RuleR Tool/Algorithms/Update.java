@@ -163,7 +163,7 @@ public class Update {
 			Rule.Modifier modifier = rule.getRuleModifier();
 			if(modifier != Rule.Modifier.Always) {
 				System.out.println("  Modifier Not Always"); 
-				if(modifier == Rule.Modifier.Skip && !activationFired) {
+				if(modifier == Rule.Modifier.State && !activationFired) {
 					System.out.println("    Do not delete");
 					continue;
 				}

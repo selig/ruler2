@@ -123,7 +123,7 @@ public class RuleSystem {
 
 			ArrayList<ConsequentRule> consequentRules = new ArrayList<ConsequentRule>();
 			
-			for(String cons : consRules) {
+			for(@SuppressWarnings("unused") String cons : consRules) {
 				
 				String consequentName = eventSplit[1].split("\\(")[0];
 				

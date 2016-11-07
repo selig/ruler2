@@ -6,7 +6,7 @@ public class Rule {
 	
 	private static String COMMA = ",";
 	
-	public enum Modifier {Always, Step, Skip, Fail};
+	public enum Modifier {Always, Step, State, Fail};
 	public enum ExtraModifier {Start, Forbidden, Assert, None};
 	
 	
@@ -133,7 +133,7 @@ public class Rule {
 		case "Always":
 			return Modifier.Always;
 		case "Skip":
-			return Modifier.Skip;
+			return Modifier.State;
 		case "Step":
 			return Modifier.Step;
 		default:

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.AbstractList;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -41,12 +40,14 @@ public class Interface {
 	public static RuleSystem ruleSystem;
 	public static ActiveRuleSet activeRuleSet;
 	
+	public static ArrayList<String> events = null;
+	
 
 	private JFrame mainFrame;
     //private JLabel ruleModifierLabel;
 	private JLabel ruleNameLabel;
 	private JLabel eventLabel;
-    private JLabel eventLabe2;
+    //private JLabel eventLabel2;
     private JLabel ruleParameterLabel;
     //private JLabel ruleEventLabel;
     //private JLabel ruleConseqLabel;
@@ -78,6 +79,7 @@ public class Interface {
     private JTabbedPane TabbedPane;
     private JLabel ruleSystemGUIHeader; 
     private JLabel activeRuleSetGUIHeader;
+    public static JTextArea eventLog;
     public static Interface Interface;
     
     
@@ -250,11 +252,12 @@ public class Interface {
 		
 		ArrayList<String> lines = new ArrayList<String>();
 		FileReader file = null;
+		BufferedReader input = null;
 		
 		try {
 			file = new FileReader(fileName);
 			
-			BufferedReader input = new BufferedReader(file);
+			input = new BufferedReader(file);
 			
 			String line;
 			while((line = input.readLine()) != null) {
@@ -267,6 +270,11 @@ public class Interface {
 			e.printStackTrace();
 		}
 		finally {
+			try {
+				input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			try {
 				file.close();
 			} catch (IOException e) {
@@ -287,7 +295,9 @@ public class Interface {
 	
 	class EventForm extends JPanel {
 	   
-	   private JPanel eventPanel;
+	   
+		private static final long serialVersionUID = 1L;
+		private JPanel eventPanel;
 	   private JPanel eventPanel2;
 	   private JPanel eventPanel3;
 	   private JPanel eventPanel5;
@@ -393,6 +403,8 @@ public class Interface {
 	
 	class ConsequentRuleForm extends JPanel {
 		
+		
+		private static final long serialVersionUID = 1L;
 		private JPanel eventPanel4;
 		private JLabel eventConsequent;
 		private JLabel eventConsequentParameter;
@@ -437,6 +449,9 @@ public class Interface {
 
 	class Tabbed extends JPanel {
 	    
+		
+		private static final long serialVersionUID = 1L;
+
 		public Tabbed() {
 	        super(new GridLayout(1, 1));
 	        
@@ -501,6 +516,8 @@ public class Interface {
 
 	class AddRules extends JPanel {
 		
+		private static final long serialVersionUID = 1L;
+
 		public AddRules() {
 			super(new FlowLayout());			
 
@@ -511,6 +528,8 @@ public class Interface {
 	
 	class RuleForm extends JPanel {
 		
+		private static final long serialVersionUID = 1L;
+
 		public RuleForm() {
 			//super(new GridLayout(1, 1));
 			super(new FlowLayout());
@@ -622,6 +641,8 @@ public class Interface {
 
 	class RuleButtons extends JPanel {
 		
+		private static final long serialVersionUID = 1L;
+
 		public RuleButtons() {
 			super(new GridLayout(1, 1));
 	 	      
@@ -649,6 +670,8 @@ public class Interface {
 
 	class RuleSystemGUI extends JPanel {
 		
+		private static final long serialVersionUID = 1L;
+
 		public RuleSystemGUI() {
 			
 			ruleSystemGUIHeader = new JLabel(THEREARE + 0 + RULESINRULESYSTEM,JLabel.LEFT);
@@ -671,6 +694,8 @@ public class Interface {
 	
 	class ActiveRuleSetGUI extends JPanel {
 		
+		private static final long serialVersionUID = 1L;
+
 		public ActiveRuleSetGUI() {
 			
 			activeRuleSetGUIHeader = new JLabel(THEREARE + 0 + RULESINACTIVERULESET,JLabel.LEFT);
@@ -694,6 +719,7 @@ public class Interface {
 	
 	class RuleString extends JPanel {
 		
+		private static final long serialVersionUID = 1L;
 		private JLabel ruleString;
 		private JPanel rulePanel;
 		
@@ -713,6 +739,9 @@ public class Interface {
 	
 	class AddEventGUI extends JPanel {
 		
+		
+		private static final long serialVersionUID = 1L;
+
 		public AddEventGUI() {
 			super(new GridLayout(0,1));
 			
@@ -758,11 +787,10 @@ public class Interface {
 			runFile.addActionListener(new ActionListener() {
  	          public void actionPerformed(ActionEvent e) {
  	        	 System.out.println("Button pressed");
- 	        	 if(EVENTS_FILE != null){
+ 	        	 if(events != null && events.size() > 0){
 
- 	 	        	 System.out.println("Button pressed. Runing");
- 	 	        	 
- 	        		ArrayList<String> events = readFile(EVENTS_FILE);
+ 	 	        	System.out.println("Button pressed. Runing");
+ 	 	        	
  	        		boolean result = false;
  	        		for(String event : events) {
 	 	        		if(Update.update(new Event(event))) {
@@ -782,13 +810,24 @@ public class Interface {
  	        		
  	        		if(result)
  	 	        		Interface.success("True");
- 	 	        	 else
+ 	 	        	else
  	 	        		Interface.error("False");
+ 	        		
+ 	        		events = null;
+ 	        		eventLog.setText("No Events Left");
  	        	 } else 
  	 	        	 System.out.println("Button pressed. not running");
  	          }
  	        });  
  	       eventPane2.add(runFile);
+ 	       
+ 	      eventLog = new JTextArea(10,85);
+		//log.setMargin(new Insets(5,5,5,5));
+ 	     eventLog.setEditable(false);
+		JScrollPane logScrollPane = new JScrollPane(eventLog);
+		eventPane2.add(logScrollPane, BorderLayout.CENTER);
+ 	       
+ 	       
 			
 			add(eventPanel);
 			add(eventPane2);
