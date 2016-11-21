@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RuleBinding {
@@ -7,6 +9,9 @@ public class RuleBinding {
 	private final String eventName;
 	private String[] eventParameterStrings;
 	private int[] eventParameterIndexes;
+	//integer 1 - parameter index in Big Array of Rule parameter
+	//integer 2 - parameter index in event Description
+	private Map<Integer, Integer> eventParameters;
 	private Condition[] eventConditions;
 	private ArrayList<ConsequentRule> consequentRules;
 	
@@ -15,6 +20,7 @@ public class RuleBinding {
 		this.event = GlobalFunctions.hashName(eventName);
 		this.eventName = eventName;
 		this.eventParameterStrings = par;
+		this.eventParameters = new HashMap<Integer, Integer>();
 		this.eventConditions = createConditions(conditions);
 		this.consequentRules = consequentRules;
 	}
@@ -43,7 +49,9 @@ public class RuleBinding {
 		eventParameterIndexes = new int[eventParameterStrings.length];
 		
 		for(int i=0;i<eventParameterIndexes.length;i++) {
-			eventParameterIndexes[i] = GlobalFunctions.getParamIndex(eventParameterStrings[i],tempParamArray);
+			int parameterIndex = GlobalFunctions.getParamIndex(eventParameterStrings[i],tempParamArray);
+			eventParameterIndexes[i] = parameterIndex;
+			eventParameters.put(parameterIndex,i);
 		}
 		
 		// Initialise event Conditions
@@ -99,6 +107,10 @@ public class RuleBinding {
 
 	public int[] getEventParameterIndexes() {
 		return eventParameterIndexes;
+	}
+	
+	public int getEventParameterIndex(int key){
+		return eventParameters.get(key);
 	}
 
 	public String toString() {

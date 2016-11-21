@@ -18,17 +18,33 @@ public class Update {
 		
 		ArrayList<RuleActivation> tempActivations = new ArrayList<RuleActivation>();
 		
+		// For all Active rules
 		for(RuleActivation activation : activeRuleSet.getArrayOfRuleActivations()){
 			// search rule with the event() (some fancy efficient way)
 			System.out.println("Rule Activation: " + activation.getRule().getRuleName());
 			boolean activationFired = false;
-			
+			// Get rule of active rule
 			Rule rule = activation.getRule();
+			
+			// For all Rule Bindings
 			rulebindingloop: for(RuleBinding binding : rule.getRuleBinding()){
 				System.out.println("  Match: " + event.getEvent() + " vs " + binding.getEventName());
 				if(event.getEvent().equals(binding.getEventName())){
 					activationFired = true;
 					System.out.println("    True. ActivationFired: " + activationFired);
+					
+					for(int bindingIndex : binding.getEventParameterIndexes()) {
+						for(int ruleIndex : rule.getRuleParameterIndexes()) {
+							if(bindingIndex == ruleIndex) {
+								// get Event Param Value
+								String eventValue = event.getEventParameter(binding.getEventParameterIndex(bindingIndex));
+								// get Rule Param Value
+								String ruleValue = activation.getParameterValue(ruleIndex);
+							}
+						}
+					}
+					
+					System.exit(0);
 					
 					// Parameters
 					Map<Integer, ParameterBinding> parameterValues = activation.getParameterBindings();

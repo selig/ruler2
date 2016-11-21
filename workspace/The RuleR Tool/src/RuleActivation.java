@@ -1,10 +1,16 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class RuleActivation {
 	
+	
+	// The Rule
 	private final Rule rule;
+	// The Parameters
 	private final Map<Integer,ParameterBinding> parameterBindings;
+	// The Parameter Values
 	private Map<Integer,VariableBinding> variableBinding;
 	
 	public RuleActivation(Rule newRuleName, String parameters) {
@@ -97,5 +103,13 @@ public class RuleActivation {
 
 	public int getVariableValue(Integer key) {
 		return variableBinding.get(key).getVariableValueInt();
+	}
+	
+	public Set<Entry<Integer,ParameterBinding>> getParameterEntries() {
+		return parameterBindings.entrySet();
+	}
+
+	public String getParameterValue(int ruleParamIndex) {
+		return parameterBindings.get(ruleParamIndex).getParameterValue();
 	}
 }

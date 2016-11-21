@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class Rule {
@@ -18,6 +19,7 @@ public class Rule {
 	private final Parameter[] parameters;
 	private HashMap<Integer, Variable> ruleVariables;
 	private int[] ruleParameterIndexes;
+	private Map<Integer, Integer> ruleParameters;
 	private String[] ruleParameterStrings;
 	private ArrayList<RuleBinding> ruleBinding;
 	
@@ -28,6 +30,7 @@ public class Rule {
 		ruleModifier = getModifier(mod);		
 		extraModifier = getExtraModifier(extMod);
 		ruleParameterStrings = GlobalFunctions.removeWhiteSpaces(parameter).split(COMMA);
+		ruleParameters = new HashMap<Integer, Integer>();
 		ruleNameID = GlobalFunctions.hashName(name+ruleParameterStrings.length);
 		ruleBinding = bindings;
 		ruleVariables = new HashMap<Integer,Variable>();
@@ -54,8 +57,10 @@ public class Rule {
 		ArrayList<Parameter> parameters = new ArrayList<Parameter>();
 		
 		// Get different parameters from Rule
+		//int index = 0;
 		for(String param : ruleParameterStrings) {
-			parameters.add(new Parameter(param, this));
+			Parameter parameter = new Parameter(param, this);
+			parameters.add(parameter);
 		}
 		
 		// Get different parameters from Event Parameters
@@ -100,7 +105,9 @@ public class Rule {
 		ruleParameterIndexes = new int[ruleParameterStrings.length];
 		
 		for(int i=0; i< ruleParameterIndexes.length;i++) {
-			ruleParameterIndexes[i] = GlobalFunctions.getParamIndex(ruleParameterStrings[i],tempParamArray);
+			int parameterIndex = GlobalFunctions.getParamIndex(ruleParameterStrings[i],tempParamArray);
+			ruleParameterIndexes[i] = parameterIndex;
+			ruleParameters.put(parameterIndex, i);
 		}
 		
 		for(RuleBinding ruleBind : ruleBinding) {
@@ -181,6 +188,10 @@ public class Rule {
 	
 	public ArrayList<RuleBinding> getRuleBinding() {
 		return ruleBinding;
+	}
+	
+	public int getRuleParamIndex(int key) {
+		return ruleParameters.get(key);
 	}
 
 	public String toString() {
