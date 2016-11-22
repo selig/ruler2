@@ -55,6 +55,8 @@ public class GlobalFunctions {
 	}
 	
 	public static String subStringLast(String string, int length) {
-		return string.substring(0, string.length()-length);
+		if(string.length() > length) {
+			return string.substring(0, string.length()-length);
+		} else return string;
 	}
 }

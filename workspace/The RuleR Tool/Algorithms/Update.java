@@ -30,21 +30,35 @@ public class Update {
 			rulebindingloop: for(RuleBinding binding : rule.getRuleBinding()){
 				System.out.println("  Match: " + event.getEvent() + " vs " + binding.getEventName());
 				if(event.getEvent().equals(binding.getEventName())){
-					activationFired = true;
-					System.out.println("    True. ActivationFired: " + activationFired);
 					
-					for(int bindingIndex : binding.getEventParameterIndexes()) {
-						for(int ruleIndex : rule.getRuleParameterIndexes()) {
-							if(bindingIndex == ruleIndex) {
-								// get Event Param Value
-								String eventValue = event.getEventParameter(binding.getEventParameterIndex(bindingIndex));
-								// get Rule Param Value
-								String ruleValue = activation.getParameterValue(ruleIndex);
+					System.out.println("    True");	
+					
+					if(rule.getRuleParameterIndexes().length > 0) {
+						System.out.println("      Rule Has Parameters");
+						// Get Event Parameter list of indexes
+						int[] eventPIndexes = binding.getEventParameterIndexes();
+						
+						int eventParamIndex = 0;
+						for(int index : eventPIndexes) {
+							System.out.println("        Event index = "+index);
+							String ruleActivationValue = activation.getParameterBindingValue(index);
+							if(ruleActivationValue != null) {
+								System.out.println("        Parameter Indexes Match");	
+								//get event value
+								String eventValue = event.getEventParameter(eventParamIndex);
+								System.out.println("        Rule Value: "+ruleActivationValue+" vs "+ eventValue + " : event value");	
+								if(!ruleActivationValue.equals(eventValue)){
+									System.out.println("          Don't Match");	
+									continue rulebindingloop;
+								} else {
+									System.out.println("          Match");	
+								}
 							}
+							eventParamIndex++;
 						}
 					}
 					
-					System.exit(0);
+					//System.exit(0);
 					
 					// Parameters
 					Map<Integer, ParameterBinding> parameterValues = activation.getParameterBindings();
@@ -79,9 +93,11 @@ public class Update {
 							System.out.println("        Rule");
 							// Deal with Rule condition
 							// Get rule
-							String ruleName = condition.getCondition();
+							String ruleNameID = condition.getConditionRuleNameID();
+							String paramValues = ;
 							
-							boolean existanceOfRule = activeRuleSet.activeRuleExist(ruleName);
+							
+							boolean existanceOfRule = activeRuleSet.activeRuleExist(ruleNameID+paramValues);
 							System.out.println("          Result of Search - "+ existanceOfRule);
 							
 							if(condition.getConditionNegation() == Condition.ConditionNegate.yes) {
@@ -167,8 +183,8 @@ public class Update {
 					}
 					
 					
-					
-					
+					activationFired = true;
+					System.out.println("    ActivationFired: " + activationFired);
 				}
 				else {
 					System.out.println("    False");
@@ -196,7 +212,7 @@ public class Update {
 		// Add New Activations
 		for(RuleActivation activation : tempActivations){
 			System.out.println("Add New Activation + + " + activation.getRule().getRuleName() + " " + activation.getRule().getRuleNameID() );
-			activeRuleSet.addNewActivation(activation.getRule().getRuleNameID(), activation);
+			activeRuleSet.addNewActivation(activation.getRule().getRuleNameID()+activation.getParameterHashValue(), activation);
 		}
 		
 		System.out.println("");

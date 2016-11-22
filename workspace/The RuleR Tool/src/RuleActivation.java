@@ -32,6 +32,14 @@ public class RuleActivation {
 	public void addVariableBinding(VariableBinding newVariableBinding) {
 		variableBinding.put(newVariableBinding.getKey(), newVariableBinding);
 	}
+	
+	public Object getVariableValue(Variable variable) {
+		return variableBinding.get(variable.getKey()).getVariableValue();
+	}
+	
+	public VariableBinding getVariableBinding(Variable variable) {
+		return variableBinding.get(variable.getKey());
+	}
 
 	private Map<Integer,ParameterBinding> getParameterBindingSet(Rule rule,String parameters) {
 		
@@ -46,6 +54,7 @@ public class RuleActivation {
 		
 		// Compare Size of each array
 		if(parameterIndexes.length == parametersArray.length) {
+			System.out.println("Not supposed to match");
 			int i=0;
 			// For Each Index
 			for(int index : parameterIndexes){
@@ -57,8 +66,6 @@ public class RuleActivation {
 				
 				i++;				
 			}			
-		} else {
-			return null;
 		}
 		
 		return tempSet;	
@@ -94,11 +101,28 @@ public class RuleActivation {
 	
 	@Override
 	public String toString() {
-		return this.rule.getRuleName() + " [" + parameterBindings.size() + "]";
+		
+		return this.rule.getRuleName() + " [" + getParameters() + "]";
+	}
+
+	private String getParameters() {
+		String finalValue = "";
+		for(ParameterBinding param : parameterBindings.values()) {
+			finalValue += param.getParameterValue()+",";
+		}
+		
+		return GlobalFunctions.subStringLast(finalValue, 1);
 	}
 
 	public ParameterBinding getParameterBinding(int key) {
 		return parameterBindings.get(key);
+	}
+	
+	public String getParameterBindingValue(int key) {
+		if(parameterBindings.get(key) != null)
+			return parameterBindings.get(key).getParameterValue();
+		else
+			return null;
 	}
 
 	public int getVariableValue(Integer key) {
@@ -111,5 +135,9 @@ public class RuleActivation {
 
 	public String getParameterValue(int ruleParamIndex) {
 		return parameterBindings.get(ruleParamIndex).getParameterValue();
+	}
+
+	public Integer getParameterHashValue() {
+		return GlobalFunctions.hashName(getParameters());
 	}
 }

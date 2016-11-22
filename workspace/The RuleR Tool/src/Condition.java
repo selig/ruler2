@@ -11,6 +11,7 @@ public class Condition {
 	public enum ConditionNegate{yes,no};
 
 	private String condition;
+	private String conditionRuleNameID;
 	private final ConditionType conditionType;
 	private final CompareOperation conditionOperator;
 	private final ConditionNegate conditionNegation;
@@ -20,7 +21,7 @@ public class Condition {
 	
 	public Condition(String condition) {
 		this.condition = GlobalFunctions.removeWhiteSpaces(condition);
-		
+
 		if(!this.condition.equals("")) {
 			this.conditionNegation = this.condition.substring(0, 1).equals("!") ? ConditionNegate.yes : ConditionNegate.no;
 			this.condition = this.condition.replaceAll("!", "");
@@ -44,7 +45,7 @@ public class Condition {
 			else {
 				System.out.println(this.condition);
 				// If it is rule, convert condition to Rule Name for ruleNameID
-				this.condition = this.condition.split("\\(")[0] + 
+				this.conditionRuleNameID = this.condition.split("\\(")[0] + 
 							this.condition.replaceAll("\\)", "").split("\\(")[1].split(",").length;
 				return ConditionType.rule;
 			}
@@ -106,7 +107,11 @@ public class Condition {
 	}
 	
 	public String getCondition() {
-		return condition;
+		return this.condition;
+	}
+	
+	public String getConditionRuleNameID() {
+		return this.conditionRuleNameID;
 	}
 
 	public ConditionType getConditionType() {

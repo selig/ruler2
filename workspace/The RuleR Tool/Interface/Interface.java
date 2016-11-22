@@ -13,7 +13,7 @@ import javax.swing.*;
 public class Interface {
 	
 	//Simple rule set 
-	//private static final String rule1 = "<None Always Open(file) { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
+	//private static final String rule1 = "<None Always Open() { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
 	//private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
 	public static File RULE_FILE = null;
 	public static File EVENTS_FILE = null;
@@ -89,16 +89,7 @@ public class Interface {
     }
     
     public static void main(String[] args){
-       
-    	/*System.out.println(GlobalFunctions.hashName("Open"));
-    	System.out.println(GlobalFunctions.hashName("isOpen"));
-    	System.out.println(GlobalFunctions.hashName("Open"));
-    	System.out.println(GlobalFunctions.hashName("isOpen"));
-    	System.out.println(GlobalFunctions.hashName("Open"));
-    	System.out.println(GlobalFunctions.hashName("isOpen"));
-    	
-    	end();*/
-    	
+         	
        Interface = new Interface();
        
        ruleSystem = new RuleSystem();
