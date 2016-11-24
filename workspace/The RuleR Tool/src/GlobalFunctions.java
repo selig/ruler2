@@ -59,4 +59,11 @@ public class GlobalFunctions {
 			return string.substring(0, string.length()-length);
 		} else return string;
 	}
+
+	public static Rule getRule(String ruleNameID) {
+		
+		RuleSystem ruleSystem = Interface.ruleSystem;
+		
+		return ruleSystem.getRule(ruleNameID);
+	}
 }

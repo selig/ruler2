@@ -14,13 +14,11 @@ public class ActiveRuleSet {
 		this.ruleActivations = new HashMap<Integer,RuleActivation>();
 	}
 	
-	public void addNewActivation(Integer key,RuleActivation newRuleActivation){
-		/*
-		 * 
-		 * What happens if the same rule activation is added to the hashmap?
-		 * later, how to recognise if the activation is for the same object..
-		 * 
-		 */
+	public void addNewActivation(RuleActivation newRuleActivation){
+		this.ruleActivations.put(newRuleActivation.getRuleActivationID(), newRuleActivation);
+	}
+	
+	public void addNewActivation(int key,RuleActivation newRuleActivation){
 		this.ruleActivations.put(key, newRuleActivation);
 	}
 	
@@ -61,7 +59,13 @@ public class ActiveRuleSet {
 		return ruleActivations.size();
 	}
 
-	public void deleteActivation(RuleActivation activation) {
-		ruleActivations.remove(activation.getRule().getRuleNameID());		
+	public boolean deleteActivation(RuleActivation activation) {
+		int ruleActivationKey = activation.getRuleActivationID();
+		//System.out.println("Rule Activation key: " + ruleActivationKey); 
+		if(null == ruleActivations.remove(ruleActivationKey)){
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

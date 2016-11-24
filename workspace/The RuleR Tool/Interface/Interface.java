@@ -80,6 +80,7 @@ public class Interface {
     private JLabel ruleSystemGUIHeader; 
     private JLabel activeRuleSetGUIHeader;
     public static JTextArea eventLog;
+    public static JTextArea log;
     public static Interface Interface;
     
     
@@ -238,6 +239,9 @@ public class Interface {
 		return (time)+"ms";
 	}
 	
+	public static void log(String message){
+		log.append(message);
+	}
 	
 	public static ArrayList<String> readFile(File fileName) {
 		
@@ -470,11 +474,10 @@ public class Interface {
 	                "Does nothing at all");
 	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
 	        
-	        panel5 = makeTextPanel(
-	                "Panel #4 (has a preferred size of 410 x 50).");
+	        panel5 = new LogGUI();
 	        panel5.setPreferredSize(new Dimension(410, 50));
 	        TabbedPane.addTab("Log", icon, panel5,
-	                "Does nothing at all");
+	                "Log");
 	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_5);
 	        
 	        //Add the Tabbed pane to this panel.
@@ -823,5 +826,20 @@ public class Interface {
 			add(eventPanel);
 			add(eventPane2);
 		}
+	}
+
+	class LogGUI extends JPanel {
+		public LogGUI() {
+			super(new GridLayout(0,1));
+			
+			log = new JTextArea(0,1);
+			//log.setMargin(new Insets(5,5,5,5));
+	 	    log.setEditable(false);
+			
+	 	    JScrollPane scroll = new JScrollPane(log);
+	 	    
+	 	    add(scroll);
+		}
+ 	    
 	}
 }

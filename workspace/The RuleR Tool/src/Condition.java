@@ -16,7 +16,7 @@ public class Condition {
 	private final CompareOperation conditionOperator;
 	private final ConditionNegate conditionNegation;
 	private String[] conditionParameterStrings;
-	private int[] conditionParamIndexes;
+	private int[] conditionParamIndexes = null;
 	
 	
 	public Condition(String condition) {
@@ -43,10 +43,12 @@ public class Condition {
 				return ConditionType.none;
 			}
 			else {
-				System.out.println(this.condition);
+				System.out.println("Condition: " + this.condition);
 				// If it is rule, convert condition to Rule Name for ruleNameID
 				this.conditionRuleNameID = this.condition.split("\\(")[0] + 
 							this.condition.replaceAll("\\)", "").split("\\(")[1].split(",").length;
+				System.out.println("Condition Rule Name ID: " + this.conditionRuleNameID);
+				
 				return ConditionType.rule;
 			}
 		}
@@ -71,7 +73,10 @@ public class Condition {
 		
 		if(conditionType == ConditionType.compare) {
 			return GlobalFunctions.removeWhiteSpaces(conditionString).split(getOperatorString());
-		} else return null;
+		} else if(conditionType == ConditionType.rule) {
+			return this.condition.replaceAll("\\)", "").split("\\(")[1].split(",");
+		} 
+		else return null;
 	}
 
 	private String getOperatorString() {
@@ -90,7 +95,7 @@ public class Condition {
 	}
 
 	public void initializeParameterIndexes(Parameter[] tempParamArray) {
-		if (conditionType == ConditionType.compare) {
+		if (conditionType == ConditionType.compare || conditionType == ConditionType.rule) {
 			conditionParamIndexes = new int[conditionParameterStrings.length];
 						
 			for(int i=0;i<conditionParamIndexes.length;i++) {
@@ -110,8 +115,8 @@ public class Condition {
 		return this.condition;
 	}
 	
-	public String getConditionRuleNameID() {
-		return this.conditionRuleNameID;
+	public int getConditionRuleNameID() {
+		return GlobalFunctions.hashName(this.conditionRuleNameID);
 	}
 
 	public ConditionType getConditionType() {

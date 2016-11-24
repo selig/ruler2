@@ -10,9 +10,11 @@ public class Update {
 	
 	public static boolean update(Event event){
 
-		System.out.println("");
-		System.out.println("-----------------------------------");
-		System.out.println("");
+		Interface.log("\n" +"");
+		Interface.log("\n" +"-----------------------------------");
+		Interface.log("\n" +"");
+		Interface.log("\n" +" The Event - " + event.toString());
+		Interface.log("\n" +"");
 		
 		ActiveRuleSet activeRuleSet = Interface.activeRuleSet;
 		
@@ -21,37 +23,39 @@ public class Update {
 		// For all Active rules
 		for(RuleActivation activation : activeRuleSet.getArrayOfRuleActivations()){
 			// search rule with the event() (some fancy efficient way)
-			System.out.println("Rule Activation: " + activation.getRule().getRuleName());
+			Interface.log("\n" +"Rule Activation: " + activation.getRule().getRuleName());
 			boolean activationFired = false;
 			// Get rule of active rule
 			Rule rule = activation.getRule();
 			
 			// For all Rule Bindings
 			rulebindingloop: for(RuleBinding binding : rule.getRuleBinding()){
-				System.out.println("  Match: " + event.getEvent() + " vs " + binding.getEventName());
+				Interface.log("\n" +"  Match: " + event.getEvent() + " vs " + binding.getEventName());
 				if(event.getEvent().equals(binding.getEventName())){
 					
-					System.out.println("    True");	
+					Interface.log("\n" +"    True");	
+					
+
+					// Get Event Parameter list of indexes
+					int[] eventPIndexes = binding.getEventParameterIndexes();
 					
 					if(rule.getRuleParameterIndexes().length > 0) {
-						System.out.println("      Rule Has Parameters");
-						// Get Event Parameter list of indexes
-						int[] eventPIndexes = binding.getEventParameterIndexes();
+						Interface.log("\n" +"      Rule Has Parameters");
 						
 						int eventParamIndex = 0;
 						for(int index : eventPIndexes) {
-							System.out.println("        Event index = "+index);
+							Interface.log("\n" +"        Event index = "+index);
 							String ruleActivationValue = activation.getParameterBindingValue(index);
 							if(ruleActivationValue != null) {
-								System.out.println("        Parameter Indexes Match");	
+								Interface.log("\n" +"        Parameter Indexes Match");	
 								//get event value
 								String eventValue = event.getEventParameter(eventParamIndex);
-								System.out.println("        Rule Value: "+ruleActivationValue+" vs "+ eventValue + " : event value");	
+								Interface.log("\n" +"        Rule Value: "+ruleActivationValue+" vs "+ eventValue + " : event value");	
 								if(!ruleActivationValue.equals(eventValue)){
-									System.out.println("          Don't Match");	
+									Interface.log("\n" +"          Don't Match");	
 									continue rulebindingloop;
 								} else {
-									System.out.println("          Match");	
+									Interface.log("\n" +"          Match");	
 								}
 							}
 							eventParamIndex++;
@@ -69,7 +73,7 @@ public class Update {
 					int[] bindingParam = binding.getEventParameterIndexes();
 					
 					if(eventParam.length == bindingParam.length) {
-						System.out.println("      Parameter Length Ok");
+						Interface.log("\n" +"      Parameter Length Ok");
 						int i=0;
 						
 						for(int index : bindingParam){
@@ -82,41 +86,66 @@ public class Update {
 							i++;				
 						}	
 					} else {
-						System.out.println("      Parameter Length Not OK");
+						Interface.log("\n" +"      Parameter Length Not OK");
 						continue;
 					}
 					
 					// Conditions
 					for(Condition condition : binding.getEventConditions()){
-						System.out.println("      Condition");
+						Interface.log("\n" +"      Condition: " + condition.getCondition());
 						if(condition.getConditionType() == Condition.ConditionType.rule){
-							System.out.println("        Rule");
+							Interface.log("\n" +"        Rule");
 							// Deal with Rule condition
 							// Get rule
-							String ruleNameID = condition.getConditionRuleNameID();
-							String paramValues = ;
+							int ruleNameID = condition.getConditionRuleNameID();
 							
+							//Rule theConditionRule = GlobalFunctions.getRule(ruleNameID);
 							
-							boolean existanceOfRule = activeRuleSet.activeRuleExist(ruleNameID+paramValues);
-							System.out.println("          Result of Search - "+ existanceOfRule);
+							String paramValues = "";
+							
+							int[] condIndexes = condition.getParameterIndexes();
+							
+							Interface.log("\n" +"length: " + condIndexes.length);
+										
+							//check if event and condition share the same parameters
+							for(int conInd : condIndexes) {
+								for(int eventIndex : eventPIndexes)  {
+									if(eventIndex == conInd) {
+										Interface.log("\n" +"index " + eventIndex + " is shared and it's value "+ event.getEventParameter(eventIndex));
+										paramValues += event.getEventParameter(eventIndex)+",";
+									}
+									else {
+										Interface.log("\n" +"index " + eventIndex + " not shared");
+									}
+								}
+							}
+							
+							paramValues = GlobalFunctions.subStringLast(paramValues, 1);
+							Interface.log("\n" +"All Parameters found : " + paramValues);
+							
+							String activeRuleSearchID = ruleNameID+paramValues;
+							Interface.log("\n" +"active Rule Search ID : " + activeRuleSearchID);
+							
+							boolean existanceOfRule = activeRuleSet.activeRuleExist(activeRuleSearchID);
+							Interface.log("\n" +"          Result of Search - "+ existanceOfRule);
 							
 							if(condition.getConditionNegation() == Condition.ConditionNegate.yes) {
 								if(!existanceOfRule) {
-									System.out.println("          Rule Condition Accepted (yes)");
+									Interface.log("\n" +"          Rule Condition Accepted (yes)");
 								} else {
-									System.out.println("          Rule Condition Not Accepted (yes)");
+									Interface.log("\n" +"          Rule Condition Not Accepted (yes)");
 									continue rulebindingloop;
 								}
 							} else {
 								if(existanceOfRule) {
-									System.out.println("          Rule Condition Accepted (no)");
+									Interface.log("\n" +"          Rule Condition Accepted (no)");
 								} else {
-									System.out.println("          Rule Condition Not Accepted (no)");
+									Interface.log("\n" +"          Rule Condition Not Accepted (no)");
 									continue rulebindingloop;
 								}
 							}
 						} else if(condition.getConditionType() == Condition.ConditionType.compare){
-							System.out.println("        Normal");
+							Interface.log("\n" +"        Normal");
 							//Deal with Conditions
 							// Get Condition Parameter Indexes
 							int[] conditionParameters = condition.getParameterIndexes();
@@ -154,70 +183,77 @@ public class Update {
 							
 							// Get Condition result
 							if(!condition.isTrue(parameterBindings[0].getParameterValue(), parameterBindings[1].getParameterValue())) {
-								System.out.println("          Condition Not ok");
+								Interface.log("\n" +"          Condition Not ok");
 								continue rulebindingloop;
 							} else {
-								System.out.println("          Condition OK");
+								Interface.log("\n" +"          Condition OK");
 							}
 							
 						}
 					}
 					
 					for(ConsequentRule consequentRule : binding.getConsequentRules()){
-						System.out.println("      Consequent Rule");
+						Interface.log("\n" +"      Consequent Rule");
 						// Check if Consequence is Fail
 						if(consequentRule.isFail()) {
-							System.out.println("        Fail");
+							Interface.log("\n" +"        Fail");
 							return false;
 						}
 						
 						// Check if is a rule
 						if(!consequentRule.isOK()) {
-							System.out.println("++++++++Rule Add");
+							Interface.log("\n" +"++++++++Rule Add");
 							// Add new RuleActivation to tempArray
 							tempActivations.add(new RuleActivation(consequentRule.getRuleName()+event.getEventParametersSize()
 										, parameterValues));
 						} else {
-							System.out.println("        Rule - OK");
+							Interface.log("\n" +"        Rule - OK");
 						}
 					}
 					
 					
 					activationFired = true;
-					System.out.println("    ActivationFired: " + activationFired);
+					Interface.log("\n" +"    ActivationFired: " + activationFired);
 				}
 				else {
-					System.out.println("    False");
+					Interface.log("\n" +"    False");
 					continue;
 				}
 			}
 			// Check (and Delete) Activation
 			Rule.Modifier modifier = rule.getRuleModifier();
+			Interface.log("\n" +"  Modifier - " + modifier);
 			if(modifier != Rule.Modifier.Always) {
-				System.out.println("  Modifier Not Always"); 
+				Interface.log("\n" +"  Modifier Not Always");
+				Interface.log("\n" +"  M: "+ (modifier == Rule.Modifier.State) + " && fired: " + (!activationFired));				
 				if(modifier == Rule.Modifier.State && !activationFired) {
-					System.out.println("    Do not delete");
+					Interface.log("\n" +"    Do not delete");
 					continue;
 				}
 				else {
-					System.out.println("    Delete");
+					Interface.log("\n" +"    Delete");
 					// Delete Activation
-					activeRuleSet.deleteActivation(activation);
+					if(activeRuleSet.deleteActivation(activation))
+						Interface.log("\n" +"      Deleted");
+					else
+						Interface.log("\n" +"      Not Deleted");
 				}
 			} else {
-				System.out.println("  Modifier Always"); 
+				Interface.log("\n" +"  Modifier Always"); 
 			}
 		}
 		
 		// Add New Activations
 		for(RuleActivation activation : tempActivations){
-			System.out.println("Add New Activation + + " + activation.getRule().getRuleName() + " " + activation.getRule().getRuleNameID() );
-			activeRuleSet.addNewActivation(activation.getRule().getRuleNameID()+activation.getParameterHashValue(), activation);
+			String activationKey = activation.getRule().getRuleNameID()+activation.getOnlyRuleParameters();
+			activation.setRuleActivationID(activationKey);
+			Interface.log("\n" +"!! Add New Activation + + " + activationKey );
+			activeRuleSet.addNewActivation(activation);
 		}
 		
-		System.out.println("");
-		System.out.println("-----------------------------------");
-		System.out.println("");
+		Interface.log("\n" +"");
+		Interface.log("\n" +"-----------------------------------");
+		Interface.log("\n" +"");
 		
 		return true;
 	}

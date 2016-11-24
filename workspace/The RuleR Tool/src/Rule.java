@@ -147,9 +147,11 @@ public class Rule {
 		switch(mod) {
 		case "Always":
 			return Modifier.Always;
-		case "Skip":
+		case "State":
 			return Modifier.State;
 		case "Step":
+			return Modifier.Step;
+		case "Skip":
 			return Modifier.Step;
 		default:
 			return Modifier.Fail;

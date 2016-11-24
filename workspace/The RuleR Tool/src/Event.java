@@ -36,4 +36,17 @@ public class Event {
 	public int getEventParametersSize() {
 		return eventParameters.length;
 	}
+	
+	public String getEventParams() {
+		String finalValue = "";
+		for(String param : eventParameters) {
+			finalValue += param+",";
+		}
+		
+		return GlobalFunctions.subStringLast(finalValue, 1);
+	}
+	
+	public String toString() {
+		return this.event + "(" + getEventParams() + ")";
+	}
 }
