@@ -30,14 +30,24 @@ public class Event {
 	}
 	
 	public String getEventParameter(int index) {
-		return eventParameters[index];
+		if(eventParameters == null)
+			return null;
+		else
+			return eventParameters[index];
 	}
 
 	public int getEventParametersSize() {
-		return eventParameters.length;
+		if(eventParameters == null)
+			return 0;
+		else
+			return eventParameters.length;
 	}
 	
 	public String getEventParams() {
+	
+		if(eventParameters == null || eventParameters.length == 0)
+			return "";
+		
 		String finalValue = "";
 		for(String param : eventParameters) {
 			finalValue += param+",";

@@ -19,6 +19,7 @@ public class Update {
 		ActiveRuleSet activeRuleSet = Interface.activeRuleSet;
 		
 		ArrayList<RuleActivation> tempActivations = new ArrayList<RuleActivation>();
+		ArrayList<RuleActivation> ruleActivationsToDelete = new ArrayList<RuleActivation>();
 		
 		// For all Active rules
 		for(RuleActivation activation : activeRuleSet.getArrayOfRuleActivations()){
@@ -72,22 +73,24 @@ public class Update {
 					// Get Binding Parameters
 					int[] bindingParam = binding.getEventParameterIndexes();
 					
-					if(eventParam.length == bindingParam.length) {
-						Interface.log("\n" +"      Parameter Length Ok");
-						int i=0;
-						
-						for(int index : bindingParam){
-							// Get Parameter
-							Parameter param = rule.getParameter(index);
+					if(eventParam != null) {		
+						if(eventParam.length == bindingParam.length) {
+							Interface.log("\n" +"      Parameter Length Ok");
+							int i=0;
 							
-							// Create and add new ParameterBinding to temp Set
-							parameterValues.put(index,new ParameterBinding(param, eventParam[i],activation));
-							
-							i++;				
-						}	
-					} else {
-						Interface.log("\n" +"      Parameter Length Not OK");
-						continue;
+							for(int index : bindingParam){
+								// Get Parameter
+								Parameter param = rule.getParameter(index);
+								
+								// Create and add new ParameterBinding to temp Set
+								parameterValues.put(index,new ParameterBinding(param, eventParam[i],activation));
+								
+								i++;				
+							}	
+						} else {
+							Interface.log("\n" +"      Parameter Length Not OK");
+							continue;
+						}
 					}
 					
 					// Conditions
@@ -197,6 +200,7 @@ public class Update {
 						// Check if Consequence is Fail
 						if(consequentRule.isFail()) {
 							Interface.log("\n" +"        Fail");
+							Interface.log("\n");
 							return false;
 						}
 						
@@ -231,23 +235,26 @@ public class Update {
 					continue;
 				}
 				else {
-					Interface.log("\n" +"    Delete");
+					Interface.log("\n" +"    To Delete " + activation.toString());
 					// Delete Activation
-					if(activeRuleSet.deleteActivation(activation))
-						Interface.log("\n" +"      Deleted");
-					else
-						Interface.log("\n" +"      Not Deleted");
+					ruleActivationsToDelete.add(activation);
 				}
 			} else {
 				Interface.log("\n" +"  Modifier Always"); 
 			}
 		}
 		
+		for(RuleActivation activation : ruleActivationsToDelete) {
+			if(activeRuleSet.deleteActivation(activation))
+				Interface.log("\n" +"      Deleted - " + activation.toString()+ "\n");
+			else
+				Interface.log("\n" +"      Not Deleted - " + activation.toString() + "\n");
+		}
+		
+		
 		// Add New Activations
 		for(RuleActivation activation : tempActivations){
-			String activationKey = activation.getRule().getRuleNameID()+activation.getOnlyRuleParameters();
-			activation.setRuleActivationID(activationKey);
-			Interface.log("\n" +"!! Add New Activation + + " + activationKey );
+			Interface.log("\n" +"!! Add New Activation + + " + activation );
 			activeRuleSet.addNewActivation(activation);
 		}
 		

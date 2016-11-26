@@ -15,11 +15,12 @@ public class ActiveRuleSet {
 	}
 	
 	public void addNewActivation(RuleActivation newRuleActivation){
-		this.ruleActivations.put(newRuleActivation.getRuleActivationID(), newRuleActivation);
-	}
-	
-	public void addNewActivation(int key,RuleActivation newRuleActivation){
-		this.ruleActivations.put(key, newRuleActivation);
+		int key = newRuleActivation.getRuleActivationID();
+
+		if(ruleActivations.get(key) == null) {
+			this.ruleActivations.put(key, newRuleActivation);
+			Interface.log("Rule Activated: " + key + " " + newRuleActivation.toString() + "\n");
+		}
 	}
 	
 	public RuleActivation[] getArrayOfRuleActivations() {
@@ -28,7 +29,7 @@ public class ActiveRuleSet {
 	
 	public boolean activeRuleExist(String RuleName){
 		int key = GlobalFunctions.hashName(RuleName);
-		System.out.println("-------   Find active rule " + RuleName + " " + key);
+		//System.out.println("-------   Find active rule " + RuleName + " " + key);
 		return this.ruleActivations.get(key) != null;
 	}
 	

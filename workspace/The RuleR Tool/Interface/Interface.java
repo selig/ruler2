@@ -11,7 +11,7 @@ import javax.swing.*;
 
 
 public class Interface {
-	
+	private static boolean logOn = false;
 	//Simple rule set 
 	//private static final String rule1 = "<None Always Open() { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
 	//private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
@@ -40,7 +40,7 @@ public class Interface {
 	public static RuleSystem ruleSystem;
 	public static ActiveRuleSet activeRuleSet;
 	
-	public static ArrayList<String> events = null;
+	public static ArrayList<String[]> tests = null;
 	
 
 	private JFrame mainFrame;
@@ -106,6 +106,14 @@ public class Interface {
  	      mainFrame.add(new Tabbed(), BorderLayout.CENTER);
  	      mainFrame.setVisible(true); 
  	   }
+    
+    private void ResetActiveRules() {
+    	//delete activations
+    	activeRuleSet = new ActiveRuleSet();
+    	
+    	// add Rules
+    	ruleSystem.activateRules(activeRuleSet);
+    }
     
 	private void AddRule() {
 		
@@ -193,7 +201,7 @@ public class Interface {
 	private void updateRuleSystemGUI(Integer ruleNameID){
 	      //headerLabel.setText("Rule Added"); 
 	      //ObjectLabel.setText(/*ObjectLabel.getText() + " | " +*/ ruleSystem.getRules() + "<! "+time() +" !>");      
-		//System.out.println(ruleSystem.getOneRule(ruleNameID));
+		System.out.println(ruleSystem.getOneRule(ruleNameID));
 		ruleSystemInside.add(new RuleString(ruleSystem.getOneRule(ruleNameID)));
 		ruleSystemInside.revalidate();
 		ruleSystemInside.repaint();
@@ -208,6 +216,7 @@ public class Interface {
 		ruleSystemInside.repaint();
 		
 		for(String rule : ruleSystem.getRules()) {
+			System.out.println(rule);
 			ruleSystemInside.add(new RuleString(rule));
 			ruleSystemInside.revalidate();
 			ruleSystemInside.repaint();
@@ -240,9 +249,54 @@ public class Interface {
 	}
 	
 	public static void log(String message){
+		if(logOn) 
+			log.append(message);
+	}
+	
+	public void logNonStatic(String message){
 		log.append(message);
 	}
 	
+	public static ArrayList<String[]> readLine(File fileName) {
+		
+		ArrayList<String[]> lines = new ArrayList<String[]>();
+		FileReader file = null;
+		BufferedReader input = null;
+		
+		try {
+			file = new FileReader(fileName);
+			
+			input = new BufferedReader(file);
+			
+			String line;
+			while((line = input.readLine()) != null) {
+				//System.out.println("Line - " + line);
+				String[] array = line.split("\\.");
+				//System.out.println("Array - " + array.length);
+				lines.add(array);
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				file.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return lines;
+	}
+
 	public static ArrayList<String> readFile(File fileName) {
 		
 		ArrayList<String> lines = new ArrayList<String>();
@@ -279,7 +333,7 @@ public class Interface {
 		
 		return lines;
 	}
-
+	
 	protected static void end() {
 		
 		//System.out.println(time());
@@ -568,7 +622,7 @@ public class Interface {
 	 	      JRadioButton alwaysButton = new JRadioButton("Always");
 		      alwaysButton.setMnemonic(KeyEvent.VK_P);
 		      alwaysButton.setActionCommand("Always");
-		      JRadioButton stepButton = new JRadioButton("Step");
+		      JRadioButton stepButton = new JRadioButton("State");
 		      stepButton.setMnemonic(KeyEvent.VK_P);
 		      stepButton.setActionCommand("Step");
 		      JRadioButton skipButton = new JRadioButton("Skip");
@@ -649,11 +703,21 @@ public class Interface {
 	 	          public void actionPerformed(ActionEvent e) {
 	 	        	  AddRule();
 	 	          }
-	 	        });  
+	 	        });
+	 	      
+	 	     JButton activateRules = new JButton("Activate Rules");
+	 	     activateRules.setActionCommand("activate");
+	 	     activateRules.addActionListener(new ActionListener() {
+	 	          public void actionPerformed(ActionEvent e) {
+	 	        	  ruleSystem.activateRules(activeRuleSet);
+	 	          }
+	 	        }); 
 	 	      
 	 	      //controlPanel4.add(newEventButton);
 	 	      controlPanel4.add(new FileChooser("rule"));
+	 	      controlPanel4.add(new JLabel(" OR ",JLabel.LEFT));
 	 	      controlPanel4.add(addButton);
+	 	      controlPanel4.add(activateRules);
 	 	      
 	 	      controlPanel4.setPreferredSize(new Dimension(1000, 100));
 	 	      
@@ -722,6 +786,8 @@ public class Interface {
 			
 			ruleString = new JLabel(Rule,JLabel.LEFT);
 			
+			//Interface.logNonStatic("Rule Added : " + Rule + "\n");
+			
 			rulePanel = new JPanel();
 			rulePanel.setLayout(new FlowLayout());
 			
@@ -780,34 +846,54 @@ public class Interface {
 			runFile.setActionCommand("runFile");
 			runFile.addActionListener(new ActionListener() {
  	          public void actionPerformed(ActionEvent e) {
- 	        	 System.out.println("Button pressed");
- 	        	 if(events != null && events.size() > 0){
+ 	        	 System.out.println("Run File");
+ 	        	 if(tests != null && tests.size() > 0){
 
  	 	        	System.out.println("Button pressed. Runing");
  	 	        	
+ 	 	        	String eventLogs;
+ 	 	        	
  	        		boolean result = false;
- 	        		for(String event : events) {
-	 	        		if(Update.update(new Event(event))) {
-	 	        			System.out.println("true");
-	 	 	        		result = true;
+ 	        		for(String[] events : tests){
+ 	        			
+ 	        			Interface.ResetActiveRules();
+ 	        			eventLogs = "";
+	 	        		for(String event : events) {
+	 	        			eventLogs += event + ".";
+		 	        		if(Update.update(new Event(event))) {
+		 	        			//System.out.println("true");
+		 	 	        		result = true;
+		 	        		}
+		 	 	        	 else {
+		 	 	        		//System.out.println("false");
+		 	 	        		result = false;
+		 	 	        		break;
+		 	 	        	 }
+		 	 	        	 
+		 	 	        	 Interface.activeRuleGUI();
 	 	        		}
-	 	 	        	 else {
-	 	 	        		System.out.println("false");
-	 	 	        		result = false;
-	 	 	        		break;
-	 	 	        	 }
-	 	 	        	 
-	 	 	        	 Interface.activeRuleGUI();
+	 	        		
+	 	        		Interface.activeRuleGUI();
+	 	        		
+	 	        		if(result) {
+	 	        			Interface.logNonStatic("\n*********************************************************\n");
+	 	        			Interface.logNonStatic("*********************************************************\n");
+		 	        		Interface.logNonStatic("**  Event : " + eventLogs+"\n");
+	 	        			Interface.logNonStatic("**  Status : True\n");
+	 	        			Interface.logNonStatic("*********************************************************\n");
+	 	 	        		Interface.logNonStatic("*********************************************************\n");
+	 	        		}
+	 	 	        	else {
+	 	 	        		Interface.logNonStatic("\n*********************************************************\n");
+	 	 	        		Interface.logNonStatic("*********************************************************\n");
+		 	        		Interface.logNonStatic("**  Event : " + eventLogs +"\n");
+	 	        			Interface.logNonStatic("**  Status : False\n");
+	 	        			Interface.logNonStatic("*********************************************************\n");
+	 	 	        		Interface.logNonStatic("*********************************************************\n");
+ 	        			}
  	        		}
  	        		
- 	        		Interface.activeRuleGUI();
- 	        		
- 	        		if(result)
- 	 	        		Interface.success("True");
- 	 	        	else
- 	 	        		Interface.error("False");
- 	        		
- 	        		events = null;
+ 	        		tests = null;
  	        		eventLog.setText("No Events Left");
  	        	 } else 
  	 	        	 System.out.println("Button pressed. not running");

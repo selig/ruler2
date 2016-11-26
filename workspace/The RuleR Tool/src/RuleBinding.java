@@ -114,6 +114,6 @@ public class RuleBinding {
 	}
 
 	public String toString() {
-		return eventName + "(" + GlobalFunctions.getParameters(eventParameterStrings) + ")<" + getEventConditionsString() + "> ¬> " + getConsequentRulesString() + " \n";
+		return eventName + "(" + GlobalFunctions.getParameters(eventParameterStrings) + ")<" + getEventConditionsString() + "> ¬> " + getConsequentRulesString();
 	}
 }

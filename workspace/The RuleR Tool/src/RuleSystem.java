@@ -83,13 +83,23 @@ public class RuleSystem {
 	}
 	
 	public void activateRules(ActiveRuleSet activeRuleSet) {
+			boolean startRuleFound = false;
 			for(Rule rule : list.values()){
 				if(rule.getRuleModifier() == Rule.Modifier.Always || rule.getExtraModifier()== Rule.ExtraModifier.Start){
-					activeRuleSet.addNewActivation(rule.getRuleNameID(), new RuleActivation(rule, ""));
+					startRuleFound = true;
+					activeRuleSet.addNewActivation(new RuleActivation(rule, ""));
 				}
 			}	
+			if(!startRuleFound) {
+				Rule rule = getFirstRule();
+				activeRuleSet.addNewActivation(new RuleActivation(rule, ""));
+			}
 	}
 	
+	private Rule getFirstRule() {
+		return (Rule) list.values().toArray()[0];
+	}
+
 	public void addPredifinedRules(String RuleString) {
 		
 		//String RuleString ="<None Step Open(file) { [write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file) ] }>";

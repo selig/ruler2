@@ -35,7 +35,7 @@ public class Rule {
 			ruleParameterStrings = param.split(COMMA);
 		} else ruleParameterStrings = new String[0];
 		
-		System.out.println("<< parameters : <<"+ parameter+ ">> size: " +ruleParameterStrings.length);
+		//System.out.println("<< parameters : <<"+ parameter+ ">> size: " +ruleParameterStrings.length);
 		ruleParameters = new HashMap<Integer, Integer>();
 		ruleNameID = GlobalFunctions.hashName(name+ruleParameterStrings.length);
 		ruleBinding = bindings;
@@ -110,7 +110,7 @@ public class Rule {
 		
 		ruleParameterIndexes = new int[ruleParameterStrings.length];
 		
-		System.out.println("<< " + ruleParameterIndexes.length + " >>");
+		//System.out.println("<< " + ruleParameterIndexes.length + " >>");
 		
 		for(int i=0; i< ruleParameterIndexes.length;i++) {
 			int parameterIndex = GlobalFunctions.getParamIndex(ruleParameterStrings[i],tempParamArray);

@@ -43,11 +43,11 @@ public class Condition {
 				return ConditionType.none;
 			}
 			else {
-				System.out.println("Condition: " + this.condition);
+				//System.out.println("Condition: " + this.condition);
 				// If it is rule, convert condition to Rule Name for ruleNameID
 				this.conditionRuleNameID = this.condition.split("\\(")[0] + 
 							this.condition.replaceAll("\\)", "").split("\\(")[1].split(",").length;
-				System.out.println("Condition Rule Name ID: " + this.conditionRuleNameID);
+				//System.out.println("Condition Rule Name ID: " + this.conditionRuleNameID);
 				
 				return ConditionType.rule;
 			}

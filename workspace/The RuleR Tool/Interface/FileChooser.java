@@ -49,12 +49,18 @@ public class FileChooser extends JPanel
 				switch (this.type) {
 				case "event":
 					Interface.EVENTS_FILE = file;
-					Interface.events = Interface.readFile(file);
+					
+					Interface.tests = Interface.readLine(file);
 					
 					Interface.eventLog.setText("");
 					
-					for(String event : Interface.events){
-						Interface.eventLog.append(event + ", ");
+					for(String[] eventArrays : Interface.tests){
+						//System.out.println("Array size - " + eventArrays.length);
+						for(String event : eventArrays) {
+							//System.out.println("event - " + event);
+							Interface.eventLog.append(event + ", ");
+						}
+						Interface.eventLog.append("\n");
 					}
 					Interface.eventLog.append(newline);
 					break;
