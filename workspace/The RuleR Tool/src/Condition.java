@@ -160,18 +160,25 @@ public class Condition {
 			switch (this.conditionOperator) {
 			case greaterThan:
 				result = param1 > param2;
+				break;
 			case lessThan:
 				result = param1 < param2;
+				break;
 			case greaterOrEqual:
 				result = param1 >= param2;
+				break;
 			case lessOrEqual:
 				result = param1 <= param2;
+				break;
 			case equals:
 				result = param1 == param2;
+				break;
 			case notEqual:
 				result = param1 != param2;
+				break;
 			default:
 				result = false;
+				break;
 			}
 			
 		} catch(NumberFormatException e){

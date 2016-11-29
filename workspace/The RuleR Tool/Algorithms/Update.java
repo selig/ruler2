@@ -155,7 +155,7 @@ public class Update {
 							
 							ParameterBinding[] parameterBindings = new ParameterBinding[conditionParameters.length];
 							
-							for(int i=0;i>parameterBindings.length;i++) {
+							for(int i=0;i<parameterBindings.length;i++) {
 								parameterBindings[i] = activation.getParameterBinding(conditionParameters[i]);
 							}
 							
