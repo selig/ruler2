@@ -1,3 +1,3 @@
-<None Always Start() { [create(item, min)<<>> ¬> Created(item, min, 0)] }>
-<None State Created(item, min, max) { [bid(item, amount)<<amount<=max>> ¬> Fail][bid(item, amount)<<amount>max>> ¬> Created(item, min, amount)][sell(item)<<max<min>> ¬> Fail][sell(item)<<max>=min>> ¬> Sold(item)] }>
-<None State Sold(item) { [create(item, min)<<>> ¬> OK][bid(item, amount)<<>> ¬> Fail][sell(item)<<>> ¬> Fail] }>
+<None Always Start() { [create(item, min)<<>> Â¬> Created(item, min, 0)] }>
+<None State Created(item, min, max) { [bid(item, amount)<<amount<=max>> Â¬> Fail][bid(item, amount)<<amount>max>> Â¬> Created(item, min, amount)][sell(item)<<max<min>> Â¬> Fail][sell(item)<<max>=min>> Â¬> Sold(item)] }>
+<None State Sold(item) { [create(item, min)<<>> Â¬> OK][bid(item, amount)<<>> Â¬> Fail][sell(item)<<>> Â¬> Fail] }>

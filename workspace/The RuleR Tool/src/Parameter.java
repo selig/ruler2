@@ -48,7 +48,7 @@ public class Parameter {
 			splitName = GlobalFunctions.removeWhiteSpaces(name).split(OperatorCharToSplit);
 		else {
 			splitName = new String[1];
-			splitName[0] = name;
+			splitName[0] = GlobalFunctions.removeWhiteSpaces(name);
 		}
 		
 		// Create parameterVariables array of indexes
@@ -186,7 +186,12 @@ public class Parameter {
 			return var1 * var2;
 		default:
 		 	return null;
-	}
+		}
 	}
 	
+	public Integer getParameterVariable() {
+		if((!(parameterVariables.length > 1)) && parameterVariables.length > 0) {
+			return parameterVariables[0];
+		} else return null;
+	}
 }

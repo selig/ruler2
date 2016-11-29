@@ -21,10 +21,11 @@ public class RuleActivation {
 		this.ruleActivationID = GlobalFunctions.hashName(this.rule.getRuleNameID() + getOnlyRuleParameters());
 	}
 	
-	public RuleActivation(String ruleName, Map<Integer,ParameterBinding> parameters) {
+	public RuleActivation(String ruleName, Map<Integer,ParameterBinding> parameters, int[] consequentIndexes) {
+		System.out.println("Look for the rule with - " + ruleName + " name");
 		this.rule = Interface.ruleSystem.getRule(ruleName);
 		initialiseVariableBinding();
-		this.parameterBindings = getParameterBindingSet(this.rule,parameters);
+		this.parameterBindings = getParameterBindingSet(this.rule,parameters,consequentIndexes);
 		this.ruleActivationID = GlobalFunctions.hashName(this.rule.getRuleNameID() + getOnlyRuleParameters());
 	}
 	
@@ -75,20 +76,23 @@ public class RuleActivation {
 	}
 
 	private Map<Integer,ParameterBinding> getParameterBindingSet(Rule rule, 
-																Map<Integer,ParameterBinding> parameters) {
+																Map<Integer,ParameterBinding> parameters,int[] consequentIndexes) {
 		// Initialise temporary Set
 		Map<Integer,ParameterBinding> tempSet = new HashMap<Integer,ParameterBinding>();
 		
 		// Get parameter Array of the rule
 		int[] parameterIndexes = rule.getRuleParameterIndexes();
-			
+		
+		int i = 0;
 		// For Each Index
 		for(int index : parameterIndexes){
 			// Get Parameter
 			Parameter param = rule.getParameter(index);
 			
 			// Create and add new ParameterBinding to temp Set
-			tempSet.put(index,new ParameterBinding(param, parameters.get(index).getParameterValue(), this));				
+			tempSet.put(index,new ParameterBinding(param, parameters.get(consequentIndexes[i]).getParameterValue(), this));
+			
+			i++;
 		}
 		
 		return tempSet;	

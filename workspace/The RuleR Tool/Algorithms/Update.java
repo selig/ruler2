@@ -65,7 +65,7 @@ public class Update {
 					
 					//System.exit(0);
 					
-					// Parameters
+// ---------------- Parameters
 					Map<Integer, ParameterBinding> parameterValues = activation.getParameterBindings();
 					// Get Event Parameters
 					String[] eventParam = event.getEventParameters();
@@ -93,7 +93,7 @@ public class Update {
 						}
 					}
 					
-					// Conditions
+// ---------------- Conditions
 					for(Condition condition : binding.getEventConditions()){
 						Interface.log("\n" +"      Condition: " + condition.getCondition());
 						if(condition.getConditionType() == Condition.ConditionType.rule){
@@ -195,7 +195,24 @@ public class Update {
 						}
 					}
 					
+// ---------------- Consequent Rules
+					
+					//Parameter[] RuleParameterArray = rule.getParameters();
+								
+					
 					for(ConsequentRule consequentRule : binding.getConsequentRules()){
+						
+						int[] consequentIndexes = consequentRule.getConsequentRuleParameterIndexes();
+						
+						//Check if Parameter Values Assigned for consequent rules
+						for(int index : consequentIndexes) {
+							if(!parameterValues.containsKey(index)) {
+								Parameter parameter = rule.getParameter(index);
+								parameterValues.put(index, new ParameterBinding(parameter, rule.getVariable(parameter.getParameterVariable()).getValue()+"" ,activation));
+							}
+						}
+						
+						
 						Interface.log("\n" +"      Consequent Rule");
 						// Check if Consequence is Fail
 						if(consequentRule.isFail()) {
@@ -208,8 +225,8 @@ public class Update {
 						if(!consequentRule.isOK()) {
 							Interface.log("\n" +"++++++++Rule Add");
 							// Add new RuleActivation to tempArray
-							tempActivations.add(new RuleActivation(consequentRule.getRuleName()+event.getEventParametersSize()
-										, parameterValues));
+							tempActivations.add(new RuleActivation(consequentRule.getRuleName()+consequentRule.getConsequentRuleParameterSize()
+										, parameterValues,consequentIndexes));
 						} else {
 							Interface.log("\n" +"        Rule - OK");
 						}

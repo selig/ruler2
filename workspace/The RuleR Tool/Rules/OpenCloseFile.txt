@@ -1,2 +1,2 @@
-<None Always Open() { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>
-<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>
+<None Always Open() { [open(file)<<>> ¬> isOpen(file)][close(file)<<!isOpen(file)>> ¬> Fail] }>
+<None State isOpen(file) { [open(file)<<>> ¬> Fail][close(file)<<>> ¬> Ok] }>

@@ -11,7 +11,7 @@ import javax.swing.*;
 
 
 public class Interface {
-	private static boolean logOn = false;
+	private static boolean logOn = true;
 	//Simple rule set 
 	//private static final String rule1 = "<None Always Open() { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
 	//private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
@@ -29,13 +29,13 @@ public class Interface {
 	private static final String RULESINRULESYSTEM = " rules in Rule System";
 	private static final String RULESINACTIVERULESET = " Active Rules in Active Rule Set";
 	
-	private static String RULE_NAME = "Open";
-	private static String RULE_PARAM = "file";
-	private static String EVENT_NAME = "write";
+	private static String RULE_NAME = "";
+	private static String RULE_PARAM = "";
+	private static String EVENT_NAME = "";
 	private static String EVENT_CONDITION = "";
-	private static String EVENT_PARAMETERS = "file";
-	private static String CONSEQUENT_NAME = "Write";
-	private static String CONSEQUENT_PARAM = "file";
+	private static String EVENT_PARAMETERS = "";
+	private static String CONSEQUENT_NAME = "";
+	private static String CONSEQUENT_PARAM = "";
 	
 	public static RuleSystem ruleSystem;
 	public static ActiveRuleSet activeRuleSet;
@@ -806,7 +806,7 @@ public class Interface {
 			super(new GridLayout(0,1));
 			
 			eventLabel = new JLabel("Event",JLabel.LEFT);
-			eventArea = new JTextArea("open(file)",2,10);
+			eventArea = new JTextArea("",2,10);
 			
 			eventPanel = new JPanel();
 			eventPanel.setLayout(new FlowLayout());
@@ -855,6 +855,11 @@ public class Interface {
  	 	        	
  	        		boolean result = false;
  	        		for(String[] events : tests){
+ 	        			System.out.println("--------------------------------------------------------------------------");
+ 	        			System.out.println("--------------------------------------------------------------------------");
+ 	        			System.out.println("--------------------------== New Test ==----------------------------------");
+ 	        			System.out.println("--------------------------------------------------------------------------");
+ 	        			System.out.println("--------------------------------------------------------------------------");
  	        			
  	        			Interface.ResetActiveRules();
  	        			eventLogs = "";

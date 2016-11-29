@@ -51,4 +51,8 @@ public class ConsequentRule {
 		return this.ruleName.toLowerCase().equals("ok");
 	}
 
+	public int getConsequentRuleParameterSize() {
+		return this.consequentRuleParameterIndexes.length;
+	}
+
 }

@@ -30,6 +30,7 @@ public class Rule {
 		ruleModifier = getModifier(mod);		
 		extraModifier = getExtraModifier(extMod);
 		
+		System.out.println("Parameters: "+parameter);
 		String param = GlobalFunctions.removeWhiteSpaces(parameter);
 		if(param.length() > 0) {
 			ruleParameterStrings = param.split(COMMA);
@@ -37,6 +38,7 @@ public class Rule {
 		
 		//System.out.println("<< parameters : <<"+ parameter+ ">> size: " +ruleParameterStrings.length);
 		ruleParameters = new HashMap<Integer, Integer>();
+		System.out.print("Rule Name ID - " + name+ruleParameterStrings.length + " ");
 		ruleNameID = GlobalFunctions.hashName(name+ruleParameterStrings.length);
 		ruleBinding = bindings;
 		ruleVariables = new HashMap<Integer,Variable>();
@@ -45,6 +47,10 @@ public class Rule {
 	
 	public void addVariable(Variable newVariable) {
 		ruleVariables.put(newVariable.getKey(), newVariable);
+	}
+	
+	public Variable getVariable(int key) {
+		return ruleVariables.get(key);
 	}
 	
 	public boolean containsVariable(String variableName) {
@@ -94,6 +100,17 @@ public class Rule {
 				}
 				
 				// Get different parameters from Consequent Rule Parameters
+				for(ConsequentRule consequent : ruleBind.getConsequentRules()) {
+					
+					String[] allconsequents;
+					
+					if((allconsequents = consequent.getConsequentRuleParameterStrings()) != null)
+						for(String param : allconsequents) {
+							//System.out.println("-- --> Parameter : " + param);
+							if(GlobalFunctions.exists(param, parameters)) continue;
+							else parameters.add(new Parameter(param, this));
+						}
+				}
 			}
 		}
 		
@@ -126,7 +143,14 @@ public class Rule {
 	}
 
 	public Parameter getParameter(int index) {
-		return parameters[index];
+		Parameter param;
+		try{
+			param = parameters[index];
+		} catch (Exception e) {
+			param = null;
+			System.out.println("--- Parameters size - " + parameters.length + " we were looking for - " + index);
+		}	
+		return param;
 	}
 	
 	private ExtraModifier getExtraModifier(String extMod) {
@@ -202,6 +226,10 @@ public class Rule {
 	
 	public int getRuleParamIndex(int key) {
 		return ruleParameters.get(key);
+	}
+	
+	public Parameter[] getParameters() {
+		return parameters;
 	}
 
 	public String toString() {

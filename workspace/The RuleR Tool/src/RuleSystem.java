@@ -16,7 +16,7 @@ public class RuleSystem {
 	}
 
 	public boolean addNewRule(Rule myRule) {
-		//System.out.println("Add new Rule \"" + myRule.getRuleName() + "\" With hashCode " + myRule.getRuleNameID());
+		System.out.println("Add new Rule \"" + myRule.getRuleName() + "\" With hashCode " + myRule.getRuleNameID());
 		Integer key = myRule.getRuleNameID();
 		if(!list.containsKey(key)) {
 			list.put(key, myRule);
@@ -61,7 +61,7 @@ public class RuleSystem {
 	
 	public Rule getRule(String name) {
 		int key = GlobalFunctions.hashName(name);
-		//System.out.println("Get Rule \"" + name +"\" with hashCode " + key);
+		System.out.println("Get Rule \"" + name +"\" with hashCode " + key);
 		return list.get(key);
 	}
 	
@@ -103,10 +103,12 @@ public class RuleSystem {
 	public void addPredifinedRules(String RuleString) {
 		
 		//String RuleString ="<None Step Open(file) { [write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file) ] }>";
+		if(RuleString.length() <= 0)
+			return;
 		
 		String[] RuleAndEvent = RuleString.split("\\{");
 		
-		String[] RuleInfo = RuleAndEvent[0].replaceAll("<", "").split(" ");
+		String[] RuleInfo = RuleAndEvent[0].replaceAll("<", "").split(" ",3);
 		
 		String extraModifier = RuleInfo[0];
 		String modifier = RuleInfo[1];
@@ -123,11 +125,11 @@ public class RuleSystem {
 			
 			String eventName = GlobalFunctions.removeWhiteSpaces(eventSplit[0]).split("\\(")[0].replaceAll("\\[", "");
 			
-			String[] eventParameters = eventSplit[0].split("\\(")[1].split("<")[0].replaceAll("\\)","").split(",");
+			String[] eventParameters = GlobalFunctions.removeWhiteSpaces(eventSplit[0]).split("\\(")[1].split("<<")[0].replaceAll("\\)","").split(",");
 			
-			String[] eventConditions = eventSplit[0].split("<")[1].replaceAll(">","").split(",");
+			String[] eventConditions = eventSplit[0].split("<<")[1].replaceAll(">>","").split(",");
 			
-			String[] consRules = eventSplit[1].split(",");
+			String[] consRules = eventSplit[1].split(";");
 			
 			////System.out.println("--> " + consRules);
 
@@ -138,7 +140,7 @@ public class RuleSystem {
 				String consequentName = eventSplit[1].split("\\(")[0];
 				
 				try {
-				String[] consequentParameters = eventSplit[1].split("\\(")[1].replaceAll("\\)", "").split(",");
+				String[] consequentParameters = eventSplit[1].split("\\(")[1].replaceAll("\\)", "").replaceAll("] }>","").split(",");
 				
 				consequentRules.add(new ConsequentRule(consequentName, consequentParameters));
 				} catch(Exception e) {

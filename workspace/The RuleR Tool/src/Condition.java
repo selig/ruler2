@@ -2,11 +2,13 @@
 public class Condition {
 	
 	private final static String GREATERTHAN = ">";
+	private final static String GREATEROREQUAL = ">=";
 	private final static String LESSTHAN = "<";
+	private final static String LESSOREQUAL = "<=";
 	private final static String EQUALS = "=";
 	private final static String NOTEQUAL = "!=";
 	
-	public enum CompareOperation{greaterThan, lessThan, equals, notEqual};
+	public enum CompareOperation{greaterThan, lessThan, greaterOrEqual, lessOrEqual, equals, notEqual};
 	public enum ConditionType{compare,rule,none};
 	public enum ConditionNegate{yes,no};
 
@@ -56,7 +58,11 @@ public class Condition {
 
 	private CompareOperation getConditionOperation(String conditionString) {
 		
-		if(conditionString.contains(GREATERTHAN)) {
+		if(conditionString.contains(GREATEROREQUAL)) {
+			return CompareOperation.greaterOrEqual;	
+		} else if(conditionString.contains(LESSOREQUAL)) {
+			return CompareOperation.lessOrEqual;
+		} else if(conditionString.contains(GREATERTHAN)) {
 			return CompareOperation.greaterThan;
 		} else if(conditionString.contains(LESSTHAN)) {
 			return CompareOperation.lessThan;
@@ -85,6 +91,10 @@ public class Condition {
 			return GREATERTHAN;
 		case lessThan:
 			return LESSTHAN;
+		case greaterOrEqual:
+			return GREATEROREQUAL;
+		case lessOrEqual:
+			return LESSOREQUAL;
 		case equals:
 			return EQUALS;
 		case notEqual:
@@ -152,6 +162,10 @@ public class Condition {
 				result = param1 > param2;
 			case lessThan:
 				result = param1 < param2;
+			case greaterOrEqual:
+				result = param1 >= param2;
+			case lessOrEqual:
+				result = param1 <= param2;
 			case equals:
 				result = param1 == param2;
 			case notEqual:
