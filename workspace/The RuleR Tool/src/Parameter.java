@@ -174,18 +174,32 @@ public class Parameter {
 		}
 	}
 	
-	public Integer getParameterValue(int var1, int var2) {
-		switch(parameterOperation){
-		case plus:
-			return var1 + var2;
-		case minus:
-			return var1 - var2;
-		case multiply:
-			return var1 / var2;
-		case divide:
-			return var1 * var2;
-		default:
-		 	return null;
+	public String getParameterValue(String variable1, String variable2) {
+		int variableValues;
+		int variableValues2;
+		try{
+			variableValues = Integer.parseInt(variable1);
+			variableValues2 = Integer.parseInt(variable2);
+			
+			switch(parameterOperation){
+			case plus:
+				return (variableValues + variableValues2) + "";
+			case minus:
+				return (variableValues - variableValues2) + "";
+			case multiply:
+				return (variableValues / variableValues2) + "";
+			case divide:
+				return (variableValues * variableValues2) + "";
+			default:
+			 	return null;
+			}
+		} catch (Exception e) {
+			if(parameterOperation != Operator.plus) {
+				System.out.println("Can't Do non plus operation on String");
+				return null;
+			} else {
+				return variable1 + variable2;
+			}
 		}
 	}
 	
@@ -193,5 +207,31 @@ public class Parameter {
 		if((!(parameterVariables.length > 1)) && parameterVariables.length > 0) {
 			return parameterVariables[0];
 		} else return null;
+	}
+	
+	public String getParameterValue(RuleActivation activation) {
+		// parameter value = variable1 operation variable2
+		// or just variable1
+		int i = 0;
+		String[] variableValues =  new String[parameterVariables.length];
+		// for each variable indexes
+		for(int index : parameterVariables) {
+			variableValues[i] = activation.getVariableValue(index);
+			if(variableValues[i] == null) {
+				Variable variable = this.rule.getVariable(index); 
+				if(variable.isNumber()) {
+					variableValues[i] = variable.getValue()+"";
+					activation.addVariableBinding(new VariableBinding(variable, variable.getValue()));
+				}
+				else System.out.println("Can't find value of this parameter - " + this.name);
+			}
+			i++;
+		}
+		
+		if(variableValues.length > 1) {
+			return getParameterValue(variableValues[0],variableValues[1])+"";
+		}else {
+			return variableValues[0]+"";
+		}
 	}
 }

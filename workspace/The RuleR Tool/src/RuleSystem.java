@@ -121,13 +121,13 @@ public class RuleSystem {
 		ArrayList<RuleBinding> ruleBindings = new ArrayList<RuleBinding>();
 		
 		for(String event : Events) {
-			String[] eventSplit = event.split("Â¬>");
+			String[] eventSplit = event.split("¬>");
 			
 			String eventName = GlobalFunctions.removeWhiteSpaces(eventSplit[0]).split("\\(")[0].replaceAll("\\[", "");
 			
 			String[] eventParameters = GlobalFunctions.removeWhiteSpaces(eventSplit[0]).split("\\(")[1].split("<<")[0].replaceAll("\\)","").split(",");
 			
-			String[] eventConditions = eventSplit[0].split("<<")[1].replaceAll(">>","").split(",");
+			String[] eventConditions = eventSplit[0].split("<<")[1].replaceAll(">>","").split(";");
 			
 			String[] consRules = eventSplit[1].split(";");
 			

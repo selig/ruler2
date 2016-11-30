@@ -61,4 +61,9 @@ public class VariableBinding {
 	public boolean hasValue() {
 		return variableValueString != null || variableValueInt != null;
 	}
+	
+	public String getVariableName() {
+		return this.variable.getName();
+	}
 }
+

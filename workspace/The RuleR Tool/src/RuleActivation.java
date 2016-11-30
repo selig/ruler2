@@ -11,7 +11,7 @@ public class RuleActivation {
 	// The Parameters
 	private final Map<Integer,ParameterBinding> parameterBindings;
 	// The Parameter Values
-	private Map<Integer,VariableBinding> variableBinding;
+	private HashMap<Integer,VariableBinding> variableBinding;
 	private final int ruleActivationID;
 	
 	public RuleActivation(Rule newRuleName, String parameters) {
@@ -43,6 +43,10 @@ public class RuleActivation {
 	
 	public VariableBinding getVariableBinding(Variable variable) {
 		return variableBinding.get(variable.getKey());
+	}
+	
+	public VariableBinding getVariableBinding(Integer key) {
+		return variableBinding.get(key);
 	}
 
 	private Map<Integer,ParameterBinding> getParameterBindingSet(Rule rule,String parameters) {
@@ -142,8 +146,13 @@ public class RuleActivation {
 			return null;
 	}
 
-	public int getVariableValue(Integer key) {
-		return variableBinding.get(key).getVariableValueInt();
+	public String getVariableValue(Integer key) {
+		VariableBinding var = variableBinding.get(key);
+		
+		if(var == null)
+			return null;
+		
+		return (String) var.getVariableValue();
 	}
 	
 	public Set<Entry<Integer,ParameterBinding>> getParameterEntries() {
@@ -160,5 +169,9 @@ public class RuleActivation {
 
 	public int getRuleActivationID() {
 		return ruleActivationID;
+	}
+	
+	public HashMap<Integer, VariableBinding> getVariableBindings() {
+		return this.variableBinding;
 	}
 }

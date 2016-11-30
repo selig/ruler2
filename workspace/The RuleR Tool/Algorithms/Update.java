@@ -39,7 +39,7 @@ public class Update {
 
 					// Get Event Parameter list of indexes
 					int[] eventPIndexes = binding.getEventParameterIndexes();
-					
+// check if event matches rule
 					if(rule.getRuleParameterIndexes().length > 0) {
 						Interface.log("\n" +"      Rule Has Parameters");
 						
@@ -112,14 +112,16 @@ public class Update {
 										
 							//check if event and condition share the same parameters
 							for(int conInd : condIndexes) {
+								int i = 0;
 								for(int eventIndex : eventPIndexes)  {
 									if(eventIndex == conInd) {
-										Interface.log("\n" +"index " + eventIndex + " is shared and it's value "+ event.getEventParameter(eventIndex));
-										paramValues += event.getEventParameter(eventIndex)+",";
+										Interface.log("\n" +"index: " + i + " paramRuleIndex: " +eventIndex + " is shared and it's value "+ event.getEventParameter(i));
+										paramValues += event.getEventParameter(i)+",";
 									}
 									else {
 										Interface.log("\n" +"index " + eventIndex + " not shared");
 									}
+									i++;
 								}
 							}
 							
@@ -165,7 +167,8 @@ public class Update {
 									// Get Parameter from Rules
 									Parameter parameter1 = rule.getParameter(conditionParameters[0]);
 									
-									// Get Parameter Variable indexes
+									String parameterValue = parameter1.getParameterValue(activation);
+									/*// Get Parameter Variable indexes
 									Integer[] varIndexes1 = parameter1.getParameterVariables();
 									
 									// Get Variable1 value
@@ -175,9 +178,9 @@ public class Update {
 									int variable2Value = activation.getVariableValue(varIndexes1[1]);
 									
 									// Get parameter 1 value
-									int param1Value = parameter1.getParameterValue(variable1Value, variable2Value);
+									int param1Value = parameter1.getParameterValue(variable1Value, variable2Value);*/
 									
-									parameterValues.put(conditionParameters[0],new ParameterBinding(parameter1,param1Value+"",activation));
+									parameterValues.put(conditionParameters[0],new ParameterBinding(parameter1,parameterValue,activation));
 									
 									parameterBindings[i] = parameterValues.get(conditionParameters[0]);
 								}
@@ -199,6 +202,10 @@ public class Update {
 					
 					//Parameter[] RuleParameterArray = rule.getParameters();
 								
+					for(Integer key : activation.getVariableBindings().keySet()){
+						VariableBinding var = activation.getVariableBinding(key);
+						System.out.println("[ "+key+" "+var.getVariableName() + " - " + var.getVariableValue() + " ]");
+					}
 					
 					for(ConsequentRule consequentRule : binding.getConsequentRules()){
 						
@@ -208,7 +215,7 @@ public class Update {
 						for(int index : consequentIndexes) {
 							if(!parameterValues.containsKey(index)) {
 								Parameter parameter = rule.getParameter(index);
-								parameterValues.put(index, new ParameterBinding(parameter, rule.getVariable(parameter.getParameterVariable()).getValue()+"" ,activation));
+								parameterValues.put(index, new ParameterBinding(parameter, parameter.getParameterValue(activation) ,activation));
 							}
 						}
 						
