@@ -1,0 +1,3 @@
+<None Always Open() { [openwindow(windName)<<>> -> Opened(windName)][close(windName)<<!Close(windName)>> -> Fail][loaddata(windName,data)<<!Opened(windName)>> -> Fail] }>
+<Forbidden State Opened(windName) { [loaddata(windName,data)<<>> -> Close(windName)]}>
+<Forbidden State Close(windName) { [close(windName)<<>> -> OK]}>
