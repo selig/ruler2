@@ -1,2 +1,2 @@
-<None Step state1() { [a()<<>> ¬> state2()][b()<<>> ¬> Fail] }>
-<None Step state2() { [a()<<>> ¬> Fail ][b()<<>> ¬> state1()] }>
+<None Step state1() { [a()<<>> -> state2()][b()<<>> -> Fail] }>
+<None Step state2() { [a()<<>> -> Fail ][b()<<>> -> state1()] }>
