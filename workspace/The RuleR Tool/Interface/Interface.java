@@ -881,22 +881,23 @@ public class Interface {
 	 	        		
 	 	        		Interface.activeRuleGUI();
 	 	        		
-	 	        		if(result) {
-	 	        			Interface.logNonStatic("\n*********************************************************\n");
-	 	        			Interface.logNonStatic("*********************************************************\n");
-		 	        		Interface.logNonStatic("**  Event : " + eventLogs+"\n");
-	 	        			Interface.logNonStatic("**  Status : True\n");
-	 	        			Interface.logNonStatic("*********************************************************\n");
-	 	 	        		Interface.logNonStatic("*********************************************************\n");
-	 	        		}
-	 	 	        	else {
-	 	 	        		Interface.logNonStatic("\n*********************************************************\n");
-	 	 	        		Interface.logNonStatic("*********************************************************\n");
-		 	        		Interface.logNonStatic("**  Event : " + eventLogs +"\n");
-	 	        			Interface.logNonStatic("**  Status : False\n");
-	 	        			Interface.logNonStatic("*********************************************************\n");
-	 	 	        		Interface.logNonStatic("*********************************************************\n");
+	 	        		Interface.logNonStatic("\n*********************************************************\n");
+ 	        			Interface.logNonStatic("*********************************************************\n");
+ 	        			Interface.logNonStatic("**  Event : " + eventLogs+"\n");
+	 	        		
+	 	        		//Check if ActiveRuleSet does not have forbidden rules
+ 	        			if(result) {
+		 	        		for(RuleActivation ruleAct : activeRuleSet.getArrayOfRuleActivations()){
+		 	        			if(ruleAct.getRule().getExtraModifier() == Rule.ExtraModifier.Forbidden) {
+		 	        				result = false;
+		 	        				Interface.logNonStatic("**  Active Rule With Forbidden State : " + ruleAct.getRule().getRuleName() +"\n");
+		 	        				break;
+		 	        			}
+		 	        		}
  	        			}
+	 	        		Interface.logNonStatic("**  Status : " + result+"\n");
+	 	        		Interface.logNonStatic("*********************************************************\n");
+ 	 	        		Interface.logNonStatic("*********************************************************\n");
  	        		}
  	        		
  	        		tests = null;

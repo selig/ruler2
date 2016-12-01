@@ -121,7 +121,7 @@ public class RuleSystem {
 		ArrayList<RuleBinding> ruleBindings = new ArrayList<RuleBinding>();
 		
 		for(String event : Events) {
-			String[] eventSplit = event.split("¬>");
+			String[] eventSplit = event.split("->");
 			
 			String eventName = GlobalFunctions.removeWhiteSpaces(eventSplit[0]).split("\\(")[0].replaceAll("\\[", "");
 			
