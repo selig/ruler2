@@ -109,7 +109,11 @@ public class Update {
 							int[] condIndexes = condition.getParameterIndexes();
 							
 							Interface.log("\n" +"length: " + condIndexes.length);
-										
+							
+							// Counter to determine if all the condition Parameters have values from event
+							int[] sharedParamIndex = new int[condIndexes.length];
+							int counter = 0;
+							
 							//check if event and condition share the same parameters
 							for(int conInd : condIndexes) {
 								int i = 0;
@@ -117,6 +121,8 @@ public class Update {
 									if(eventIndex == conInd) {
 										Interface.log("\n" +"index: " + i + " paramRuleIndex: " +eventIndex + " is shared and it's value "+ event.getEventParameter(i));
 										paramValues += event.getEventParameter(i)+",";
+										sharedParamIndex[counter] = conInd;
+										counter++;
 									}
 									else {
 										Interface.log("\n" +"index " + eventIndex + " not shared");
@@ -125,14 +131,39 @@ public class Update {
 								}
 							}
 							
-							paramValues = GlobalFunctions.subStringLast(paramValues, 1);
-							Interface.log("\n" +"All Parameters found : " + paramValues);
+							boolean notFoundFlag = false;
 							
-							String activeRuleSearchID = ruleNameID+paramValues;
-							Interface.log("\n" +"active Rule Search ID : " + activeRuleSearchID);
+							//Check if Condition Parameters have values from event
+							if(counter != condIndexes.length) {
+								paramValues = "";
+								//check if the Condition Parameters has values in values Map
+								for(int conInd : condIndexes) {
+									ParameterBinding par = parameterValues.get(conInd);
+									if(par == null){
+										notFoundFlag = true;
+										break;
+									} else {
+										paramValues += par.getParameterValue() + ",";
+									}
+								}
+							}
 							
-							boolean existanceOfRule = activeRuleSet.activeRuleExist(activeRuleSearchID);
-							Interface.log("\n" +"          Result of Search - "+ existanceOfRule);
+							boolean existanceOfRule;
+							
+							if(notFoundFlag) {
+								// Linear Search all The active rules looking for Rule with shared parameters and ignoring not shared ones
+								existanceOfRule = activeRuleSet.findMatchingRule(sharedParamIndex,ruleNameID,parameterValues);
+							} else {
+															
+								paramValues = GlobalFunctions.subStringLast(paramValues, 1);
+								Interface.log("\n" +"All Parameters found : " + paramValues);
+								
+								String activeRuleSearchID = ruleNameID+paramValues;
+								Interface.log("\n" +"active Rule Search ID : " + activeRuleSearchID);
+								
+								existanceOfRule = activeRuleSet.activeRuleExist(activeRuleSearchID);
+								Interface.log("\n" +"          Result of Search - "+ existanceOfRule);
+							}
 							
 							if(condition.getConditionNegation() == Condition.ConditionNegate.yes) {
 								if(!existanceOfRule) {
@@ -149,6 +180,7 @@ public class Update {
 									continue rulebindingloop;
 								}
 							}
+							
 						} else if(condition.getConditionType() == Condition.ConditionType.compare){
 							Interface.log("\n" +"        Normal");
 							//Deal with Conditions
@@ -202,11 +234,11 @@ public class Update {
 					
 					//Parameter[] RuleParameterArray = rule.getParameters();
 								
-					for(Integer key : activation.getVariableBindings().keySet()){
+				/*	for(Integer key : activation.getVariableBindings().keySet()){
 						VariableBinding var = activation.getVariableBinding(key);
 						System.out.println("[ "+key+" "+var.getVariableName() + " - " + var.getVariableValue() + " ]");
 					}
-					
+					*/
 					for(ConsequentRule consequentRule : binding.getConsequentRules()){
 						
 						int[] consequentIndexes = consequentRule.getConsequentRuleParameterIndexes();

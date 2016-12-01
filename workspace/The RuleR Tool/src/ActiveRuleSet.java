@@ -69,4 +69,18 @@ public class ActiveRuleSet {
 			return true;
 		}
 	}
+
+	public boolean findMatchingRule(int[] sharedParamIndex, int ruleNameID, Map<Integer, ParameterBinding> parameterValues) {
+		for(RuleActivation ruleActivation : ruleActivations.values() ){
+			if(ruleActivation.getRule().getRuleNameID() == ruleNameID){
+				for(int index: sharedParamIndex) {
+					if(ruleActivation.getParameterBindingValue(index) != parameterValues.get(index).getParameterValue()){
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
+	}
 }
