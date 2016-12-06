@@ -17,6 +17,14 @@ public class Update {
 		Interface.log("\n" +"");
 		
 		ActiveRuleSet activeRuleSet = Interface.activeRuleSet;
+		RuleSystem ruleSystem = Interface.ruleSystem;
+		
+		boolean assertAccepted;
+		
+		if(ruleSystem.getAssertArraySize() > 0)
+			assertAccepted = false;
+		else
+			assertAccepted = true;
 		
 		ArrayList<RuleActivation> tempActivations = new ArrayList<RuleActivation>();
 		ArrayList<RuleActivation> ruleActivationsToDelete = new ArrayList<RuleActivation>();
@@ -280,7 +288,7 @@ public class Update {
 					continue;
 				}
 			}
-			// Check (and Delete) Activation
+//--------- Check (and Delete) Activation
 			Rule.Modifier modifier = rule.getRuleModifier();
 			Interface.log("\n" +"  Modifier - " + modifier);
 			if(modifier != Rule.Modifier.Always) {
@@ -297,6 +305,10 @@ public class Update {
 				}
 			} else {
 				Interface.log("\n" +"  Modifier Always"); 
+			}
+// -------- Check Assert Array of Rules
+			if(activationFired && rule.isAssert()) {
+				assertAccepted = true;
 			}
 		}
 		
@@ -318,6 +330,9 @@ public class Update {
 		Interface.log("\n" +"-----------------------------------");
 		Interface.log("\n" +"");
 		
-		return true;
+		if(assertAccepted)
+			return true;
+		else
+			return false;
 	}
 }

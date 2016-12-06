@@ -236,4 +236,8 @@ public class Rule {
 		return extraModifier + " " +ruleModifier + " " + ruleName + "("+ GlobalFunctions.getParameters(ruleParameterStrings) +") { " + getRuleBindingsString() + " }";
 	}
 
+	public boolean isAssert() {
+		return extraModifier == ExtraModifier.Assert;
+	}
+
 }

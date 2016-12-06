@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class RuleSystem {
 	
+	private static HashMap<Integer,Rule> assertList;
 	private static HashMap<Integer,Rule> list;
 	
 	
@@ -161,5 +162,20 @@ public class RuleSystem {
 		this.addNewRule(new Rule(ruleName, modifier, extraModifier, ruleParameters, ruleBindings));
 			
 		
+	}
+
+	public int getAssertArraySize() {
+		return assertList.size();
+	}
+	
+	public boolean addAssertArray(Rule newRule) {
+		System.out.println("Add new Rule into Assert \"" + newRule.getRuleName() + "\" With hashCode " + newRule.getRuleNameID());
+		Integer key = newRule.getRuleNameID();
+		if(!assertList.containsKey(key)) {
+			assertList.put(key, newRule);
+			return true;
+		}
+		else
+		   return false;
 	}
 }
