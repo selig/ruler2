@@ -38,6 +38,13 @@ public class FileChooser extends JPanel
 	
 	public void actionPerformed(ActionEvent e) {
 		
+		if(this.type.equals("event")) {
+			if(!Interface.Interface.setEventsTestGroup()) {
+				Interface.Interface.error("The Test Option Not Selected");
+				return;
+			}
+		}
+			
 		//Handle open button action.
 		if (e.getSource() == openButton) {
 			int returnVal = fc.showOpenDialog(FileChooser.this);

@@ -14,6 +14,7 @@ public class RuleSystem {
 	
 	public RuleSystem() {
 		list = new HashMap<Integer,Rule>();
+		assertList = new HashMap<Integer,Rule>();
 	}
 
 	public boolean addNewRule(Rule myRule) {
@@ -21,6 +22,9 @@ public class RuleSystem {
 		Integer key = myRule.getRuleNameID();
 		if(!list.containsKey(key)) {
 			list.put(key, myRule);
+			if(myRule.isAssert()) {
+				assertList.put(key, myRule);
+			}
 			return true;
 		}
 		else

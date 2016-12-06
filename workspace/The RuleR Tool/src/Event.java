@@ -20,6 +20,24 @@ public class Event {
 			this.eventParameters = null;
 		}
 	}
+	
+	public Event(String newEvent, String Option) {
+		
+		if(Option.equals("oneTest")){
+			this.event = newEvent.split(",")[0];
+			this.eventParameters = newEvent.split(",",2)[1].split(",");
+		} else {
+			String eventName = newEvent.split("\\(")[0];
+			this.event = eventName;
+			
+			try{
+				String[] eventParameters = newEvent.replaceAll("\\)", "").split("\\(")[1].split(",");
+				this.eventParameters = eventParameters;
+			} catch(Exception e) {
+				this.eventParameters = null;
+			}
+		}
+	}
 
 	public String getEvent() {
 		return event;

@@ -11,12 +11,13 @@ import javax.swing.*;
 
 
 public class Interface {
-	private static boolean logOn = true;
+	private static boolean logOn = false;
 	//Simple rule set 
 	//private static final String rule1 = "<None Always Open() { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
 	//private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
 	public static File RULE_FILE = null;
 	public static File EVENTS_FILE = null;
+	public static String TEST_OPTION = null;
 	
 	
 	private static long startTime = 0;
@@ -79,6 +80,7 @@ public class Interface {
     private JTabbedPane TabbedPane;
     private JLabel ruleSystemGUIHeader; 
     private JLabel activeRuleSetGUIHeader;
+    private ButtonGroup testGroup;
     public static JTextArea eventLog;
     public static JTextArea log;
     public static Interface Interface;
@@ -188,9 +190,8 @@ public class Interface {
 				successMessage);
 		System.out.println("Suc: " + successMessage);
 	}
-	
-	
-	private void error(String errorMessage) {
+		
+	public void error(String errorMessage) {
 		JOptionPane.showMessageDialog(mainFrame,
 			    errorMessage + " Please fix the problem",
 			    "Inane error",
@@ -840,6 +841,24 @@ public class Interface {
 			*/
 			eventPane2 = new JPanel();
 			eventPane2.setLayout(new FlowLayout());
+			
+			JRadioButton oneTest = new JRadioButton("One Test");
+			oneTest.setMnemonic(KeyEvent.VK_P);
+			oneTest.setActionCommand("oneTest");
+	 	    JRadioButton multipleTests = new JRadioButton("Multiple Tests");
+	 	    multipleTests.setMnemonic(KeyEvent.VK_P);
+	 	    multipleTests.setActionCommand("multipleTests");
+			
+	 	    testGroup = new ButtonGroup();
+	 	    testGroup.add(oneTest);
+	 	    testGroup.add(multipleTests);
+	 	      
+	 	    JPanel panel = new JPanel();
+	 	    panel.setLayout(new GridLayout(0,1));
+	 	    panel.add(oneTest);
+	 	    panel.add(multipleTests);
+	 	    
+			eventPane2.add(panel);
 			eventPane2.add(new FileChooser("event"));
 			
 			JButton runFile = new JButton("Run From File");
@@ -849,24 +868,32 @@ public class Interface {
  	        	 System.out.println("Run File");
  	        	 if(tests != null && tests.size() > 0){
 
- 	 	        	System.out.println("Button pressed. Runing");
+ 	 	        	//System.out.println("Button pressed. Runing");
  	 	        	
- 	 	        	String eventLogs;
+ 	 	        	String eventLogs = "";
+ 	 	        	int eventCount = 0;
  	 	        	
  	        		boolean result = false;
 
+ 	        		Interface.ResetActiveRules();
+ 	        		
  	        		for(String[] events : tests){
- 	        			System.out.println("--------------------------------------------------------------------------");
- 	        			System.out.println("--------------------------------------------------------------------------");
- 	        			System.out.println("--------------------------== New Test ==----------------------------------");
- 	        			System.out.println("--------------------------------------------------------------------------");
- 	        			System.out.println("--------------------------------------------------------------------------");
  	        			
- 	        			Interface.ResetActiveRules();
- 	        			eventLogs = "";
+ 	        			eventCount++;
+ 	        			if(!TEST_OPTION.equals("oneTest")) { 
+	 	        			//System.out.println("--------------------------------------------------------------------------");
+	 	        			System.out.println("--------------------------------------------------------------------------");
+	 	        			System.out.println("--------------------------== New Test ==----------------------------------");
+	 	        			System.out.println("--------------------------------------------------------------------------");
+	 	        			//System.out.println("--------------------------------------------------------------------------");
+ 	        			
+ 	        				Interface.ResetActiveRules();
+ 	        				eventLogs = "";
+ 	        			}
+ 	        			
 	 	        		for(String event : events) {
 	 	        			eventLogs += event + ".";
-		 	        		if(Update.update(new Event(event))) {
+		 	        		if(Update.update(new Event(event,TEST_OPTION))) {
 		 	        			//System.out.println("true");
 		 	 	        		result = true;
 		 	        		}
@@ -878,27 +905,29 @@ public class Interface {
 		 	 	        	 
 		 	 	        	 Interface.activeRuleGUI();
 	 	        		}
-	 	        		
-	 	        		Interface.activeRuleGUI();
-	 	        		
-	 	        		Interface.logNonStatic("\n*********************************************************\n");
- 	        			Interface.logNonStatic("*********************************************************\n");
- 	        			Interface.logNonStatic("**  Event : " + eventLogs+"\n");
-	 	        		
-	 	        		//Check if ActiveRuleSet does not have forbidden rules
- 	        			if(result) {
-		 	        		for(RuleActivation ruleAct : activeRuleSet.getArrayOfRuleActivations()){
-		 	        			if(ruleAct.getRule().getExtraModifier() == Rule.ExtraModifier.Forbidden) {
-		 	        				result = false;
-		 	        				Interface.logNonStatic("**  Active Rule With Forbidden State : " + ruleAct.getRule().getRuleName() +"\n");
-		 	        				break;
-		 	        			}
-		 	        		}
- 	        			}
-	 	        		Interface.logNonStatic("**  Status : " + result+"\n");
-	 	        		Interface.logNonStatic("*********************************************************\n");
- 	 	        		Interface.logNonStatic("*********************************************************\n");
- 	        		}
+	 	        		if(!TEST_OPTION.equals("oneTest") || eventCount == tests.size()) {
+	 	        			
+		 	        		Interface.activeRuleGUI();
+		 	        		
+		 	        		Interface.logNonStatic("\n*********************************************************\n");
+	 	        			Interface.logNonStatic("*********************************************************\n");
+	 	        			Interface.logNonStatic("**  Event : " + eventLogs+"\n");
+		 	        		
+		 	        		//Check if ActiveRuleSet does not have forbidden rules
+	 	        			if(result) {
+			 	        		for(RuleActivation ruleAct : activeRuleSet.getArrayOfRuleActivations()){
+			 	        			if(ruleAct.getRule().getExtraModifier() == Rule.ExtraModifier.Forbidden) {
+			 	        				result = false;
+			 	        				Interface.logNonStatic("**  Active Rule With Forbidden State : " + ruleAct.getRule().getRuleName() +"\n");
+			 	        				break;
+			 	        			} // if
+			 	        		} // for
+	 	        			} // if
+		 	        		Interface.logNonStatic("**  Status : " + result+"\n");
+		 	        		Interface.logNonStatic("*********************************************************\n");
+	 	 	        		Interface.logNonStatic("*********************************************************\n");
+	 	        		} // if
+ 	        		} // for Tests
  	        		
  	        		tests = null;
  	        		eventLog.setText("No Events Left");
@@ -934,5 +963,12 @@ public class Interface {
 	 	    add(scroll);
 		}
  	    
+	}
+
+	public boolean setEventsTestGroup() {
+		if(testGroup.getSelection() != null) {
+			TEST_OPTION = testGroup.getSelection().getActionCommand();
+			return true;
+		} else return false;
 	}
 }
