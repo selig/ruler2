@@ -174,4 +174,18 @@ public class RuleActivation {
 	public HashMap<Integer, VariableBinding> getVariableBindings() {
 		return this.variableBinding;
 	}
+	
+	public static int getRuleActivationKey(Rule rule, Map<Integer,ParameterBinding> parameters) {
+		
+		int[] ruleIndexes = rule.getRuleParameterIndexes();
+		String finalValue = "";
+		for(int index : ruleIndexes) {
+			finalValue += parameters.get(index).getParameterValue()+",";
+		}
+		
+		finalValue = GlobalFunctions.subStringLast(finalValue, 1);
+		
+		
+		return GlobalFunctions.hashName(rule.getRuleNameID() + finalValue);
+	}
 }

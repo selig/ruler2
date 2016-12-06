@@ -877,10 +877,13 @@ public class Interface {
 
  	        		Interface.ResetActiveRules();
  	        		
+ 	        		long startTime = System.nanoTime();
+ 	        		
  	        		for(String[] events : tests){
  	        			
  	        			eventCount++;
  	        			if(!TEST_OPTION.equals("oneTest")) { 
+ 	        				startTime = System.nanoTime();
 	 	        			//System.out.println("--------------------------------------------------------------------------");
 	 	        			System.out.println("--------------------------------------------------------------------------");
 	 	        			System.out.println("--------------------------== New Test ==----------------------------------");
@@ -907,6 +910,10 @@ public class Interface {
 	 	        		}
 	 	        		if(!TEST_OPTION.equals("oneTest") || eventCount == tests.size()) {
 	 	        			
+	 	        			long endTime = System.nanoTime();
+
+	 	 	        		//System.out.println("Total execution time: " + (endTime - startTime) );
+	 	        			
 		 	        		Interface.activeRuleGUI();
 		 	        		
 		 	        		Interface.logNonStatic("\n*********************************************************\n");
@@ -923,7 +930,8 @@ public class Interface {
 			 	        			} // if
 			 	        		} // for
 	 	        			} // if
-		 	        		Interface.logNonStatic("**  Status : " + result+"\n");
+	 	        			Interface.logNonStatic("**  Status : " + result+"\n");
+		 	        		Interface.logNonStatic("** Total execution time: " + ((endTime - startTime) / 1000000) + "ms\n" );
 		 	        		Interface.logNonStatic("*********************************************************\n");
 	 	 	        		Interface.logNonStatic("*********************************************************\n");
 	 	        		} // if

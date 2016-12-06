@@ -270,10 +270,22 @@ public class Update {
 						
 						// Check if is a rule
 						if(!consequentRule.isOK()) {
-							Interface.log("\n" +"++++++++Rule Add");
-							// Add new RuleActivation to tempArray
-							tempActivations.add(new RuleActivation(consequentRule.getRuleName()+consequentRule.getConsequentRuleParameterSize()
-										, parameterValues,consequentIndexes));
+							// Check if rule is delete or not
+							if(consequentRule.isDelete()) {
+								
+								RuleActivation toDeleteRuleActivation = 
+										activeRuleSet.getRuleActivation(
+												RuleActivation.getRuleActivationKey(
+														consequentRule.getRule(), parameterValues));
+								
+								ruleActivationsToDelete.add(toDeleteRuleActivation);
+							}
+							else {
+								Interface.log("\n" +"++++++++Rule Add");
+								// Add new RuleActivation to tempArray
+								tempActivations.add(new RuleActivation(consequentRule.getRuleName()+consequentRule.getConsequentRuleParameterSize()
+											, parameterValues,consequentIndexes));
+							}
 						} else {
 							Interface.log("\n" +"        Rule - OK");
 						}

@@ -83,4 +83,8 @@ public class ActiveRuleSet {
 		}
 		return false;
 	}
+
+	public RuleActivation getRuleActivation(int ruleActivationKey) {
+		return ruleActivations.get(ruleActivationKey);
+	}
 }

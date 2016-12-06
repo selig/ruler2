@@ -4,16 +4,19 @@
  * @author mbax2md4
  */
 public class ConsequentRule {
-
+	public enum Delete {delete, notDelete};
+	
 	private final String ruleName;
 	//private final int ruleID;
+	private final Delete flag;
 	private int[] consequentRuleParameterIndexes;
 	private String[] consequentRuleParameterStrings;
 	
 	public ConsequentRule(String name,String[] param) {
 		name = GlobalFunctions.removeWhiteSpaces(name);
+		flag = name.substring(0, 1).equals("!") ? Delete.delete : Delete.notDelete;
 		//this.ruleID = GlobalFunctions.hashName(name);
-		this.ruleName = name;
+		this.ruleName = flag == Delete.delete ? name.substring(1) : name;
 		this.consequentRuleParameterStrings = param;
 	}
 	
@@ -53,6 +56,14 @@ public class ConsequentRule {
 
 	public int getConsequentRuleParameterSize() {
 		return this.consequentRuleParameterIndexes.length;
+	}
+	
+	public Rule getRule() {
+		return Interface.ruleSystem.getRule(this.ruleName + consequentRuleParameterIndexes.length);
+	}
+
+	public boolean isDelete() {
+		return false;
 	}
 
 }
