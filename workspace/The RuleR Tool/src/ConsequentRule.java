@@ -22,8 +22,8 @@ public class ConsequentRule {
 	
 	public String toString() {
 		if(this.ruleName.toLowerCase().equals("fail") || this.ruleName.toLowerCase().equals("ok"))
-			return this.ruleName;
-		return  this.ruleName + "(" + GlobalFunctions.getParameters(consequentRuleParameterStrings) + ")";
+			return (this.flag == Delete.delete ? "!" : "") + this.ruleName;
+		return  (this.flag == Delete.delete ? "!" : "")  + this.ruleName + "(" + GlobalFunctions.getParameters(consequentRuleParameterStrings) + ")";
 	}
 
 	public void initializeParameterIndexes(Parameter[] tempParamArray) {

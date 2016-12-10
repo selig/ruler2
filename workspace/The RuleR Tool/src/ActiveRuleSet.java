@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -70,18 +71,21 @@ public class ActiveRuleSet {
 		}
 	}
 
-	public boolean findMatchingRule(int[] sharedParamIndex, int ruleNameID, Map<Integer, ParameterBinding> parameterValues) {
-		for(RuleActivation ruleActivation : ruleActivations.values() ){
+	public ArrayList<RuleActivation> findMatchingRule(int[] sharedParamIndex, int ruleNameID, Map<Integer, ParameterBinding> parameterValues) {
+		ArrayList<RuleActivation> TempArray = new ArrayList<RuleActivation>();
+		activations : for(RuleActivation ruleActivation : ruleActivations.values() ){
 			if(ruleActivation.getRule().getRuleNameID() == ruleNameID){
 				for(int index: sharedParamIndex) {
-					if(ruleActivation.getParameterBindingValue(index) != parameterValues.get(index).getParameterValue()){
-						return false;
+					String param1 = ruleActivation.getParameterBindingValue(index);
+					String param2 = parameterValues.get(index).getParameterValue();
+					if(!param1.equals(param2)){
+						continue activations;
 					}
 				}
-				return true;
+				TempArray.add(ruleActivation);
 			}
 		}
-		return false;
+		return TempArray;
 	}
 
 	public RuleActivation getRuleActivation(int ruleActivationKey) {

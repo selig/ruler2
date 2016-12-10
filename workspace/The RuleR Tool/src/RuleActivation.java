@@ -110,6 +110,15 @@ public class RuleActivation {
 		return parameterBindings;
 	}
 	
+	public Map<Integer,ParameterBinding> getRuleParameterBindings() {
+		int[] ruleIndexes = this.rule.getRuleParameterIndexes();
+		Map<Integer,ParameterBinding> tempMap = new HashMap<Integer,ParameterBinding>();
+		for(int index : ruleIndexes) {
+			tempMap.put(index, parameterBindings.get(index));
+		}
+		return tempMap;
+	}
+	
 	@Override
 	public String toString() {
 		

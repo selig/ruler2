@@ -11,7 +11,7 @@ import javax.swing.*;
 
 
 public class Interface {
-	private static boolean logOn = false;
+	private static boolean logOn = true;
 	//Simple rule set 
 	//private static final String rule1 = "<None Always Open() { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
 	//private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";

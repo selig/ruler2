@@ -108,6 +108,7 @@ public class RuleSystem {
 	public void addPredifinedRules(String RuleString) {
 		
 		//String RuleString ="<None Step Open(file) { [write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file)][write(file)<> ¬> Write(file) ] }>";
+
 		if(RuleString.length() <= 0)
 			return;
 		
@@ -121,11 +122,14 @@ public class RuleSystem {
 		String ruleParameters = RuleInfo[2].split("\\(")[1].replaceAll("\\)", "");
 		
 		
-		String[] Events = RuleAndEvent[1].replace("\\s+", "").split("\\]\\[");
+		String[] Events = RuleAndEvent[1].replace("\\s+", "").replace("}>", "").split("\\]\\[");
 		
 		ArrayList<RuleBinding> ruleBindings = new ArrayList<RuleBinding>();
 		
 		for(String event : Events) {
+			if(event.equals(""))
+				continue;
+			
 			String[] eventSplit = event.split("->");
 			
 			String eventName = GlobalFunctions.removeWhiteSpaces(eventSplit[0]).split("\\(")[0].replaceAll("\\[", "");

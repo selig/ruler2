@@ -159,21 +159,27 @@ public class Condition {
 			
 			switch (this.conditionOperator) {
 			case greaterThan:
+				Interface.log("result = " + param1 +" > "+ param2);
 				result = param1 > param2;
 				break;
 			case lessThan:
+				Interface.log("result = " + param1 +" < "+ param2);
 				result = param1 < param2;
 				break;
 			case greaterOrEqual:
+				Interface.log("result = " + param1 +" >= "+ param2);
 				result = param1 >= param2;
 				break;
 			case lessOrEqual:
+				Interface.log("result = " + param1 +" <= "+ param2);
 				result = param1 <= param2;
 				break;
 			case equals:
+				Interface.log("result = " + param1 +" == "+ param2);
 				result = param1 == param2;
 				break;
 			case notEqual:
+				Interface.log("result = " + param1 +" != "+ param2);
 				result = param1 != param2;
 				break;
 			default:
