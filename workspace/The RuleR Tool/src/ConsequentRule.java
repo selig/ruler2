@@ -63,7 +63,7 @@ public class ConsequentRule {
 	}
 
 	public boolean isDelete() {
-		return false;
+		return flag == Delete.delete;
 	}
 
 }

@@ -175,6 +175,7 @@ public class Update {
 											// Linear Search all The active rules looking for Rule with shared parameters and ignoring not shared ones
 											matchingRules = activeRuleSet.findMatchingRule(sharedParamIndex,ruleNameID,parameterValues);
 											
+
 											if(matchingRules.size() > 0) {
 												existanceOfRule = true;
 											} else { 
@@ -218,6 +219,8 @@ public class Update {
 										Interface.log("\n" +"          Compare Condition Accepted (yes)");
 									} else {
 										Interface.log("\n" +"          Compare Condition Not Accepted (yes)");
+										matchingRuleIndex++;
+										continue multipleRulesMatch;
 									}
 								}
 							}
@@ -275,12 +278,12 @@ public class Update {
 								} else {
 									Interface.log("\n" +"        Rule - OK");
 								}
+								activationFired = true;
 							} // Consequent Rule
 							
 							matchingRuleIndex++;
 						} while(matchingRules.size() > matchingRuleIndex);
 						
-					activationFired = true;
 					Interface.log("\n" +"    ActivationFired: " + activationFired);
 				}
 				else {
@@ -381,9 +384,9 @@ public class Update {
 		boolean conditionResult = condition.isTrue(parameterBindings[0].getParameterValue(), parameterBindings[1].getParameterValue());
 		
 		// Negate Condition Result if Needed
-		if(condition.getConditionNegation() == Condition.ConditionNegate.yes) {
+		/*if(condition.getConditionNegation() == Condition.ConditionNegate.yes) {
 			conditionResult = !conditionResult;
-		}
+		}*/
 		
 		//Make a decision
 		if(conditionResult) {

@@ -122,7 +122,7 @@ public class RuleSystem {
 		String ruleParameters = RuleInfo[2].split("\\(")[1].replaceAll("\\)", "");
 		
 		
-		String[] Events = RuleAndEvent[1].replace("\\s+", "").replace("]}>", "").split("\\]\\[");
+		String[] Events = RuleAndEvent[1].replaceAll("\\s+", "").replaceAll("}>","").split("\\]\\[");
 		
 		ArrayList<RuleBinding> ruleBindings = new ArrayList<RuleBinding>();
 		
@@ -144,13 +144,13 @@ public class RuleSystem {
 
 			ArrayList<ConsequentRule> consequentRules = new ArrayList<ConsequentRule>();
 			
-			for(@SuppressWarnings("unused") String cons : consRules) {
+			for(String cons : consRules) {
 				
-				String consequentName = eventSplit[1].split("\\(")[0];
+				String consequentName = cons.split("\\(")[0];
 				
 				try {
 				String[] consequentParameters = eventSplit[1].split("\\(")[1].replaceAll("\\)", "")
-						.replaceAll("] }>","").replaceAll("]}>","").split(",");
+						.replaceAll("] }>","").replaceAll("]}>","").replaceAll("\\]","").split(",");
 				
 				consequentRules.add(new ConsequentRule(consequentName, consequentParameters));
 				} catch(Exception e) {
