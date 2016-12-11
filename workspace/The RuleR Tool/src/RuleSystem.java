@@ -122,7 +122,7 @@ public class RuleSystem {
 		String ruleParameters = RuleInfo[2].split("\\(")[1].replaceAll("\\)", "");
 		
 		
-		String[] Events = RuleAndEvent[1].replace("\\s+", "").replace("}>", "").split("\\]\\[");
+		String[] Events = RuleAndEvent[1].replace("\\s+", "").replace("]}>", "").split("\\]\\[");
 		
 		ArrayList<RuleBinding> ruleBindings = new ArrayList<RuleBinding>();
 		
