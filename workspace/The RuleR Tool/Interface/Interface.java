@@ -11,7 +11,7 @@ import javax.swing.*;
 
 
 public class Interface {
-	private static boolean logOn = true;
+	private static boolean logOn = false;
 	//Simple rule set 
 	//private static final String rule1 = "<None Always Open() { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
 	//private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
@@ -259,7 +259,7 @@ public class Interface {
 	}
 	
 	public static ArrayList<String[]> readLine(File fileName) {
-		
+		System.out.println("Start Reading file");
 		ArrayList<String[]> lines = new ArrayList<String[]>();
 		FileReader file = null;
 		BufferedReader input = null;
@@ -294,6 +294,8 @@ public class Interface {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("Finish Reading file");
 		
 		return lines;
 	}
@@ -533,7 +535,7 @@ public class Interface {
 	        panel5.setPreferredSize(new Dimension(410, 50));
 	        TabbedPane.addTab("Log", icon, panel5,
 	                "Log");
-	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_5);
+	        TabbedPane.setMnemonicAt(4, KeyEvent.VK_5);
 	        
 	        //Add the Tabbed pane to this panel.
 	        add(TabbedPane);
@@ -867,8 +869,10 @@ public class Interface {
  	          public void actionPerformed(ActionEvent e) {
  	        	 System.out.println("Run File");
  	        	 if(tests != null && tests.size() > 0){
+ 	        		 
+ 	        		TabbedPane.setSelectedIndex(5);
 
- 	 	        	//System.out.println("Button pressed. Runing");
+ 	 	        	System.out.println("Button pressed. Runing");
  	 	        	
  	 	        	String eventLogs = "";
  	 	        	int eventCount = 0;
@@ -878,9 +882,9 @@ public class Interface {
  	        		Interface.ResetActiveRules();
  	        		
  	        		long startTime = System.nanoTime();
+ 	        		int eventsCount = 0;
  	        		
  	        		for(String[] events : tests){
- 	        			
  	        			eventCount++;
  	        			if(!TEST_OPTION.equals("oneTest")) { 
  	        				startTime = System.nanoTime();
@@ -892,10 +896,16 @@ public class Interface {
  	        			
  	        				Interface.ResetActiveRules();
  	        				eventLogs = "";
+ 	        				eventsCount = 0;
  	        			}
  	        			
 	 	        		for(String event : events) {
 	 	        			eventLogs += event + ".";
+	 	        			eventsCount++;
+	 	        			if(eventsCount % 100000  == 0) {
+	 	        				Interface.logNonStatic("Event Count" + eventsCount);
+	 	        				System.out.println("Event Count" + eventsCount);
+	 	        			}
 		 	        		if(Update.update(new Event(event,TEST_OPTION))) {
 		 	        			//System.out.println("true");
 		 	 	        		result = true;
@@ -931,6 +941,7 @@ public class Interface {
 			 	        		} // for
 	 	        			} // if
 	 	        			Interface.logNonStatic("**  Status : " + result+"\n");
+	 	        			Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");
 		 	        		Interface.logNonStatic("** Total execution time: " + ((endTime - startTime) / 1000000) + "ms\n" );
 		 	        		Interface.logNonStatic("*********************************************************\n");
 	 	 	        		Interface.logNonStatic("*********************************************************\n");

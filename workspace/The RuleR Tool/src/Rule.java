@@ -30,7 +30,7 @@ public class Rule {
 		ruleModifier = getModifier(mod);		
 		extraModifier = getExtraModifier(extMod);
 		
-		System.out.println("Parameters: "+parameter);
+		//System.out.println("Parameters: "+parameter);
 		String param = GlobalFunctions.removeWhiteSpaces(parameter);
 		if(param.length() > 0) {
 			ruleParameterStrings = param.split(COMMA);
@@ -38,7 +38,7 @@ public class Rule {
 		
 		//System.out.println("<< parameters : <<"+ parameter+ ">> size: " +ruleParameterStrings.length);
 		ruleParameters = new HashMap<Integer, Integer>();
-		System.out.print("Rule Name ID - " + name+ruleParameterStrings.length + " ");
+		//System.out.print("Rule Name ID - " + name+ruleParameterStrings.length + " ");
 		ruleNameID = GlobalFunctions.hashName(name+ruleParameterStrings.length);
 		ruleBinding = bindings;
 		ruleVariables = new HashMap<Integer,Variable>();
@@ -148,7 +148,7 @@ public class Rule {
 			param = parameters[index];
 		} catch (Exception e) {
 			param = null;
-			System.out.println("--- Parameters size - " + parameters.length + " we were looking for - " + index);
+			//System.out.println("--- Parameters size - " + parameters.length + " we were looking for - " + index);
 		}	
 		return param;
 	}

@@ -22,7 +22,7 @@ public class RuleActivation {
 	}
 	
 	public RuleActivation(String ruleName, Map<Integer,ParameterBinding> parameters, int[] consequentIndexes) {
-		System.out.println("Look for the rule with - " + ruleName + " name");
+		//System.out.println("Look for the rule with - " + ruleName + " name");
 		this.rule = Interface.ruleSystem.getRule(ruleName);
 		initialiseVariableBinding();
 		this.parameterBindings = getParameterBindingSet(this.rule,parameters,consequentIndexes);
@@ -62,7 +62,7 @@ public class RuleActivation {
 		
 		// Compare Size of each array
 		if(parameterIndexes.length == parametersArray.length) {
-			System.out.println("Not supposed to match");
+			//System.out.println("Not supposed to match");
 			int i=0;
 			// For Each Index
 			for(int index : parameterIndexes){

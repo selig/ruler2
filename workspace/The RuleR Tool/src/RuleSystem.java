@@ -18,7 +18,7 @@ public class RuleSystem {
 	}
 
 	public boolean addNewRule(Rule myRule) {
-		System.out.println("Add new Rule \"" + myRule.getRuleName() + "\" With hashCode " + myRule.getRuleNameID());
+		//System.out.println("Add new Rule \"" + myRule.getRuleName() + "\" With hashCode " + myRule.getRuleNameID());
 		Integer key = myRule.getRuleNameID();
 		if(!list.containsKey(key)) {
 			list.put(key, myRule);
@@ -66,7 +66,7 @@ public class RuleSystem {
 	
 	public Rule getRule(String name) {
 		int key = GlobalFunctions.hashName(name);
-		System.out.println("Get Rule \"" + name +"\" with hashCode " + key);
+		//System.out.println("Get Rule \"" + name +"\" with hashCode " + key);
 		return list.get(key);
 	}
 	
@@ -178,7 +178,7 @@ public class RuleSystem {
 	}
 	
 	public boolean addAssertArray(Rule newRule) {
-		System.out.println("Add new Rule into Assert \"" + newRule.getRuleName() + "\" With hashCode " + newRule.getRuleNameID());
+		//System.out.println("Add new Rule into Assert \"" + newRule.getRuleName() + "\" With hashCode " + newRule.getRuleNameID());
 		Integer key = newRule.getRuleNameID();
 		if(!assertList.containsKey(key)) {
 			assertList.put(key, newRule);

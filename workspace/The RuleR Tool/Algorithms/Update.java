@@ -89,7 +89,7 @@ public class Update {
 								for(int index : bindingParam){
 									// Get Parameter
 									Parameter param = rule.getParameter(index);
-									System.out.println("------- > Addign Parameter: " + index + " " + param.toString() + " " + eventParam[i]);
+									//System.out.println("------- > Addign Parameter: " + index + " " + param.toString() + " " + eventParam[i]);
 									// Create and add new ParameterBinding to temp Set
 									parameterValues.put(index,new ParameterBinding(param, eventParam[i],activation));
 									
@@ -231,7 +231,7 @@ public class Update {
 										
 						/*	for(Integer key : activation.getVariableBindings().keySet()){
 								VariableBinding var = activation.getVariableBinding(key);
-								System.out.println("[ "+key+" "+var.getVariableName() + " - " + var.getVariableValue() + " ]");
+								//System.out.println("[ "+key+" "+var.getVariableName() + " - " + var.getVariableValue() + " ]");
 							}
 							*/
 							
@@ -243,7 +243,7 @@ public class Update {
 								for(int index : consequentIndexes) {
 									if(!parameterValues.containsKey(index)) {
 										Parameter parameter = rule.getParameter(index);
-										System.out.println("------- > Consequent Parameter: " + index + " " + parameter.toString() + " " + parameter.getParameterValue(activation));
+										//System.out.println("------- > Consequent Parameter: " + index + " " + parameter.toString() + " " + parameter.getParameterValue(activation));
 										parameterValues.put(index, new ParameterBinding(parameter, parameter.getParameterValue(activation) ,activation));
 									}
 								}
@@ -372,7 +372,7 @@ public class Update {
 				
 				// Get parameter 1 value
 				int param1Value = parameter1.getParameterValue(variable1Value, variable2Value);*/
-				System.out.println("------- > COnditino Parameter: " + conditionParameters[i] + " " + parameter.toString() + " " + parameterValue);
+				////System.out.println("------- > COnditino Parameter: " + conditionParameters[i] + " " + parameter.toString() + " " + parameterValue);
 				
 				parameterValues.put(conditionParameters[i],new ParameterBinding(parameter,parameterValue,activation));
 				
