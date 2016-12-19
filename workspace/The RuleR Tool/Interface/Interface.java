@@ -870,7 +870,7 @@ public class Interface {
  	        	 System.out.println("Run File");
  	        	 if(tests != null && tests.size() > 0){
  	        		 
- 	        		TabbedPane.setSelectedIndex(5);
+ 	        		TabbedPane.setSelectedIndex(4);
 
  	 	        	System.out.println("Button pressed. Runing");
  	 	        	
@@ -884,21 +884,27 @@ public class Interface {
  	        		long startTime = System.nanoTime();
  	        		int eventsCount = 0;
  	        		
- 	        		for(String[] events : tests){
- 	        			eventCount++;
- 	        			if(!TEST_OPTION.equals("oneTest")) { 
+ 	        		int flag = 0;
+ 	        		
+
+ 	        	for(int no = 0; no<4;no++){	
+ 	        		//for(String[] events : tests){
+ 	        			//eventCount++;
+ 	        			//if(!TEST_OPTION.equals("oneTest") || flag != i) { 
  	        				startTime = System.nanoTime();
 	 	        			//System.out.println("--------------------------------------------------------------------------");
-	 	        			System.out.println("--------------------------------------------------------------------------");
+	 	        			//System.out.println("--------------------------------------------------------------------------");
 	 	        			System.out.println("--------------------------== New Test ==----------------------------------");
-	 	        			System.out.println("--------------------------------------------------------------------------");
+	 	        			//System.out.println("--------------------------------------------------------------------------");
 	 	        			//System.out.println("--------------------------------------------------------------------------");
  	        			
  	        				Interface.ResetActiveRules();
  	        				eventLogs = "";
  	        				eventsCount = 0;
- 	        			}
- 	        			
+ 	        				flag = no;
+ 	        			//}
+ 	        		for(String[] events : tests){
+ 	    	        	eventCount++;
 	 	        		for(String event : events) {
 	 	        			eventLogs += event + ".";
 	 	        			eventsCount++;
@@ -918,7 +924,8 @@ public class Interface {
 		 	 	        	 
 		 	 	        	 Interface.activeRuleGUI();
 	 	        		}
-	 	        		if(!TEST_OPTION.equals("oneTest") || eventCount == tests.size()) {
+ 	        		}
+	 	        		//if(!TEST_OPTION.equals("oneTest") || eventCount == tests.size()) {
 	 	        			
 	 	        			long endTime = System.nanoTime();
 
@@ -945,8 +952,9 @@ public class Interface {
 		 	        		Interface.logNonStatic("** Total execution time: " + ((endTime - startTime) / 1000000) + "ms\n" );
 		 	        		Interface.logNonStatic("*********************************************************\n");
 	 	 	        		Interface.logNonStatic("*********************************************************\n");
-	 	        		} // if
- 	        		} // for Tests
+	 	        		//} // if
+ 	        		//} // for Tests
+ 	        	}
  	        		
  	        		tests = null;
  	        		eventLog.setText("No Events Left");
