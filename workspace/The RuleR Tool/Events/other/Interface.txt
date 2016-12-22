@@ -1,0 +1,8 @@
+close(A)
+openwindow(A).loaddata(A,data).close(A)
+openwindow(A).loaddata(A,data).close(A).openwindow(B).loaddata(B,data).close(B)
+openwindow(A)
+openwindow(A).loaddata(A,data)
+openwindow(A).close(A)
+openwindow(A).loaddata(A,data).close(A).openwindow(B).loaddata(A,data).close(B)
+openwindow(A).loaddata(A,data).close(B)

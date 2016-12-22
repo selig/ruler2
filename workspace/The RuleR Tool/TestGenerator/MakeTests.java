@@ -17,69 +17,18 @@ public class MakeTests {
 	  private static ArrayList<String> existingCharacters = new ArrayList<String>();
 
 	  public static void main(String[] args) {
-	    
-		HashMap<String, MaxMin> ActiveItems = new HashMap<String,MaxMin>();
 		  
-		  
-	    numberOfEvents = 100;
-	    
-	    System.out.println("Start");
-	    for(int i = 0;i<12;i++) {
-	    	eventCount = 0;
+		numberOfEvents = 100;  
+		System.out.println("Start");
+		for(int i = 0;i<12;i++) {
+	    	eventCount = 0;	  
 	    	
-	    	File output = new File("Auction"+(numberOfEvents)+".txt");
+	    	File output = new File("Interface"+(numberOfEvents)+".txt");
 			try {
 				fileWriter = new PrintWriter(output);
 				
-			    int openEventCount = 0;
-			    int closeEventCount = 0;	
-	
-			    while(eventCount < numberOfEvents) {
-			    	int RandomEvent = r.nextInt(3);
-			    	switch(RandomEvent) {
-			    	case 1: // create Item
-			    		for(int i1 = 0 ;i1 < 10; i1++) {
-				    		String rItem = getRandomChar();
-				    		if(!ActiveItems.containsKey(rItem)) {
-				    			int rMin = r.nextInt(9);
-				    			ActiveItems.put(rItem, new MaxMin(rMin,0));
-				    			String text = "create,"+rItem + "," +rMin;
-				    			PrintToFile(fileWriter, text);
-				    			break;
-				    		}
-			    		}
-			    	break;
-			    	case 2: // bid
-			    		for(int i1 = 0 ;i1 < 10; i1++) {
-				    		String rItem = getRandomChar();
-				    		if(ActiveItems.containsKey(rItem)) {
-				    			MaxMin rules = ActiveItems.get(rItem);
-				    			int rAmount = rules.getMax() + r.nextInt(10);
-				    			rules.setMax(rAmount);
-				    			String text = "bid," + rItem + "," + rAmount;
-				    			PrintToFile(fileWriter, text);
-				    			break;
-				    		}
-			    		}
-			    	break;
-			    	case 0: // sell
-			    		for(int i1 = 0 ;i1 < 10; i1++) {
-				    		String rItem = getRandomChar();
-				    		if(ActiveItems.containsKey(rItem)) {
-				    			MaxMin rules = ActiveItems.get(rItem);
-				    			if(rules.getMax() > rules.getMin()) {
-					    			String text = "sell," + rItem;
-					    			PrintToFile(fileWriter, text);
-					    			ActiveItems.remove(rItem);
-					    			break;
-				    			}
-				    		}
-			    		}
-			    	break;
-			    	default:
-			    		System.out.println("??");
-			    	}
-			    }
+			   // Test Method	
+			   Interface();
 			    
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -92,6 +41,167 @@ public class MakeTests {
 	  }
 	    System.out.println("done");
 	}
+	
+	private static void Interface() {
+		HashMap<String, String> ActiveAccounts = new HashMap<String,String>();
+		
+		while(eventCount < numberOfEvents) {
+	    	int RandomEvent = r.nextInt(3);
+	    	switch(RandomEvent) {
+	    	case 1: // openwindow(windName)
+	    		for(int i1 = 0 ;i1 < 10; i1++) {
+		    		String rItem = getRandomChar();
+		    		if(!ActiveAccounts.containsKey(rItem)) {
+		    			ActiveAccounts.put(rItem, "loaddata");
+		    			String text = "openwindow,"+rItem;
+		    			PrintToFile(fileWriter, text);
+		    			break;
+		    		}
+	    		}
+	    	break;
+	    	case 2: // loaddata(windName, data)
+	    		for(int i1 = 0 ;i1 < 10; i1++) {
+		    		String rItem = getRandomChar();
+		    		if(ActiveAccounts.containsKey(rItem)) {
+		    			String event = ActiveAccounts.get(rItem);
+		    			if(event.equals("loaddata")) {
+			    			String data = "anyData";
+			    			String text = event + "," + rItem + "," + data;
+			    			PrintToFile(fileWriter, text);
+			    			ActiveAccounts.remove(rItem);
+			    			ActiveAccounts.put(rItem,"close");		    			
+			    			break;
+		    			}
+		    		}
+	    		}
+	    	break;
+	    	case 0: // close(windname)
+	    		for(int i1 = 0 ;i1 < 10; i1++) {
+	    			String rItem = getRandomChar();
+		    		if(ActiveAccounts.containsKey(rItem)) {
+		    			String event = ActiveAccounts.get(rItem);
+		    			if(event.equals("close")) {
+			    			int m = r.nextInt(20);
+			    			String text = event + "," + rItem;
+			    			PrintToFile(fileWriter, text);
+			    			ActiveAccounts.remove(rItem);	    			
+			    			break;
+		    			}
+		    		}
+	    		}
+	    	break;
+	    	default:
+	    		System.out.println("??");
+	    	}
+	    }
+	}  
+	  
+	private static void LotteryTest()  {
+			HashMap<String, Integer> ActiveAccounts = new HashMap<String,Integer>();
+			HashMap<String, Lottery> PayOrTake = new HashMap<String,Lottery>();
+			
+			while(eventCount < numberOfEvents) {
+		    	int RandomEvent = r.nextInt(3);
+		    	switch(RandomEvent) {
+		    	case 1: // GetNumber(Account,n)
+		    		for(int i1 = 0 ;i1 < 10; i1++) {
+			    		String rItem = getRandomChar();
+			    		if(!ActiveAccounts.containsKey(rItem)) {
+			    			int rMin = r.nextInt(20);
+			    			ActiveAccounts.put(rItem, rMin);
+			    			String text = "getNumber,"+rItem + "," +rMin;
+			    			PrintToFile(fileWriter, text);
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	case 2: // compare(account, m)
+		    		for(int i1 = 0 ;i1 < 10; i1++) {
+			    		String rItem = getRandomChar();
+			    		if(ActiveAccounts.containsKey(rItem)) {
+			    			Integer n = ActiveAccounts.get(rItem);
+			    			int m = r.nextInt(20);
+			    			String text = "compare," + rItem + "," + m;
+			    			PrintToFile(fileWriter, text);
+			    			ActiveAccounts.remove(rItem);
+			    			if(m > n) {
+			    				PayOrTake.put(rItem, new Lottery("pay",m+1));
+			    			} else {
+			    				PayOrTake.put(rItem, new Lottery("take",n+1));
+			    			}
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	case 0: // pay or take
+		    		for(int i1 = 0 ;i1 < 10; i1++) {
+			    		String rItem = getRandomChar();
+			    		if(PayOrTake.containsKey(rItem)) {
+			    			Lottery events = PayOrTake.get(rItem);
+			    			String text = events.getAccount()+"," + rItem + "," + events.getAmount();
+			    			PrintToFile(fileWriter, text);
+			    			PayOrTake.remove(rItem);
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	default:
+		    		System.out.println("??");
+		    	}
+		    }
+		}    
+	  
+	private static void ThreeEventTest()  {
+		HashMap<String, MaxMin> ActiveItems = new HashMap<String,MaxMin>();
+		
+		while(eventCount < numberOfEvents) {
+	    	int RandomEvent = r.nextInt(3);
+	    	switch(RandomEvent) {
+	    	case 1: // create Item
+	    		for(int i1 = 0 ;i1 < 10; i1++) {
+		    		String rItem = getRandomChar();
+		    		if(!ActiveItems.containsKey(rItem)) {
+		    			int rMin = r.nextInt(9);
+		    			ActiveItems.put(rItem, new MaxMin(rMin,0));
+		    			String text = "create,"+rItem + "," +rMin;
+		    			PrintToFile(fileWriter, text);
+		    			break;
+		    		}
+	    		}
+	    	break;
+	    	case 2: // bid
+	    		for(int i1 = 0 ;i1 < 10; i1++) {
+		    		String rItem = getRandomChar();
+		    		if(ActiveItems.containsKey(rItem)) {
+		    			MaxMin rules = ActiveItems.get(rItem);
+		    			int rAmount = rules.getMax() + r.nextInt(10);
+		    			rules.setMax(rAmount);
+		    			String text = "bid," + rItem + "," + rAmount;
+		    			PrintToFile(fileWriter, text);
+		    			break;
+		    		}
+	    		}
+	    	break;
+	    	case 0: // sell
+	    		for(int i1 = 0 ;i1 < 10; i1++) {
+		    		String rItem = getRandomChar();
+		    		if(ActiveItems.containsKey(rItem)) {
+		    			MaxMin rules = ActiveItems.get(rItem);
+		    			if(rules.getMax() > rules.getMin()) {
+			    			String text = "sell," + rItem;
+			    			PrintToFile(fileWriter, text);
+			    			ActiveItems.remove(rItem);
+			    			break;
+		    			}
+		    		}
+	    		}
+	    	break;
+	    	default:
+	    		System.out.println("??");
+	    	}
+	    }
+	}  
+	  
 	  
 	private static void PrintToFile(PrintWriter fileWriter, String text) {
 		fileWriter.println(text);
@@ -229,5 +339,31 @@ public class MakeTests {
 	
 		public void setMin(int min) {
 			this.min = min;
+		}
+	}
+	
+	class Lottery {
+		private String event;
+		private int amount;
+		
+		public Lottery(String Acc, int newAmount) {
+			event = Acc;
+			amount = newAmount;
+		}
+
+		public String getAccount() {
+			return event;
+		}
+
+		public void setAccount(String event) {
+			this.event = event;
+		}
+
+		public int getAmount() {
+			return amount;
+		}
+
+		public void setAmount(int amount) {
+			this.amount = amount;
 		}
 	}
