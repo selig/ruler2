@@ -1,0 +1,200 @@
+hasNext,l, true
+hasNext,j, true
+next,l
+hasNext,i, true
+next,i
+hasNext,y, true
+next,j
+next,y
+hasNext,e, true
+hasNext,v, true
+hasNext,a, true
+hasNext,y, true
+next,e
+next,v
+hasNext,j, true
+hasNext,d, true
+next,d
+hasNext,v, true
+next,v
+hasNext,e, true
+next,j
+hasNext,x, true
+hasNext,f, true
+hasNext,w, true
+next,e
+next,w
+next,y
+hasNext,i, true
+hasNext,r, true
+hasNext,q, true
+next,f
+hasNext,n, true
+next,r
+hasNext,e, true
+hasNext,l, true
+next,q
+hasNext,p, true
+hasNext,d, true
+next,d
+hasNext,z, true
+next,i
+next,e
+next,p
+hasNext,i, true
+hasNext,m, true
+next,i
+hasNext,w, true
+hasNext,j, true
+next,l
+next,w
+hasNext,f, true
+hasNext,t, true
+hasNext,d, true
+next,t
+next,d
+next,m
+next,f
+next,x
+next,a
+hasNext,r, true
+next,n
+next,r
+hasNext,m, true
+hasNext,f, true
+hasNext,c, true
+next,f
+hasNext,l, true
+hasNext,a, true
+hasNext,v, true
+next,z
+next,j
+next,m
+hasNext,n, true
+hasNext,b, true
+next,v
+next,a
+next,n
+next,b
+hasNext,h, true
+hasNext,v, true
+next,l
+next,h
+hasNext,r, true
+hasNext,h, true
+hasNext,l, true
+hasNext,a, true
+next,r
+next,h
+hasNext,u, true
+next,u
+hasNext,s, true
+next,s
+next,a
+next,l
+next,v
+hasNext,b, true
+hasNext,z, true
+hasNext,k, true
+hasNext,u, true
+next,k
+next,u
+next,z
+hasNext,m, true
+hasNext,h, true
+next,c
+hasNext,p, true
+next,m
+hasNext,z, true
+hasNext,u, true
+hasNext,f, true
+next,p
+next,h
+next,f
+hasNext,x, true
+hasNext,a, true
+next,u
+hasNext,e, true
+next,b
+next,x
+hasNext,l, true
+next,e
+next,l
+hasNext,l, true
+hasNext,d, true
+next,a
+hasNext,i, true
+hasNext,x, true
+hasNext,b, true
+next,l
+hasNext,u, true
+hasNext,q, true
+hasNext,h, true
+next,z
+next,x
+hasNext,p, true
+next,p
+next,d
+hasNext,r, true
+next,r
+hasNext,y, true
+next,u
+next,b
+hasNext,p, true
+hasNext,u, true
+next,h
+next,u
+hasNext,b, true
+hasNext,j, true
+next,i
+next,q
+hasNext,z, true
+next,p
+hasNext,o, true
+next,b
+next,o
+next,j
+next,z
+hasNext,j, true
+hasNext,c, true
+hasNext,b, true
+next,j
+next,c
+hasNext,q, true
+hasNext,z, true
+next,z
+hasNext,t, true
+hasNext,o, true
+hasNext,p, true
+hasNext,i, true
+hasNext,c, true
+hasNext,r, true
+next,q
+next,o
+next,r
+hasNext,q, true
+hasNext,h, true
+next,h
+next,c
+next,t
+next,b
+next,y
+next,p
+hasNext,c, true
+hasNext,y, true
+hasNext,d, true
+hasNext,g, true
+hasNext,z, true
+hasNext,b, true
+next,z
+hasNext,z, true
+next,b
+hasNext,f, true
+next,y
+hasNext,s, true
+next,z
+next,i
+next,c
+next,g
+next,q
+hasNext,b, true

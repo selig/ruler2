@@ -1,0 +1,400 @@
+hasNext,r, true
+hasNext,g, true
+hasNext,z, true
+hasNext,l, true
+hasNext,b, true
+next,z
+hasNext,s, true
+hasNext,y, true
+next,s
+next,r
+next,y
+hasNext,r, true
+hasNext,c, true
+next,b
+next,l
+next,g
+hasNext,o, true
+next,c
+hasNext,s, true
+hasNext,t, true
+next,o
+next,s
+hasNext,e, true
+hasNext,l, true
+hasNext,v, true
+next,t
+hasNext,s, true
+hasNext,f, true
+next,s
+next,e
+hasNext,i, true
+hasNext,p, true
+hasNext,e, true
+next,r
+next,e
+next,f
+hasNext,x, true
+next,l
+next,v
+hasNext,f, true
+hasNext,l, true
+next,f
+hasNext,s, true
+hasNext,y, true
+hasNext,r, true
+hasNext,m, true
+hasNext,w, true
+hasNext,f, true
+next,p
+hasNext,d, true
+hasNext,o, true
+hasNext,t, true
+next,m
+hasNext,e, true
+hasNext,n, true
+hasNext,a, true
+hasNext,j, true
+hasNext,c, true
+next,y
+hasNext,g, true
+hasNext,k, true
+hasNext,p, true
+hasNext,q, true
+hasNext,m, true
+next,i
+next,x
+hasNext,i, true
+next,d
+next,p
+hasNext,d, true
+hasNext,y, true
+next,f
+hasNext,h, true
+hasNext,f, true
+next,f
+hasNext,u, true
+hasNext,x, true
+next,d
+hasNext,p, true
+next,w
+hasNext,w, true
+hasNext,f, true
+hasNext,z, true
+next,m
+next,y
+hasNext,d, true
+next,t
+next,d
+hasNext,y, true
+hasNext,m, true
+next,e
+next,g
+hasNext,b, true
+next,b
+next,i
+hasNext,e, true
+hasNext,i, true
+next,w
+next,u
+hasNext,v, true
+next,a
+hasNext,u, true
+hasNext,b, true
+hasNext,w, true
+next,l
+next,y
+hasNext,g, true
+next,e
+next,z
+hasNext,y, true
+next,v
+next,u
+next,n
+next,f
+hasNext,u, true
+hasNext,l, true
+hasNext,a, true
+next,i
+next,m
+next,g
+hasNext,e, true
+next,h
+hasNext,m, true
+hasNext,i, true
+hasNext,n, true
+next,k
+hasNext,v, true
+hasNext,h, true
+next,e
+hasNext,z, true
+hasNext,d, true
+next,w
+next,b
+next,s
+next,i
+next,l
+next,p
+next,j
+next,n
+next,q
+next,u
+hasNext,k, true
+next,z
+next,o
+next,c
+hasNext,j, true
+hasNext,p, true
+hasNext,u, true
+hasNext,t, true
+next,t
+hasNext,c, true
+next,h
+hasNext,e, true
+next,e
+hasNext,i, true
+hasNext,w, true
+hasNext,f, true
+hasNext,z, true
+next,z
+hasNext,z, true
+next,k
+hasNext,e, true
+hasNext,h, true
+hasNext,b, true
+hasNext,k, true
+hasNext,s, true
+next,w
+hasNext,q, true
+next,k
+hasNext,t, true
+hasNext,g, true
+hasNext,k, true
+next,s
+next,a
+next,h
+next,y
+hasNext,y, true
+hasNext,l, true
+next,y
+next,t
+hasNext,t, true
+next,j
+next,k
+hasNext,a, true
+hasNext,n, true
+hasNext,h, true
+next,p
+hasNext,j, true
+next,i
+hasNext,w, true
+next,j
+hasNext,o, true
+hasNext,p, true
+next,c
+hasNext,k, true
+hasNext,s, true
+hasNext,y, true
+next,x
+next,w
+next,t
+next,k
+hasNext,t, true
+next,b
+next,v
+hasNext,w, true
+hasNext,b, true
+next,l
+next,e
+next,b
+hasNext,j, true
+next,u
+hasNext,k, true
+hasNext,b, true
+next,k
+hasNext,x, true
+next,y
+next,x
+next,d
+hasNext,v, true
+next,j
+hasNext,x, true
+hasNext,d, true
+next,w
+next,d
+hasNext,u, true
+hasNext,w, true
+next,p
+hasNext,d, true
+next,q
+next,w
+next,d
+next,u
+next,n
+hasNext,i, true
+hasNext,c, true
+next,r
+hasNext,p, true
+next,a
+hasNext,w, true
+hasNext,e, true
+next,t
+hasNext,u, true
+hasNext,d, true
+next,b
+next,m
+hasNext,m, true
+hasNext,b, true
+next,v
+next,f
+next,h
+hasNext,h, true
+next,c
+next,g
+next,e
+hasNext,y, true
+hasNext,l, true
+next,h
+next,z
+hasNext,e, true
+next,l
+next,s
+hasNext,k, true
+next,u
+next,i
+hasNext,a, true
+hasNext,t, true
+next,x
+next,p
+hasNext,h, true
+hasNext,j, true
+hasNext,g, true
+hasNext,r, true
+hasNext,q, true
+hasNext,v, true
+next,j
+next,g
+next,a
+hasNext,z, true
+hasNext,x, true
+hasNext,u, true
+next,t
+hasNext,g, true
+hasNext,f, true
+hasNext,s, true
+next,d
+hasNext,j, true
+hasNext,i, true
+next,j
+next,k
+next,g
+hasNext,d, true
+next,d
+next,f
+next,b
+hasNext,t, true
+next,u
+next,s
+next,m
+hasNext,k, true
+hasNext,d, true
+next,x
+next,z
+hasNext,n, true
+hasNext,m, true
+hasNext,x, true
+hasNext,g, true
+next,w
+hasNext,c, true
+next,x
+hasNext,a, true
+hasNext,x, true
+hasNext,j, true
+next,v
+hasNext,f, true
+hasNext,w, true
+next,w
+hasNext,w, true
+hasNext,v, true
+hasNext,p, true
+hasNext,u, true
+next,d
+hasNext,d, true
+hasNext,l, true
+hasNext,s, true
+next,c
+hasNext,z, true
+next,o
+next,y
+hasNext,c, true
+next,d
+hasNext,o, true
+next,w
+hasNext,w, true
+hasNext,y, true
+next,x
+hasNext,x, true
+next,r
+hasNext,b, true
+hasNext,r, true
+next,c
+next,t
+next,u
+hasNext,t, true
+next,y
+next,n
+hasNext,n, true
+hasNext,u, true
+hasNext,d, true
+next,q
+next,x
+hasNext,q, true
+next,v
+next,t
+next,u
+hasNext,v, true
+next,g
+next,e
+next,f
+hasNext,y, true
+hasNext,e, true
+hasNext,g, true
+next,m
+next,k
+hasNext,k, true
+hasNext,m, true
+next,j
+hasNext,t, true
+hasNext,f, true
+hasNext,c, true
+hasNext,j, true
+next,f
+next,k
+hasNext,u, true
+next,d
+next,z
+next,h
+next,j
+next,l
+next,w
+hasNext,f, true
+hasNext,z, true
+hasNext,x, true
+next,m
+next,x
+hasNext,m, true
+next,m
+hasNext,k, true
+hasNext,h, true
+next,f
+next,r
+next,b
+hasNext,m, true
+hasNext,x, true
+hasNext,d, true
+next,n
+hasNext,r, true
+hasNext,f, true
+next,r
+hasNext,w, true
+next,u
