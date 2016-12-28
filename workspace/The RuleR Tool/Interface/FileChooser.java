@@ -26,8 +26,14 @@ public class FileChooser extends JPanel
 				
 		//Create a file chooser
 		fc = new JFileChooser();
-		
+		fc.setCurrentDirectory(new java.io.File("."));
 		openButton = new JButton("Import a File...");
+		
+		if(file.equals("folder")) {
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			openButton = new JButton("Select Folder");
+		}
+		
 		openButton.addActionListener(this);
 		
 		JPanel buttonPanel = new JPanel(); //use FlowLayout
@@ -90,7 +96,11 @@ public class FileChooser extends JPanel
 			       
 			       Interface.Interface.updateRuleSystemGUI();
 			       Interface.Interface.activeRuleGUI();
-					break;
+			       break;
+				case "folder":
+					Interface.FOLDER = file;
+					Interface.eventLog2.setText(file.getPath());
+				break;
 				default:
 					break;
 				}

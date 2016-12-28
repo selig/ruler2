@@ -23,9 +23,9 @@ public class Event {
 	
 	public Event(String newEvent, String Option) {
 		
-		if(Option.equals("oneTest")){
+		if(Option.equals("CSV")){
 			this.event = newEvent.split(",")[0];
-			this.eventParameters = newEvent.split(",",2)[1].split(",");
+			this.eventParameters = newEvent.split(",",2).length > 1 ? newEvent.split(",",2)[1].split(",") : new String[0];
 		} else {
 			String eventName = newEvent.split("\\(")[0];
 			this.event = eventName;

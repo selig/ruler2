@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.swing.*;
 
@@ -17,7 +20,9 @@ public class Interface {
 	//private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
 	public static File RULE_FILE = null;
 	public static File EVENTS_FILE = null;
+	public static File FOLDER = null;
 	public static String TEST_OPTION = null;
+	public static TreeMap<Integer,String> TestResultTable = new TreeMap<Integer, String>();
 	
 	
 	private static long startTime = 0;
@@ -61,6 +66,7 @@ public class Interface {
     private JPanel fieldPanel3;
     private JPanel eventPanel;
     private JPanel eventPane2;
+    private JPanel eventPane3;
     private ButtonGroup modifierGroup;
     private ButtonGroup extraModifierGroup;
     private JPanel inside;
@@ -82,6 +88,7 @@ public class Interface {
     private JLabel activeRuleSetGUIHeader;
     private ButtonGroup testGroup;
     public static JTextArea eventLog;
+    public static JTextArea eventLog2;
     public static JTextArea log;
     public static Interface Interface;
     
@@ -844,9 +851,9 @@ public class Interface {
 			eventPane2 = new JPanel();
 			eventPane2.setLayout(new FlowLayout());
 			
-			JRadioButton oneTest = new JRadioButton("One Test");
+			JRadioButton oneTest = new JRadioButton("CSV Tests");
 			oneTest.setMnemonic(KeyEvent.VK_P);
-			oneTest.setActionCommand("oneTest");
+			oneTest.setActionCommand("CSV");
 	 	    JRadioButton multipleTests = new JRadioButton("Multiple Tests");
 	 	    multipleTests.setMnemonic(KeyEvent.VK_P);
 	 	    multipleTests.setActionCommand("multipleTests");
@@ -874,90 +881,8 @@ public class Interface {
 
  	 	        	System.out.println("Button pressed. Runing");
  	 	        	
- 	 	        	String eventLogs = "";
- 	 	        	int eventCount = 0;
+ 	 	        	TestRun();
  	 	        	
- 	        		boolean result = false;
-
- 	        		Interface.ResetActiveRules();
- 	        		
- 	        		long startTime = System.nanoTime();
- 	        		int eventsCount = 0;
- 	        		
- 	        		int flag = 0;
- 	        		
-
- 	        	for(int no = 0; no<4;no++){	
- 	        		//for(String[] events : tests){
- 	        			//eventCount++;
- 	        			//if(!TEST_OPTION.equals("oneTest") || flag != i) { 
- 	        				startTime = System.nanoTime();
-	 	        			//System.out.println("--------------------------------------------------------------------------");
-	 	        			//System.out.println("--------------------------------------------------------------------------");
-	 	        			System.out.println("--------------------------== New Test ==----------------------------------");
-	 	        			//System.out.println("--------------------------------------------------------------------------");
-	 	        			//System.out.println("--------------------------------------------------------------------------");
- 	        			
- 	        				Interface.ResetActiveRules();
- 	        				eventLogs = "";
- 	        				eventsCount = 0;
- 	        				flag = no;
- 	        			//}
- 	        		for(String[] events : tests){
- 	    	        	eventCount++;
-	 	        		for(String event : events) {
-	 	        			eventLogs += event + ".";
-	 	        			eventsCount++;
-	 	        			if(eventsCount % 100000  == 0) {
-	 	        				Interface.logNonStatic("Event Count" + eventsCount);
-	 	        				System.out.println("Event Count" + eventsCount);
-	 	        			}
-		 	        		if(Update.update(new Event(event,TEST_OPTION))) {
-		 	        			//System.out.println("true");
-		 	 	        		result = true;
-		 	        		}
-		 	 	        	 else {
-		 	 	        		//System.out.println("false");
-		 	 	        		result = false;
-		 	 	        		break;
-		 	 	        	 }
-		 	 	        	 
-		 	 	        	 Interface.activeRuleGUI();
-	 	        		}
- 	        		}
-	 	        		//if(!TEST_OPTION.equals("oneTest") || eventCount == tests.size()) {
-	 	        			
-	 	        			long endTime = System.nanoTime();
-
-	 	 	        		//System.out.println("Total execution time: " + (endTime - startTime) );
-	 	        			
-		 	        		Interface.activeRuleGUI();
-		 	        		
-		 	        		Interface.logNonStatic("\n*********************************************************\n");
-	 	        			Interface.logNonStatic("*********************************************************\n");
-	 	        			Interface.logNonStatic("**  Event : " + eventLogs+"\n");
-		 	        		
-		 	        		//Check if ActiveRuleSet does not have forbidden rules
-	 	        			if(result) {
-			 	        		for(RuleActivation ruleAct : activeRuleSet.getArrayOfRuleActivations()){
-			 	        			if(ruleAct.getRule().getExtraModifier() == Rule.ExtraModifier.Forbidden) {
-			 	        				result = false;
-			 	        				Interface.logNonStatic("**  Active Rule With Forbidden State : " + ruleAct.getRule().getRuleName() +"\n");
-			 	        				break;
-			 	        			} // if
-			 	        		} // for
-	 	        			} // if
-	 	        			Interface.logNonStatic("**  Status : " + result+"\n");
-	 	        			Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");
-		 	        		Interface.logNonStatic("** Total execution time: " + ((endTime - startTime) / 1000000) + "ms\n" );
-		 	        		Interface.logNonStatic("*********************************************************\n");
-	 	 	        		Interface.logNonStatic("*********************************************************\n");
-	 	        		//} // if
- 	        		//} // for Tests
- 	        	}
- 	        		
- 	        		tests = null;
- 	        		eventLog.setText("No Events Left");
  	        	 } else 
  	 	        	 System.out.println("Button pressed. not running");
  	          }
@@ -969,12 +894,161 @@ public class Interface {
  	     eventLog.setEditable(false);
 		JScrollPane logScrollPane = new JScrollPane(eventLog);
 		eventPane2.add(logScrollPane, BorderLayout.CENTER);
- 	       
+ 	    
+		
+		eventPane3 = new JPanel();
+		eventPane3.setLayout(new FlowLayout());
+		eventPane3.add(new FileChooser("folder"));
+		
+		JButton runFolder = new JButton("Run All From Folder");
+			runFolder.setActionCommand("folder");
+			runFolder.addActionListener(new ActionListener() {
+	          public void actionPerformed(ActionEvent e) {
+	        	  
+	        	  TabbedPane.setSelectedIndex(4);
+	        	  
+	        	  File folder = FOLDER;
+	        	  //File folder = new File("/Users/you/folder/");
+	        	  File[] listOfFiles = folder.listFiles();
+
+	        	  for (File file : listOfFiles) {
+	        	      if (file.isFile()) {
+	        	    	  TEST_OPTION = "CSV";
+	        	          System.out.println(file.getName());
+	        	          tests = readLine(file);
+	        	          TestRun();
+	        	      }
+	        	  }
+	        	  printTestResultTable();
+	          }
+	        }); 
+			eventPane3.add(runFolder);
+			
+			eventLog2 = new JTextArea(5,60);
+			//log.setMargin(new Insets(5,5,5,5));
+	 	     eventLog2.setEditable(false);
+			JScrollPane logScrollPane2 = new JScrollPane(eventLog2);
+			eventPane3.add(logScrollPane2, BorderLayout.CENTER);
+			
+		
  	       
 			
 			add(eventPanel);
 			add(eventPane2);
+			add(eventPane3);
 		}
+	}
+	
+	public void TestRun() {
+		String eventLogs = "";
+      	int eventCount = 0;
+      	
+ 		boolean result = false;
+
+ 		Interface.ResetActiveRules();
+ 		
+ 		long startTime = System.nanoTime();
+ 		int eventsCount = 0;
+ 		
+ 		int flag = 0;
+ 		
+ 		long[] testResults = new long[4];
+ 		
+	 	for(int no = 0; no<4;no++){	
+	 		//for(String[] events : tests){
+	 			//eventCount++;
+	 			//if(!TEST_OPTION.equals("oneTest") || flag != i) { 
+	 				startTime = System.nanoTime();
+	     			//System.out.println("--------------------------------------------------------------------------");
+	     			//System.out.println("--------------------------------------------------------------------------");
+	     			System.out.println("--------------------------== New Test ==----------------------------------");
+	     			//System.out.println("--------------------------------------------------------------------------");
+	     			//System.out.println("--------------------------------------------------------------------------");
+	 			
+	 				Interface.ResetActiveRules();
+	 				eventLogs = "";
+	 				eventsCount = 0;
+	 				flag = no;
+	 			//}
+	 		for(String[] events : tests){
+		        	eventCount++;
+	     		for(String event : events) {
+	     			eventLogs += event + ".";
+	     			eventsCount++;
+	     			if(eventsCount % 100000  == 0) {
+	     				Interface.logNonStatic("Event Count" + eventsCount);
+	     				System.out.println("Event Count" + eventsCount);
+	     			}
+		        		if(Update.update(new Event(event,TEST_OPTION))) {
+		        			//System.out.println("true");
+		 	        		result = true;
+		        		}
+		 	        	 else {
+		 	        		//System.out.println("false");
+		 	        		result = false;
+		 	        		break;
+		 	        	 }
+		 	        	 
+		 	        	 Interface.activeRuleGUI();
+	     		}
+	 		}
+	     		//if(!TEST_OPTION.equals("oneTest") || eventCount == tests.size()) {
+	     			
+	     			long endTime = System.nanoTime();
+	
+		        		//System.out.println("Total execution time: " + (endTime - startTime) );
+	     			
+		        		Interface.activeRuleGUI();
+		        		
+		        	Interface.logNonStatic("\n***********\n");
+	     			Interface.logNonStatic("*************\n");
+	     			Interface.logNonStatic("**  Event : " + eventLogs+"\n");
+		        		
+		        		//Check if ActiveRuleSet does not have forbidden rules
+	     			if(result) {
+	 	        		for(RuleActivation ruleAct : activeRuleSet.getArrayOfRuleActivations()){
+	 	        			if(ruleAct.getRule().getExtraModifier() == Rule.ExtraModifier.Forbidden) {
+	 	        				result = false;
+	 	        				Interface.logNonStatic("**  Active Rule With Forbidden State : " + ruleAct.getRule().getRuleName() +"\n");
+	 	        				break;
+	 	        			} // if
+	 	        		} // for
+	     			} // if
+	     			Interface.logNonStatic("**  Status : " + result+"\n");
+	     			Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");
+	     			long finaltime = ((endTime - startTime) / 1000000);
+		        	Interface.logNonStatic("** Total execution time: " + finaltime + "ms\n" );
+		        	Interface.logNonStatic("***********\n");
+		        	Interface.logNonStatic("***********\n");
+	     		//} // if
+	 		//} // for Tests
+		    testResults[no] = finaltime;
+	 	}
+	 	
+	 	Interface.logNonStatic("___________________________________________________________\n");
+	 	String text = "";
+	 	long average = 0;
+	 	for(long num : testResults) {
+	 		text += num + ", ";
+	 		average += num;
+	 	}
+	 	Interface.logNonStatic("** events:"+ eventsCount +" **\n");
+	 	Interface.logNonStatic("** av: "+ (float)(average/4) +","+ text +" **\n");
+	 	Interface.logNonStatic("___________________________________________________________\n");
+	 	
+	 	
+	 	TestResultTable.put(eventsCount,(float)(average/4) +","+ text);
+ 		
+ 		tests = null;
+ 		eventLog.setText("No Events Left");
+	}
+	
+	public void printTestResultTable() {
+		Interface.logNonStatic("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+		for(Integer key : TestResultTable.keySet()){
+			Interface.logNonStatic(key + " | " + TestResultTable.get(key) + "\n");
+		}
+		Interface.logNonStatic("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	}
 
 	class LogGUI extends JPanel {

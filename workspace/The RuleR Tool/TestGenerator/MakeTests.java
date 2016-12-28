@@ -23,12 +23,12 @@ public class MakeTests {
 		for(int i = 0;i<12;i++) {
 	    	eventCount = 0;	  
 	    	
-	    	File output = new File("Interface"+(numberOfEvents)+".txt");
+	    	File output = new File("UnsafeMapIterator"+(numberOfEvents)+".txt");
 			try {
 				fileWriter = new PrintWriter(output);
 				
 			   // Test Method	
-			   Interface();
+				UnsafeMapIterator();
 			    
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -41,6 +41,150 @@ public class MakeTests {
 	  }
 	    System.out.println("done");
 	}
+	
+	  private static void UnsafeMapIterator() {
+			HashMap<String, String> ActiveMaps = new HashMap<String,String>();
+			
+			while(eventCount < numberOfEvents) {
+		    	int RandomEvent = r.nextInt(2);
+		    	switch(RandomEvent) {
+		    	case 1: // create
+		    		for(int i1 = 0 ;i1 < 5; i1++) {
+		    			String rCollection = getRandomChar();
+			    		String rMap = getRandomChar();
+			    		if(!ActiveMaps.containsKey(rCollection)) {
+			    			ActiveMaps.put(rCollection, rMap);
+			    			String text = "create,"+rMap+","+rCollection;
+			    			PrintToFile(fileWriter, text);
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	case 0: // iterator(collection, iterrator)
+		    		for(int i1 = 0 ;i1 < 10; i1++) {
+			    		String rItem = getRandomChar();
+			    		if(ActiveMaps.containsKey(rItem)) {
+				    		String rIterator = getRandomChar();
+			    			String text = "iterator" + "," + rItem + "," + rIterator;
+			    			PrintToFile(fileWriter, text);	    			
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	default:
+		    		System.out.println("??");
+		    	}
+		    }
+		}  
+	  
+	private static void ExactluOneSuccess() {
+		  HashMap<String, String> sucAccounts = new HashMap<String,String>();
+			HashMap<String, String> doneAccounts = new HashMap<String,String>();
+			int RandomEvent;
+			while(eventCount < numberOfEvents || sucAccounts.size() != 0 || doneAccounts.size() != 0) {
+				if(eventCount + (sucAccounts.size()*2) + doneAccounts.size() < numberOfEvents) {
+					RandomEvent = r.nextInt(3);
+				}
+				else {
+				   if(sucAccounts.size() > 0) {
+					   RandomEvent = 2;
+				   } else if (doneAccounts.size() > 0){
+					   RandomEvent = 0;
+				   } else {
+					   RandomEvent = 5;
+				   }
+				}
+				
+		    	switch(RandomEvent) {
+		    	case 1: // com(n)
+		    		for(int i1 = 0 ;i1 < 10; i1++) {
+			    		String rItem = getRandomChar();
+			    		if(!sucAccounts.containsKey(rItem)) {
+			    			sucAccounts.put(rItem, "suc");
+			    			String text = "com,"+rItem;
+			    			PrintToFile(fileWriter, text);
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	case 2: // suc(n)
+		    		for(int i1 = 0 ;i1 < 10; i1++) {
+			    		String rItem = getRandomChar();
+			    		if(sucAccounts.containsKey(rItem)) {
+			    			String text = "suc" + "," + rItem;
+			    			PrintToFile(fileWriter, text);
+			    			sucAccounts.remove(rItem);
+			    			doneAccounts.put(rItem,"done");		    			
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	case 0: // done(n)
+		    		for(int i1 = 0 ;i1 < 10; i1++) {
+		    			String rItem = getRandomChar();
+			    		if(doneAccounts.containsKey(rItem)) {
+			    			int m = r.nextInt(20);
+			    			String text = "done" + "," + rItem;
+			    			PrintToFile(fileWriter, text);
+			    			doneAccounts.remove(rItem);	    			
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	default:
+		    		System.out.println("??");
+		    	}
+		    }
+		}   
+	  
+	private static void HasNext() {
+			ArrayList<String> SafeIter = new ArrayList<String>();
+			
+			while(eventCount < numberOfEvents) {
+		    	int RandomEvent = r.nextInt(2);
+		    	switch(RandomEvent) {
+		    	case 1: // hasNext(windName)
+		    		for(int i1 = 0 ;i1 < 10; i1++)	 {
+			    		String rItem = getRandomChar();
+			    		if(!SafeIter.contains(rItem)) {
+			    			SafeIter.add(rItem);
+			    			String text = "hasNext,"+rItem + ", true";
+			    			PrintToFile(fileWriter, text);
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	case 0: // next(iter)
+		    		for(int i1 = 0 ;i1 < 10; i1++) {
+		    			String rItem = getRandomChar();
+			    		if(SafeIter.contains(rItem)) {
+			    			String text = "next" + "," + rItem;
+			    			PrintToFile(fileWriter, text);
+			    			SafeIter.remove(rItem);	    			
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	default:
+		    		System.out.println("??");
+		    	}
+		    }
+		}    
+	 
+	private static void StateMachine() {
+		  String prevEvent = "b";
+			
+			while(eventCount < numberOfEvents) {
+		    	if(prevEvent.equals("b")) {
+		    		prevEvent = "a";
+	    			PrintToFile(fileWriter, prevEvent);
+		    	}
+		    	else {
+		    		prevEvent = "b";
+	    			PrintToFile(fileWriter, prevEvent);
+		    	}
+		    }
+		}  
 	
 	private static void Interface() {
 		HashMap<String, String> ActiveAccounts = new HashMap<String,String>();
