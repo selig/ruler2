@@ -42,6 +42,41 @@ public class MakeTests {
 	    System.out.println("done");
 	}
 	
+	  private static void RespectPriorities() {
+			HashMap<String, String> ActiveMaps = new HashMap<String,String>();
+			
+			while(eventCount < numberOfEvents) {
+		    	int RandomEvent = r.nextInt(2);
+		    	switch(RandomEvent) {
+		    	case 1: // create
+		    		for(int i1 = 0 ;i1 < 5; i1++) {
+		    			String rCollection = getRandomChar();
+			    		String rMap = getRandomChar();
+			    		if(!ActiveMaps.containsKey(rCollection)) {
+			    			ActiveMaps.put(rCollection, rMap);
+			    			String text = "create,"+rMap+","+rCollection;
+			    			PrintToFile(fileWriter, text);
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	case 0: // iterator(collection, iterrator)
+		    		for(int i1 = 0 ;i1 < 10; i1++) {
+			    		String rItem = getRandomChar();
+			    		if(ActiveMaps.containsKey(rItem)) {
+				    		String rIterator = getRandomChar();
+			    			String text = "iterator" + "," + rItem + "," + rIterator;
+			    			PrintToFile(fileWriter, text);	    			
+			    			break;
+			    		}
+		    		}
+		    	break;
+		    	default:
+		    		System.out.println("??");
+		    	}
+		    }
+		}
+	  
 	  private static void UnsafeMapIterator() {
 			HashMap<String, String> ActiveMaps = new HashMap<String,String>();
 			
