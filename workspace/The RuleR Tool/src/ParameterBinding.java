@@ -38,6 +38,7 @@ public class ParameterBinding {
 		// Get Variables
 		for(int i : indexes){
 			variables[index] = this.parameter.getRule().getVariable(i);
+			index++;
 		}
 		
 		if(indexes.length == 1) {
@@ -96,7 +97,7 @@ public class ParameterBinding {
 					}
 				}
 			} catch(Exception e) {
-				System.out.println("Parameter value not integer");
+				System.out.println("ParameterBinding.java: Parameter value not integer");
 			}
 		}
 	}

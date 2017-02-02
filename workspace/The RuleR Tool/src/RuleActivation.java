@@ -138,7 +138,10 @@ public class RuleActivation {
 		int[] ruleIndexes = this.rule.getRuleParameterIndexes();
 		String finalValue = "";
 		for(int index : ruleIndexes) {
-			finalValue += parameterBindings.get(index).getParameterValue()+",";
+			ParameterBinding paramBinding = parameterBindings.get(index);
+			if(paramBinding != null) {
+				finalValue += paramBinding.getParameterValue()+",";
+			}
 		}
 		
 		return GlobalFunctions.subStringLast(finalValue, 1);

@@ -2,15 +2,24 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
+
+import sun.applet.Main;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 
 public class Interface {
@@ -91,6 +100,9 @@ public class Interface {
     public static JTextArea eventLog2;
     public static JTextArea log;
     public static Interface Interface;
+    
+    public static String successSound = "Sounds/sound95.wav";
+    public static String failureSound = "Sounds/sound100.wav";
     
     
     
@@ -920,6 +932,7 @@ public class Interface {
 	        	      }
 	        	  }
 	        	  printTestResultTable();
+	        	  playSuccess();
 	          }
 	        }); 
 			eventPane3.add(runFolder);
@@ -937,6 +950,29 @@ public class Interface {
 			add(eventPane2);
 			add(eventPane3);
 		}
+	}
+	
+	public static void playSound(String sound) 
+	  throws Exception
+	  {
+	    // open the sound file as a Java input stream
+	    //String gongFile = "/Users/al/DevDaily/Projects/MeditationApp/resources/gong.au";
+	    InputStream in = new FileInputStream(sound);
+
+	    // create an audiostream from the inputstream
+	    AudioStream audioStream = new AudioStream(in);
+
+	    // play the audio clip with the audioplayer class
+	    AudioPlayer.player.start(audioStream);
+	  }
+	
+	public static void playSuccess() {
+		try {
+			playSound(successSound);
+	   } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	   }
 	}
 	
 	public void TestRun() {
@@ -1041,6 +1077,7 @@ public class Interface {
  		
  		tests = null;
  		eventLog.setText("No Events Left");
+ 		
 	}
 	
 	public void printTestResultTable() {
