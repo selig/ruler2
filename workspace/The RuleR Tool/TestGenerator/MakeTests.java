@@ -83,6 +83,7 @@ public class MakeTests {
 	private static void UnsafeMapIterator() {
 			HashMap<String, MapCollection> Created = new HashMap<String,MapCollection>(); //<Map,Collection> for iterator
 			HashMap<String, MapIterator> Live = new HashMap<String,MapIterator>(); //<Map,iterator> for update
+			int usedMapIterators=0;
 			
 			while(eventCount < numberOfEvents) {
 								
@@ -134,15 +135,19 @@ public class MakeTests {
 		    		}
 				break;
 				case 2: // update(map)
-					if(Live.size() > 0) {
+					if(Live.size() > 0 && usedMapIterators < Live.size()) {
 			    		while(true) {
 			    			List<String> keys      = new ArrayList<String>(Live.keySet());
 			    			String       rMapIterator = keys.get( r.nextInt(keys.size()) );
-				    		if(Created.containsKey(rMapIterator)) {
-				    			MapIterator object = Live.get(rMapIterator);				    			
-				    			String text = "update," + object.getMap();
-				    			PrintToFile(fileWriter, text);
-				    			break;
+				    		if(Live.containsKey(rMapIterator)) {
+				    			MapIterator object = Live.get(rMapIterator);
+				    			if(!object.isUsed()) {
+				    				String text = "update," + object.getMap();
+				    				PrintToFile(fileWriter, text);
+				    				object.setUsed(true);
+				    				usedMapIterators++;
+				    				break;
+				    			}
 				    		}
 			    		}
 		    		}
@@ -624,12 +629,22 @@ public class MakeTests {
 	class MapIterator {
 		private String map;
 		private String iterator;
+		private boolean used;
 		
 		public MapIterator(String newMap, String newIterator) {
 			this.map = newMap;
 			this.iterator = newIterator;
+			this.used = false;
 		}
-
+		
+		public boolean isUsed() {
+			return used;
+		}
+		
+		public void setUsed(boolean newUsed) {
+			this.used = newUsed;
+		}
+		
 		public String getMap() {
 			return map;
 		}
