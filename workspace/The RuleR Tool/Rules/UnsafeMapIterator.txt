@@ -1,4 +1,4 @@
 <None Always Start() { [create(map,collection)<<>> -> Created(map,collection)]}>
-<None Always Created(map,collection) { [iterator(collection,iterator)<<>> -> Live(map,iterator)]}>
-<None Always Live(map,iterator) { [update(map)<<>> -> Unsafe(iterator)]}>
-<None Always Unsafe(iterator) { [next(iterator)<<>> -> FAIL]}>
+<None State Created(map,collection) { [iterator(collection,iterator)<<>> -> Live(map,iterator); Created(map,collection)]}>
+<None State Live(map,iterator) { [update(map)<<>> -> Unsafe(iterator)]}>
+<None State Unsafe(iterator) { [next(iterator)<<>> -> FAIL]}>
