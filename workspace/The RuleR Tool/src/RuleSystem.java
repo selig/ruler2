@@ -149,7 +149,7 @@ public class RuleSystem {
 				String consequentName = cons.split("\\(")[0];
 				
 				try {
-				String[] consequentParameters = eventSplit[1].split("\\(")[1].replaceAll("\\)", "")
+				String[] consequentParameters = cons.split("\\(")[1].replaceAll("\\)", "")
 						.replaceAll("] }>","").replaceAll("]}>","").replaceAll("\\]","").split(",");
 				
 				consequentRules.add(new ConsequentRule(consequentName, consequentParameters));

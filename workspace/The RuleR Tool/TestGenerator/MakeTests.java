@@ -20,10 +20,10 @@ public class MakeTests {
 	
 	public static void main(String[] args) {
 		  
-		numberOfEvents = 100;  
+		numberOfEvents = 10;  
 		worstCase = true;
 		System.out.println("Start");
-		for(int i = 0;i<8;i++) {
+		for(int i = 0;i<1;i++) {
 			eventCount = 0;	  
 			
 			File output = new File((i+1)+"_" + "UnsafeMapIterator" +(numberOfEvents)+ ".txt");
@@ -157,7 +157,86 @@ public class MakeTests {
 		    		Error(RandomEvent);
 		    	}
 			}//*/
-		}  
+		} 
+	
+	private static void LockOrdering() {
+		HashMap<String, Threadlock> Taken = new HashMap<String,Threadlock>(); //<Map,Collection> for iterator
+		HashMap<String, MapIterator> Live = new HashMap<String,MapIterator>(); //<Map,iterator> for update
+		int usedMapIterators=0;
+		
+		while(eventCount < numberOfEvents) {
+							
+			int RandomEvent= -1;
+			if(worstCase) {
+				if(numberOfEvents/3 > eventCount)
+					RandomEvent = 0;
+				else
+					RandomEvent = r.nextInt(2) + 1;
+			} else {
+				RandomEvent = r.nextInt(3);
+			}
+	    	switch(RandomEvent) {
+	    	case 0: // lock(thread,lock)
+	    		while(true) {
+	    			String rThread = getRandomChar(Taken.size());
+		    		String rLock = getRandomChar(Taken.size());
+		    		String key = rThread + rLock;
+		    		if(!Taken.containsKey(key)) {
+		    			Taken.put(key, new Threadlock(rThread, rLock));
+		    			String text = "lock,"+rThread + "," +rLock;
+		    			PrintToFile(fileWriter, text);
+		    			break;
+		    		}
+	    		}
+			break;
+			case 1: // iterator(collection, iterator)
+				if(Created.size() > 0) {
+		    		while(true) {
+		    			List<String> keys      = new ArrayList<String>(Created.keySet());
+		    			String       rMapCollection = keys.get( r.nextInt(keys.size()) );
+			    		if(Created.containsKey(rMapCollection)) {
+			    			MapCollection object = Created.get(rMapCollection);
+			    			String key = "";
+			    			String iterator = "";
+			    			do {
+			    				iterator = getRandomChar(Created.size());
+			    				//check if iterator does not repeat with map
+			    				key = object.getMap() + iterator;
+			    			}
+			    			while(Live.containsKey(key));
+			    			
+			    			String text = "iterator," + object.getCollection() + "," + iterator;
+			    			Live.put(key, new MapIterator(object.getMap(), iterator));
+			    			PrintToFile(fileWriter, text);
+			    			break;
+			    		}
+		    		}
+	    		}
+			break;
+			case 2: // update(map)
+				if(Live.size() > 0 && usedMapIterators < Live.size()) {
+		    		while(true) {
+		    			List<String> keys      = new ArrayList<String>(Live.keySet());
+		    			String       rMapIterator = keys.get( r.nextInt(keys.size()) );
+			    		if(Live.containsKey(rMapIterator)) {
+			    			MapIterator object = Live.get(rMapIterator);
+			    			if(!object.isUsed()) {
+			    				String text = "update," + object.getMap();
+			    				PrintToFile(fileWriter, text);
+			    				object.setUsed(true);
+			    				usedMapIterators++;
+			    				break;
+			    			}
+			    		}
+		    		}
+	    		}
+			break;
+			default:
+
+	    		Error(RandomEvent);
+	    	}
+		}//*/
+	}  
 	  
 	private static void ExactlyOneSuccess() {
 		/*	  HashMap<String, String> sucAccounts = new HashMap<String,String>();
@@ -660,4 +739,31 @@ public class MakeTests {
 		public void setIterator(String iterator) {
 			this.iterator = iterator;
 		}
+	}
+	
+	class Threadlock {
+		private String thread;
+		private String lock;
+		
+		public Threadlock(String newthread, String newlock) {
+			this.thread = newthread;
+			this.lock = newlock;
+		}
+
+		public String getThread() {
+			return thread;
+		}
+
+		public void setThread(String thread) {
+			this.thread = thread;
+		}
+
+		public String getLock() {
+			return lock;
+		}
+
+		public void setLock(String lock) {
+			this.lock = lock;
+		}
+		
 	}
