@@ -1,0 +1,4 @@
+<None Always Start() { [priority(x,y)<<>> -> P(x,y)][grant(x)<<>> -> G(x)] }>  
+<None State P(x,y){}>
+<None Always G(x){ [cancel(x)<<>> -> !G(x)][request(y)<<P(y,x);!P(z,y);!G(z)>> -> Res(x,y)] }>
+<None State Res(x,y) {[rescind(x)<<>> -> OK][grant(y)<<>> -> FAIL] }>

@@ -1,0 +1,2 @@
+<None Always Start() { [hasNext(iter,true)<<>> -> Safe(iter)][next(iter)<<!Safe(iter)>> -> Fail] }>
+<None State Safe(iter) { [next(iter)<<>> -> OK]}>
