@@ -1,7 +1,0 @@
-#!/bin/bash
-
-cd Report
-pdflatex Report.tex
-pdflatex Report.tex
-
-cp Report.pdf ../.
