@@ -20,18 +20,18 @@ public class MakeTests {
 	
 	public static void main(String[] args) {
 		  
-		numberOfEvents = 10;  
+		numberOfEvents = 3200;  
 		worstCase = true;
 		System.out.println("Start");
-		for(int i = 0;i<1;i++) {
+		for(int i = 0;i<3;i++) {
 			eventCount = 0;	  
 			
-			File output = new File((i+1)+"_" + "UnsafeMapIterator" +(numberOfEvents)+ ".txt");
+			File output = new File((i+1)+"_" + "OpenCloseFile" +(numberOfEvents)+ ".txt");
 		try {
 			fileWriter = new PrintWriter(output);
 			
 		   // Test Method	
-			UnsafeMapIterator();
+			OpenCloseFile();
 		    
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -160,7 +160,7 @@ public class MakeTests {
 		} 
 	
 	private static void LockOrdering() {
-		HashMap<String, Threadlock> Taken = new HashMap<String,Threadlock>(); //<Map,Collection> for iterator
+	/*	HashMap<String, Threadlock> Taken = new HashMap<String,Threadlock>(); //<Map,Collection> for iterator
 		HashMap<String, MapIterator> Live = new HashMap<String,MapIterator>(); //<Map,iterator> for update
 		int usedMapIterators=0;
 		

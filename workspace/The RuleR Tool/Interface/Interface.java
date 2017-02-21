@@ -978,6 +978,7 @@ public class Interface {
 	public void TestRun() {
 		String eventLogs = "";
       	int eventCount = 0;
+ 		int numberOfTestRuns = 1;
       	
  		boolean result = false;
 
@@ -988,9 +989,9 @@ public class Interface {
  		
  		int flag = 0;
  		
- 		long[] testResults = new long[4];
+ 		long[] testResults = new long[numberOfTestRuns];
  		
-	 	for(int no = 0; no<4;no++){	
+	 	for(int no = 0; no<numberOfTestRuns;no++){	
 	 		//for(String[] events : tests){
 	 			//eventCount++;
 	 			//if(!TEST_OPTION.equals("oneTest") || flag != i) { 
@@ -1009,7 +1010,7 @@ public class Interface {
 	 		for(String[] events : tests){
 		        	eventCount++;
 	     		for(String event : events) {
-	     			eventLogs += event + ".";
+	     			//eventLogs += event + ".";
 	     			eventsCount++;
 	     			if(eventsCount % 100000  == 0) {
 	     				Interface.logNonStatic("Event Count" + eventsCount);
@@ -1038,7 +1039,7 @@ public class Interface {
 		        		
 		        	Interface.logNonStatic("\n***********\n");
 	     			Interface.logNonStatic("*************\n");
-	     			Interface.logNonStatic("**  Event : " + eventLogs+"\n");
+	     			//Interface.logNonStatic("**  Event : " + eventLogs+"\n");
 		        		
 		        		//Check if ActiveRuleSet does not have forbidden rules
 	     			if(result) {
@@ -1069,11 +1070,11 @@ public class Interface {
 	 		average += num;
 	 	}
 	 	Interface.logNonStatic("** events:"+ eventsCount +" **\n");
-	 	Interface.logNonStatic("** av: "+ (float)(average/4) +","+ text +" **\n");
+	 	Interface.logNonStatic("** av: "+ (float)(average/numberOfTestRuns) +","+ text +" **\n");
 	 	Interface.logNonStatic("___________________________________________________________\n");
 	 	
 	 	
-	 	TestResultTable.put(eventsCount,(float)(average/4) +","+ text);
+	 	TestResultTable.put(eventsCount,(float)(average/numberOfTestRuns) +","+ text);
  		
  		tests = null;
  		eventLog.setText("No Events Left");
