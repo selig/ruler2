@@ -20,13 +20,14 @@ import javax.swing.*;
 import sun.applet.Main;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
-
+/**
+ * Basic implementation
+ * 
+ * @author Mantas
+ */
 
 public class Interface {
 	private static boolean logOn = false;
-	//Simple rule set 
-	//private static final String rule1 = "<None Always Open() { [open(file)<> ¬> isOpen(file)][close(file)<!isOpen(file)> ¬> Fail] }>";
-	//private static final String rule2 = "<None Step isOpen(file) { [open(file)<> ¬> Fail][close(file)<> ¬> Ok] }>";
 	public static File RULE_FILE = null;
 	public static File EVENTS_FILE = null;
 	public static File FOLDER = null;

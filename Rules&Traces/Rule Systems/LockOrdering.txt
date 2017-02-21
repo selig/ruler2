@@ -1,0 +1,3 @@
+<None Always Start() { [lock(thread,lock)<<>> -> Taken(thread,lock)]}>
+<None State Taken(thread,lock) { [unlock(thread,lock)<<>> -> OK][lock(thread,other)<<>> -> Order(lock,other)][lock(thread,other)<<Order(other,lock)>> -> Fail]}>
+<None State Order(one,two) {}>
