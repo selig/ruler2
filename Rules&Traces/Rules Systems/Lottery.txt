@@ -1,4 +1,0 @@
-<None Always Spin() { [getNumber(account,n)<<Compare(account,n);Take(account,a);Pay(account,a)>> -> Fail][compare(account,m)<<!Compare(account,n)>> -> Fail][pay(account,a)<<!Win(account,a)>> -> Fail][take(account,a)<<!Lose(account,a)>> -> Fail][getNumber(account,n)<<>>  -> Compare(account,n)] }>
-<None State Compare(account,n) { [compare(account,m)<< m > n >> -> Win(account,m+1)][compare(account,m)<< m <= n >> -> Lose(account,n+1)] }>
-<None State Lose(account,amount) { [take(account, amount)<<>> -> OK] }>
-<None State Win(account,amount) { [pay(account, amount)<<>> -> OK] }>
