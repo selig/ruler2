@@ -1,2 +1,0 @@
-<Assert Always Start() { [list(item,min)<<>> -> Item(item,min)][sell(item,amount)<<Item(item,min); amount >= min>> -> !Item(item,min)]}>
-<Assert State Item(item,min) {}>
