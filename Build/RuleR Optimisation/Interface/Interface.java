@@ -236,14 +236,15 @@ public class Interface {
 		ruleSystemInside.removeAll();
 		ruleSystemInside.revalidate();
 		ruleSystemInside.repaint();
-		
+		System.out.println("Rule System:");
 		for(String rule : ruleSystem.getRules()) {
-			System.out.println(rule);
+			System.out.println("  " + rule);
 			ruleSystemInside.add(new RuleString(rule));
 			ruleSystemInside.revalidate();
 			ruleSystemInside.repaint();
 			ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM);
 		}
+		System.out.println("");
 	}
 	
 	public void activeRuleGUI(){

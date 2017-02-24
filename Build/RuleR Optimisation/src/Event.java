@@ -47,6 +47,21 @@ public class Event {
 		return eventParameters;
 	}
 	
+	public String[] getEventParameters(Integer[] indexes) {
+		if(indexes == null)
+			return null;
+		
+		String[] tempArray = new String[indexes.length];
+		
+		int count = 0;
+		for(int ind : indexes) {
+			tempArray[count] = eventParameters[ind];
+			count++;
+		}
+		
+		return tempArray;
+	}
+	
 	public String getEventParameter(int index) {
 		if(eventParameters == null)
 			return null;
@@ -76,5 +91,15 @@ public class Event {
 	
 	public String toString() {
 		return this.event + "(" + getEventParams() + ")";
+	}
+
+	public Integer getEventId() {
+		return GlobalFunctions.hashName(getEvent()+getEventParametersSize());
+	}
+
+	public int getEventParametersHashValue(Integer[] matchingIndexes) {
+		String[] paramArray = getEventParameters(matchingIndexes);
+		String values = GlobalFunctions.getValuesString(paramArray);
+		return GlobalFunctions.hashName(values);
 	}
 }

@@ -21,7 +21,8 @@ public class Rule {
 	private int[] ruleParameterIndexes;
 	private Map<Integer, Integer> ruleParameters;
 	private String[] ruleParameterStrings;
-	private ArrayList<RuleBinding> ruleBinding;
+	private ArrayList<RuleBinding> ruleBindings;
+	private HashMap<Integer, Integer[]> eventToMachingParameterIndex;
 	
 	
 	public Rule(String name,String mod, String extMod, String parameter, ArrayList<RuleBinding> bindings) {
@@ -40,9 +41,12 @@ public class Rule {
 		ruleParameters = new HashMap<Integer, Integer>();
 		//System.out.print("Rule Name ID - " + name+ruleParameterStrings.length + " ");
 		ruleNameID = GlobalFunctions.hashName(name+ruleParameterStrings.length);
-		ruleBinding = bindings;
+		ruleBindings = bindings;
 		ruleVariables = new HashMap<Integer,Variable>();
 		parameters = getParameterArray();
+		eventToMachingParameterIndex = new HashMap<Integer, Integer[]>();
+		
+		addEventToRuleParameterMatching();
 	}
 	
 	public void addVariable(Variable newVariable) {
@@ -76,7 +80,7 @@ public class Rule {
 		}
 		
 		// Get different parameters from Event Parameters
-		for(RuleBinding ruleBind : ruleBinding) {
+		for(RuleBinding ruleBind : ruleBindings) {
 			String[] allParameters;
 			
 			if((allParameters = ruleBind.getEventParamArray()) != null) {
@@ -135,7 +139,7 @@ public class Rule {
 			ruleParameters.put(parameterIndex, i);
 		}
 		
-		for(RuleBinding ruleBind : ruleBinding) {
+		for(RuleBinding ruleBind : ruleBindings) {
 			ruleBind.initializeParameterIndexes(tempParamArray);
 		}
 		
@@ -183,13 +187,13 @@ public class Rule {
 	}
 
 	public void addRuleBinding(RuleBinding ruleBinding) {
-		this.ruleBinding.add(ruleBinding);
+		this.ruleBindings.add(ruleBinding);
 	}
 	
 	public String getRuleBindingsString() {
 		String bindingString = "";
 		
-		for(RuleBinding binding : ruleBinding) {
+		for(RuleBinding binding : ruleBindings) {
 			bindingString+= "[" + binding.toString() + "]";
 		}
 		
@@ -220,8 +224,8 @@ public class Rule {
 		return ruleModifier;
 	}
 	
-	public ArrayList<RuleBinding> getRuleBinding() {
-		return ruleBinding;
+	public ArrayList<RuleBinding> getRuleBindings() {
+		return ruleBindings;
 	}
 	
 	public int getRuleParamIndex(int key) {
@@ -232,12 +236,50 @@ public class Rule {
 		return parameters;
 	}
 
+	public void addEventToRuleParameterMatching(){
+		for(RuleBinding ruleBinding : ruleBindings) {
+			int eventNameID = GlobalFunctions.hashName(ruleBinding.getEventName()+ruleBinding.getNoOfEventParameters());
+			
+			StringBuilder allMatchingIndexes = new StringBuilder();
+			
+			Integer traceIndex;
+			Integer[] matchingIndexes = new Integer[0];
+			
+			if(ruleParameterIndexes.length > 0) {
+				for(int index : ruleParameterIndexes) {
+					if((traceIndex = ruleBinding.getEventParameterIndex(index)) != null) {
+						allMatchingIndexes.append(traceIndex).append(COMMA);
+					}
+				}
+				
+				String[] strIndex = allMatchingIndexes.toString().split(COMMA); 
+				matchingIndexes = new Integer[strIndex.length];
+				int count= 0;
+				for(String string : strIndex){
+					matchingIndexes[count] = Integer.parseInt(string);
+					count++;
+				}
+			}
+			
+			eventToMachingParameterIndex.put(eventNameID, matchingIndexes);
+			
+		}
+	} 
+	
+	public Integer[] getEventToRuleParameterMatching(int eventNameKey){
+		return eventToMachingParameterIndex.get(eventNameKey);
+	} 
+	
 	public String toString() {
 		return extraModifier + " " +ruleModifier + " " + ruleName + "("+ GlobalFunctions.getParameters(ruleParameterStrings) +") { " + getRuleBindingsString() + " }";
 	}
 
 	public boolean isAssert() {
 		return extraModifier == ExtraModifier.Assert;
+	}
+	
+	public HashMap<Integer, Integer[]> getEventToMachingParameterIndex() {
+		return eventToMachingParameterIndex;
 	}
 
 }

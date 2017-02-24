@@ -20,6 +20,8 @@ public class Update {
 		Interface.log("\n" +" The Event - " + event.toString());
 		Interface.log("\n" +"");
 		
+		int eventId = event.getEventId();
+		
 		ActiveRuleSet activeRuleSet = Interface.activeRuleSet;
 		RuleSystem ruleSystem = Interface.ruleSystem;
 		
@@ -33,24 +35,42 @@ public class Update {
 		ArrayList<RuleActivation> tempActivations = new ArrayList<RuleActivation>();
 		ArrayList<RuleActivation> ruleActivationsToDelete = new ArrayList<RuleActivation>();
 		
-		// For all Active rules
-		for(RuleActivation activation : activeRuleSet.getArrayOfRuleActivations()){
-			// search rule with the event() (some fancy efficient way)
-			Interface.log("\n" +"Rule Activation: " + activation.getRule().getRuleName());
-			boolean activationFired = false;
-			// Get rule of active rule
-			Rule rule = activation.getRule();
+		ArrayList<Integer> ruleIds = ruleSystem.getEventFromEventToRuleMapping(eventId);
+		
+		// Loop Through Rule IDs Which was Found Next to Event
+		ruleIdsLoop : for(int ruleID : ruleIds){
 			
-			// For all Rule Bindings
-			rulebindingloop: for(RuleBinding binding : rule.getRuleBinding()){
+			Rule rule = ruleSystem.getRule(ruleID);
+			
+			// Get Trace and Rule Matching Parameter indexes
+			Integer[] matchingIndexes = rule.getEventToRuleParameterMatching(eventId);
+			
+			// Get Trace Matching Parameter Hash Value
+			int eventParameterHashValue = event.getEventParametersHashValue(matchingIndexes);
+			
+			// Get Active Rule if Exists
+			RuleActivation activation = activeRuleSet.getRuleActivationFromMapping(ruleID, eventParameterHashValue);
+			
+			if(activation == null)
+				continue ruleIdsLoop;
+			
+			Interface.log("\n" +"Rule Activation: " + activation.getRule().getRuleName());
+			
+			boolean activationFired = false;
+			
+			// For all Rule Bindings in the Rule
+			rulebindingloop: for(RuleBinding binding : rule.getRuleBindings()){
 					Interface.log("\n" +"  Match: " + event.getEvent() + " vs " + binding.getEventName());
 					if(event.getEvent().equals(binding.getEventName())){
 						Interface.log("\n" +"    True");
 	
 						// Get Event Parameter list of indexes
 						int[] eventPIndexes = binding.getEventParameterIndexes();
-	// check if event matches rule
-						if(rule.getRuleParameterIndexes().length > 0) {
+						
+						// check if Trace Parameter length matches Event Parameter Length defined in Rule
+						
+						// check if Rule Has Parameters
+						/*if(rule.getRuleParameterIndexes().length > 0) {
 							Interface.log("\n" +"      Rule Has Parameters");
 							
 							int eventParamIndex = 0;
@@ -71,7 +91,7 @@ public class Update {
 								}
 								eventParamIndex++;
 							}
-						}
+						} */
 						
 	// ---------------- Parameters
 						parameterValues = activation.getRuleParameterBindings();

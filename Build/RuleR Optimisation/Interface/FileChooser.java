@@ -102,6 +102,9 @@ public class FileChooser extends JPanel
 			       
 			       Interface.Interface.updateRuleSystemGUI();
 			       Interface.Interface.activeRuleGUI();
+			       
+			       Interface.ruleSystem.printEventToRuleMapping();
+			       Interface.ruleSystem.printEventIndexesMatchingRuleParameters();
 			       break;
 				case "folder":
 					Interface.FOLDER = file;

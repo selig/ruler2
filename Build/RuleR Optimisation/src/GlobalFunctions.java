@@ -66,4 +66,17 @@ public class GlobalFunctions {
 		
 		return ruleSystem.getRule(ruleNameID);
 	}
+
+	public static String getValuesString(String[] paramArray) {
+		if(paramArray == null)
+			return "";
+		
+		StringBuilder finalString = new StringBuilder("");
+		
+		for(String arrayString : paramArray) {
+			finalString.append(arrayString);
+		}
+		
+		return finalString.toString();
+	}
 }

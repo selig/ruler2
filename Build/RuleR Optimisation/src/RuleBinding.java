@@ -11,7 +11,7 @@ public class RuleBinding {
 	private int[] eventParameterIndexes;
 	//integer 1 - parameter index in Big Array of Rule parameter
 	//integer 2 - parameter index in event Description
-	private Map<Integer, Integer> eventParameters;
+	private HashMap<Integer, Integer> eventParameters;
 	private Condition[] eventConditions;
 	private ArrayList<ConsequentRule> consequentRules;
 	
@@ -109,11 +109,15 @@ public class RuleBinding {
 		return eventParameterIndexes;
 	}
 	
-	public int getEventParameterIndex(int key){
+	public Integer getEventParameterIndex(int key){
 		return eventParameters.get(key);
 	}
 
 	public String toString() {
 		return eventName + "(" + GlobalFunctions.getParameters(eventParameterStrings) + ")<" + getEventConditionsString() + "> ¬> " + getConsequentRulesString();
+	}
+
+	public int getNoOfEventParameters() {
+		return eventParameterStrings.length;
 	}
 }

@@ -9,21 +9,28 @@ public class ActiveRuleSet {
 	//private final int id;
 	//              RuleID, RuleActivation
 	private HashMap<Integer,RuleActivation> ruleActivations;
+	private HashMap<Integer,HashMap<Integer, RuleActivation>> ruleIDtoRuleActivationMapping;
 	
 	public ActiveRuleSet() {
 		//this.id = GlobalVariables.getNextActiveRuleSetID();
 		this.ruleActivations = new HashMap<Integer,RuleActivation>();
+		ruleIDtoRuleActivationMapping = new HashMap<Integer,HashMap<Integer, RuleActivation>>();
 	}
 	
 	public void addNewActivation(RuleActivation newRuleActivation){
 		int key = newRuleActivation.getRuleActivationID();
-
+		
 		if(ruleActivations.get(key) == null) {
 			this.ruleActivations.put(key, newRuleActivation);
+			
+			int ruleId = newRuleActivation.getRule().getRuleNameID();
+			
+			addRuleIdToRuleIdRuleActivationMapping(ruleId,newRuleActivation);
+			
 			Interface.log("Rule Activated: " + key + " " + newRuleActivation.toString() + "\n");
 		}
 	}
-	
+
 	public RuleActivation[] getArrayOfRuleActivations() {
 		return  (RuleActivation[]) ruleActivations.values().toArray(new RuleActivation[0]);
 	}
@@ -90,5 +97,36 @@ public class ActiveRuleSet {
 
 	public RuleActivation getRuleActivation(int ruleActivationKey) {
 		return ruleActivations.get(ruleActivationKey);
+	}
+	
+	private void addRuleIdToRuleIdRuleActivationMapping(int ruleId,
+			RuleActivation newRuleActivation) {
+		
+		HashMap<Integer, RuleActivation> parameterToActivationMapping;
+		
+		if((parameterToActivationMapping = getRuleIdToRuleActivationMappingMap(ruleId)) != null) {
+			
+			parameterToActivationMapping.put(newRuleActivation.getParameterHashValue(), newRuleActivation);
+			
+		} else {
+			parameterToActivationMapping = new HashMap<Integer, RuleActivation>();
+			
+			parameterToActivationMapping.put(newRuleActivation.getParameterHashValue(), newRuleActivation);
+			
+			ruleIDtoRuleActivationMapping.put(ruleId, parameterToActivationMapping);
+		}
+	}
+
+	private HashMap<Integer, RuleActivation> getRuleIdToRuleActivationMappingMap(
+			int ruleId) {
+		return ruleIDtoRuleActivationMapping.get(ruleId);
+	}
+
+	public RuleActivation getRuleActivationFromMapping(int ruleId, int parameterHash) {
+		HashMap<Integer, RuleActivation> map = ruleIDtoRuleActivationMapping.get(ruleId);
+		if(map != null)
+			return map.get(parameterHash);
+		else 
+			return null;
 	}
 }
