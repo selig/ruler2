@@ -28,13 +28,14 @@ import sun.audio.AudioStream;
  */
 
 public class Interface {
-	private static boolean logOn = false;
+	private static boolean logOn = true;
 	public static File RULE_FILE = null;
 	public static File EVENTS_FILE = null;
 	public static File FOLDER = null;
 	public static String TEST_OPTION = null;
 	public static TreeMap<Integer,String> TestResultTable = new TreeMap<Integer, String>();
 	
+	private static int numberOfTestRuns = 1;
 	
 	private static long startTime = 0;
 	private static long finishTime = 0;
@@ -281,7 +282,7 @@ public class Interface {
 	}
 	
 	public static ArrayList<String[]> readLine(File fileName) {
-		System.out.println("Start Reading file");
+		//System.out.println("Start Reading file");
 		ArrayList<String[]> lines = new ArrayList<String[]>();
 		FileReader file = null;
 		BufferedReader input = null;
@@ -317,7 +318,7 @@ public class Interface {
 			}
 		}
 		
-		System.out.println("Finish Reading file");
+		//System.out.println("Finish Reading file");
 		
 		return lines;
 	}
@@ -889,17 +890,17 @@ public class Interface {
 			runFile.setActionCommand("runFile");
 			runFile.addActionListener(new ActionListener() {
  	          public void actionPerformed(ActionEvent e) {
- 	        	 System.out.println("Run File");
+ 	        	//System.out.println("Run File");
  	        	 if(tests != null && tests.size() > 0){
  	        		 
  	        		TabbedPane.setSelectedIndex(4);
 
- 	 	        	System.out.println("Button pressed. Runing");
+ 	 	        	//System.out.println("Button pressed. Runing");
  	 	        	
  	 	        	TestRun();
  	 	        	
- 	        	 } else 
- 	 	        	 System.out.println("Button pressed. not running");
+ 	        	 }/*else 
+ 	 	        	 //System.out.println("Button pressed. not running");*/
  	          }
  	        });  
  	       eventPane2.add(runFile);
@@ -981,103 +982,118 @@ public class Interface {
 	public void TestRun() {
 		String eventLogs = "";
       	int eventCount = 0;
- 		int numberOfTestRuns = 1;
       	
  		boolean result = false;
 
  		Interface.ResetActiveRules();
  		
- 		long startTime = System.nanoTime();
+ 		long startTime;// = System.nanoTime();
+ 		long endTime;
  		int eventsCount = 0;
  		
  		int flag = 0;
  		
  		long[] testResults = new long[numberOfTestRuns];
  		
-	 	for(int no = 0; no<numberOfTestRuns;no++){	
-	 		//for(String[] events : tests){
-	 			//eventCount++;
-	 			//if(!TEST_OPTION.equals("oneTest") || flag != i) { 
-	 				startTime = System.nanoTime();
-	     			//System.out.println("--------------------------------------------------------------------------");
-	     			//System.out.println("--------------------------------------------------------------------------");
-	     			System.out.println("--------------------------== New Test ==----------------------------------");
-	     			//System.out.println("--------------------------------------------------------------------------");
-	     			//System.out.println("--------------------------------------------------------------------------");
+	 	for(int no = 0; no<numberOfTestRuns;no++){
+	 		
+	 		/** multipleTests or CSV */
+	 		
+			System.out.println("--------------------------== New Test ==----------------------------------");
+		
+			Interface.ResetActiveRules();
+			eventLogs = "";
+			eventsCount = 0;
+			flag = no;
+			
+			startTime = System.nanoTime();
 	 			
-	 				Interface.ResetActiveRules();
-	 				eventLogs = "";
-	 				eventsCount = 0;
-	 				flag = no;
-	 			//}
 	 		for(String[] events : tests){
-		        	eventCount++;
+	 			
+ 				eventCount++;
+ 				
+ 				if(TEST_OPTION.equals("multipleTests")) {
+ 					startTime = System.nanoTime();
+ 	 				eventLogs = "";
+ 				}
+	 				
 	     		for(String event : events) {
-	     			//eventLogs += event + ".";
+	     			eventLogs += event + ".";
 	     			eventsCount++;
-	     			if(eventsCount % 100000  == 0) {
+	     			/*if(eventsCount % 100000  == 0) {
 	     				Interface.logNonStatic("Event Count" + eventsCount);
 	     				System.out.println("Event Count" + eventsCount);
-	     			}
-		        		if(Update.update(new Event(event,TEST_OPTION))) {
-		        			//System.out.println("true");
-		 	        		result = true;
-		        		}
-		 	        	 else {
-		 	        		//System.out.println("false");
-		 	        		result = false;
-		 	        		break;
-		 	        	 }
-		 	        	 
-		 	        	 Interface.activeRuleGUI();
+	     			}*/
+	     			
+					if(Update.update(new Event(event,TEST_OPTION))) {
+						result = true;
+					}
+					else {
+						result = false;
+						break;
+					} // else
+	     		} // for
+	     		
+	     		if(TEST_OPTION.equals("multipleTests")) {
+		     		endTime = System.nanoTime();
+		     		printTestResults(result,eventsCount,startTime,endTime,testResults,no,eventLogs);
+		     		Interface.ResetActiveRules();
 	     		}
 	 		}
-	     		//if(!TEST_OPTION.equals("oneTest") || eventCount == tests.size()) {
-	     			
-	     			long endTime = System.nanoTime();
+	 		if (TEST_OPTION.equals("CSV")) {
+	 			endTime = System.nanoTime();
+	 			printTestResults(result,eventsCount,startTime,endTime,testResults,no,eventLogs);
+			}
+	 	}
+	}
 	
-		        		//System.out.println("Total execution time: " + (endTime - startTime) );
+	private void printTestResults(boolean result, int eventsCount, long startTime, long endTime,
+			long[] testResults, int no, String eventLogs) {
+     		
 	     			
-		        		Interface.activeRuleGUI();
-		        		
-		        	Interface.logNonStatic("\n***********\n");
-	     			Interface.logNonStatic("*************\n");
-	     			//Interface.logNonStatic("**  Event : " + eventLogs+"\n");
-		        		
-		        		//Check if ActiveRuleSet does not have forbidden rules
-	     			if(result) {
-	 	        		for(RuleActivation ruleAct : activeRuleSet.getArrayOfRuleActivations()){
-	 	        			if(ruleAct.getRule().getExtraModifier() == Rule.ExtraModifier.Forbidden) {
-	 	        				result = false;
-	 	        				Interface.logNonStatic("**  Active Rule With Forbidden State : " + ruleAct.getRule().getRuleName() +"\n");
-	 	        				break;
-	 	        			} // if
-	 	        		} // for
-	     			} // if
-	     			Interface.logNonStatic("**  Status : " + result+"\n");
-	     			Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");
-	     			long finaltime = ((endTime - startTime) / 1000000);
-		        	Interface.logNonStatic("** Total execution time: " + finaltime + "ms\n" );
-		        	Interface.logNonStatic("***********\n");
-		        	Interface.logNonStatic("***********\n");
-	     		//} // if
-	 		//} // for Tests
-		    testResults[no] = finaltime;
-	 	}
-	 	
-	 	Interface.logNonStatic("___________________________________________________________\n");
-	 	String text = "";
-	 	long average = 0;
-	 	for(long num : testResults) {
-	 		text += num + ", ";
-	 		average += num;
-	 	}
-	 	Interface.logNonStatic("** events:"+ eventsCount +" **\n");
-	 	Interface.logNonStatic("** av: "+ (float)(average/numberOfTestRuns) +","+ text +" **\n");
-	 	Interface.logNonStatic("___________________________________________________________\n");
-	 	
-	 	
-	 	TestResultTable.put(eventsCount,(float)(average/numberOfTestRuns) +","+ text);
+		Interface.activeRuleGUI();
+			
+		Interface.logNonStatic("\n***********\n");
+		Interface.logNonStatic("*************\n");
+		
+		if(result) {
+			for(RuleActivation ruleAct : activeRuleSet.getArrayOfRuleActivations()){
+				if(ruleAct.getRule().getExtraModifier() == Rule.ExtraModifier.Forbidden) {
+					result = false;
+					Interface.logNonStatic("**  Active Rule With Forbidden State : " + ruleAct.getRule().getRuleName() +"\n");
+					break;
+				}
+			}
+		}
+		
+		Interface.logNonStatic("**  Status : " + result+"\n");
+		Interface.logNonStatic("**  Events Log : " + eventLogs+"\n");
+		Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");
+		long finaltime = ((endTime - startTime) / 1000000);
+		Interface.logNonStatic("**  Total execution time: " + finaltime + "ms\n" );
+		Interface.logNonStatic("***********\n");
+		Interface.logNonStatic("***********\n");
+		
+		
+		if (TEST_OPTION.equals("CSV")) {
+			testResults[no] = finaltime;
+			
+			if(numberOfTestRuns == no) {
+		 	
+			 	Interface.logNonStatic("___________________________________________________________\n");
+			 	String text = "";
+			 	long average = 0;
+			 	for(long num : testResults) {
+			 		text += num + ", ";
+			 		average += num;
+			 	}
+			 	Interface.logNonStatic("** events:"+ eventsCount +" **\n");
+			 	Interface.logNonStatic("** av: "+ (float)(average/numberOfTestRuns) +","+ text +" **\n");
+			 	Interface.logNonStatic("___________________________________________________________\n");
+			 	
+			 	TestResultTable.put(eventsCount,(float)(average/numberOfTestRuns) +","+ text);
+			}
+		}
  		
  		tests = null;
  		eventLog.setText("No Events Left");

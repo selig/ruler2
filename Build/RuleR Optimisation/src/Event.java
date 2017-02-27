@@ -98,6 +98,7 @@ public class Event {
 	}
 
 	public int getEventParametersHashValue(Integer[] matchingIndexes) {
+		
 		String[] paramArray = getEventParameters(matchingIndexes);
 		String values = GlobalFunctions.getValuesString(paramArray);
 		return GlobalFunctions.hashName(values);

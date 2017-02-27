@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 public class Rule {
@@ -22,6 +23,7 @@ public class Rule {
 	private Map<Integer, Integer> ruleParameters;
 	private String[] ruleParameterStrings;
 	private ArrayList<RuleBinding> ruleBindings;
+	private int[] ruleParamIndexShared;
 	private HashMap<Integer, Integer[]> eventToMachingParameterIndex;
 	
 	
@@ -237,7 +239,11 @@ public class Rule {
 	}
 
 	public void addEventToRuleParameterMatching(){
+		
+		int[] tempArray = null;
+		
 		for(RuleBinding ruleBinding : ruleBindings) {
+			
 			int eventNameID = GlobalFunctions.hashName(ruleBinding.getEventName()+ruleBinding.getNoOfEventParameters());
 			
 			StringBuilder allMatchingIndexes = new StringBuilder();
@@ -246,9 +252,19 @@ public class Rule {
 			Integer[] matchingIndexes = new Integer[0];
 			
 			if(ruleParameterIndexes.length > 0) {
+				
+				int countRule= 0;
+				
+				int[] tempArray2 = new int[ruleParameterIndexes.length];
+				
 				for(int index : ruleParameterIndexes) {
+					
 					if((traceIndex = ruleBinding.getEventParameterIndex(index)) != null) {
 						allMatchingIndexes.append(traceIndex).append(COMMA);
+						
+						/** Add rule parameter index which match */
+						tempArray2[countRule] = index;
+						countRule++;
 					}
 				}
 				
@@ -259,11 +275,46 @@ public class Rule {
 					matchingIndexes[count] = Integer.parseInt(string);
 					count++;
 				}
+				
+				if(tempArray == null) {
+					tempArray = tempArray2;
+				} else {
+					int[] tempArray3 = new int[tempArray.length];
+					int ruleCount = 0;
+					
+					for(Integer ind1 : tempArray) {
+						for(Integer ind2 : tempArray2) {
+							if(ind1 == ind2) {
+								/** We have match*/
+								tempArray3[ruleCount] = ind1;
+								ruleCount++;
+							}
+						}
+					}
+					
+					if(tempArray3.length > ruleCount) {
+						int[] tempArray4 = new int[ruleCount];
+						for(int i = 0; i< ruleCount;i++) {
+							tempArray4[i] = tempArray3[i];
+						}
+						tempArray = tempArray4;
+					} else {
+						tempArray = tempArray3;	
+					}
+				}
+				
+				
 			}
+			
+			ruleParamIndexShared = tempArray;
 			
 			eventToMachingParameterIndex.put(eventNameID, matchingIndexes);
 			
 		}
+		
+		
+		
+		
 	} 
 	
 	public Integer[] getEventToRuleParameterMatching(int eventNameKey){
@@ -280,6 +331,10 @@ public class Rule {
 	
 	public HashMap<Integer, Integer[]> getEventToMachingParameterIndex() {
 		return eventToMachingParameterIndex;
+	}
+	
+	public int[] getEventToMachingParameterIndexArray() {
+		return ruleParamIndexShared;
 	}
 
 }

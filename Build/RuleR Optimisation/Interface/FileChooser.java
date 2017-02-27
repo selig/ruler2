@@ -72,7 +72,7 @@ public class FileChooser extends JPanel
 					Interface.tests = Interface.readLine(file);
 					
 					Interface.eventLog.setText("");
-					System.out.println("Start printing to the log");
+					//System.out.println("Start printing to the log");
 					
 					for(String[] eventArrays : Interface.tests){
 						//System.out.println("Array size - " + eventArrays.length);
@@ -84,7 +84,7 @@ public class FileChooser extends JPanel
 					}
 					Interface.eventLog.append(newline);
 					
-					System.out.println("Finished printing to the log");
+					//System.out.println("Finished printing to the log");
 					
 					break;
 				case "rule":

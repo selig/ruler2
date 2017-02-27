@@ -79,6 +79,7 @@ public class ActiveRuleSet {
 	}
 
 	public ArrayList<RuleActivation> findMatchingRule(int[] sharedParamIndex, int ruleNameID, Map<Integer, ParameterBinding> parameterValues) {
+
 		ArrayList<RuleActivation> TempArray = new ArrayList<RuleActivation>();
 		activations : for(RuleActivation ruleActivation : ruleActivations.values() ){
 			if(ruleActivation.getRule().getRuleNameID() == ruleNameID){
@@ -93,7 +94,10 @@ public class ActiveRuleSet {
 			}
 		}
 		return TempArray;
+		
 	}
+	
+	//public 
 
 	public RuleActivation getRuleActivation(int ruleActivationKey) {
 		return ruleActivations.get(ruleActivationKey);

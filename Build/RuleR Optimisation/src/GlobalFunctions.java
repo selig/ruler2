@@ -60,7 +60,7 @@ public class GlobalFunctions {
 		} else return string;
 	}
 
-	public static Rule getRule(String ruleNameID) {
+	public static Rule getRule(int ruleNameID) {
 		
 		RuleSystem ruleSystem = Interface.ruleSystem;
 		

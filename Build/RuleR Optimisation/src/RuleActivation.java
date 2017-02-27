@@ -134,13 +134,29 @@ public class RuleActivation {
 		return GlobalFunctions.subStringLast(finalValue, 1);
 	}
 	
+	/* Modification:
+	 * change from getting only rule parameters to 
+	 * getting only rule parameters which match with the events for that rule 
+	 * unless that rule does not contain any events
+	 * */
 	public String getOnlyRuleParameters() {
-		int[] ruleIndexes = this.rule.getRuleParameterIndexes();
+		
 		String finalValue = "";
-		for(int index : ruleIndexes) {
-			ParameterBinding paramBinding = parameterBindings.get(index);
-			if(paramBinding != null) {
-				finalValue += paramBinding.getParameterValue()+",";
+		int[] matchRuleIndex = rule.getEventToMachingParameterIndexArray();
+		if(matchRuleIndex != null) {
+			for(int index : matchRuleIndex) {
+				ParameterBinding paramBinding = parameterBindings.get(index);
+				if(paramBinding != null) {
+					finalValue += paramBinding.getParameterValue()+",";
+				}
+			}
+		} else {
+			int[] ruleIndexes = this.rule.getRuleParameterIndexes();
+			for(int index : ruleIndexes) {
+				ParameterBinding paramBinding = parameterBindings.get(index);
+				if(paramBinding != null) {
+					finalValue += paramBinding.getParameterValue()+",";
+				}
 			}
 		}
 		
@@ -176,7 +192,8 @@ public class RuleActivation {
 	}
 
 	public Integer getParameterHashValue() {
-		return GlobalFunctions.hashName(getParameters());
+		//return GlobalFunctions.hashName(getParameters());
+		return GlobalFunctions.hashName(getOnlyRuleParameters());
 	}
 
 	public int getRuleActivationID() {

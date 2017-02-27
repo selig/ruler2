@@ -8,6 +8,7 @@
 /Event.class
 /FileChooser.class
 /GlobalFunctions.class
+/GlobalVariables.class
 /Interface$ActiveRuleSetGUI.class
 /Interface$AddEventGUI$1.class
 /Interface$AddEventGUI$2.class
@@ -27,4 +28,17 @@
 /Interface$RuleSystemGUI.class
 /Interface$Tabbed.class
 /Interface.class
+/Parameter$Operator.class
+/Parameter.class
+/ParameterBinding.class
+/Rule$ExtraModifier.class
+/Rule$Modifier.class
+/Rule.class
+/RuleActivation.class
+/RuleBinding.class
+/RuleSystem.class
 /Update.class
+/Variable.class
+/VariableBinding$Type.class
+/VariableBinding.class
+/VariableNumber.class
