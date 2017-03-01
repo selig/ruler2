@@ -118,12 +118,18 @@ public class Update {
 										
 										Rule theConditionRule = GlobalFunctions.getRule(ruleNameID);
 										
-										Integer[] sharedEventAndConditionRuleParameterIndexes
-											= theConditionRule.getEventToRuleParameterMatching(eventId);
-										
-										//String paramValues = "";
+										/** Indexes Which Determines On Which Parameters
+										 * 	The Rule are Hashed in Active Rule Set
+										 * 	if null, all the variables of the RuleActivation Was used
+										 */
+										int[] ruleMatchingParameterIndexArray
+											= theConditionRule.getRuleMatchingParameterIndexArray();
 										
 										int[] condIndexes = condition.getParameterIndexes();
+										
+										for(int ind : condIndexes) 
+												System.out.println("Condition Indexes - " + ind );
+										
 										
 										//Interface.log("\n" +"        No of Parameter: " + condIndexes.length);
 										

@@ -142,7 +142,7 @@ public class RuleActivation {
 	public String getOnlyRuleParameters() {
 		
 		String finalValue = "";
-		int[] matchRuleIndex = rule.getEventToMachingParameterIndexArray();
+		int[] matchRuleIndex = rule.getRuleMatchingParameterIndexArray();
 		if(matchRuleIndex != null) {
 			for(int index : matchRuleIndex) {
 				ParameterBinding paramBinding = parameterBindings.get(index);

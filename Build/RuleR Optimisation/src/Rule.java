@@ -333,7 +333,7 @@ public class Rule {
 		return eventToMachingParameterIndex;
 	}
 	
-	public int[] getEventToMachingParameterIndexArray() {
+	public int[] getRuleMatchingParameterIndexArray() {
 		return ruleParamIndexShared;
 	}
 
