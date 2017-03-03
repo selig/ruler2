@@ -73,13 +73,13 @@ public class RuleSystem {
 	}
 	
 	public static int getRuleID(String name) {
-		Rule rule = list.get(GlobalFunctions.hashName(name));
+		Rule rule = list.get(GlobalFunctions.hash(name));
 		if(rule == null) return -1;
 		else return rule.getRuleNameID();
 	}
 	
 	public Rule getRule(String name) {
-		int key = GlobalFunctions.hashName(name);
+		int key = GlobalFunctions.hash(name);
 		//System.out.println("Get Rule \EMPTY + name +"\" with hashCode " + key);
 		return list.get(key);
 	}
@@ -206,7 +206,7 @@ public class RuleSystem {
 	}
 
 	private void addEventToRuleMapping(String event, int eventParameters, Integer RuleId) {
-		Integer key = GlobalFunctions.hashName(event+eventParameters);
+		Integer key = GlobalFunctions.hash(event+eventParameters);
 		
 		addEventHashToEventMapping(event+eventParameters,key);
 		

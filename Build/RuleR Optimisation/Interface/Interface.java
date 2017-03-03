@@ -28,7 +28,7 @@ import sun.audio.AudioStream;
  */
 
 public class Interface {
-	private static boolean logOn = true;
+	private static boolean logOn = false;
 	public static File RULE_FILE = null;
 	public static File EVENTS_FILE = null;
 	public static File FOLDER = null;

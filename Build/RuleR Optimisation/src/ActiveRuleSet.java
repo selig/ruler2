@@ -36,7 +36,7 @@ public class ActiveRuleSet {
 	}
 	
 	public boolean activeRuleExist(String RuleName){
-		int key = GlobalFunctions.hashName(RuleName);
+		int key = GlobalFunctions.hash(RuleName);
 		//System.out.println("-------   Find active rule " + RuleName + " " + key);
 		return this.ruleActivations.get(key) != null;
 	}
@@ -97,7 +97,38 @@ public class ActiveRuleSet {
 		
 	}
 	
-	//public 
+	public ArrayList<RuleActivation> findMatchingRules(Rule rule,
+			int[] parameterIndexes, Map<Integer, ParameterBinding> parameterValues) {
+		
+		ArrayList<RuleActivation> TempArray = new ArrayList<RuleActivation>();
+		
+		activations : for(RuleActivation ruleActivation : ruleActivations.values() ){
+			
+			Rule ruleActivationRule = ruleActivation.getRule();
+			int ruleActivationRuleId = ruleActivationRule.getRuleNameID();
+			int conditionRuleId = rule.getRuleNameID();
+			
+			
+			if(ruleActivationRuleId == conditionRuleId){
+				//parameterIndexes = rule.getRuleParameterIndexes();
+				
+				for(int index : parameterIndexes) {
+					String param1 = ruleActivation.getParameterBindingValue(index);
+					ParameterBinding param2Binding = parameterValues.get(index);
+					if(param2Binding != null) {
+						String param2 = param2Binding.getParameterValue();
+						if(!param1.equals(param2)){
+							continue activations;
+						}
+					}
+				}
+				
+				TempArray.add(ruleActivation);
+			}
+		}
+
+		return TempArray;
+	}
 
 	public RuleActivation getRuleActivation(int ruleActivationKey) {
 		return ruleActivations.get(ruleActivationKey);

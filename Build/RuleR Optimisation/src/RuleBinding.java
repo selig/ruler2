@@ -17,7 +17,7 @@ public class RuleBinding {
 	
 	
 	public RuleBinding(String eventName,String[] par, String[] conditions, ArrayList<ConsequentRule> consequentRules) {
-		this.event = GlobalFunctions.hashName(eventName);
+		this.event = GlobalFunctions.hash(eventName);
 		this.eventName = eventName;
 		this.eventParameterStrings = par;
 		this.eventParameters = new HashMap<Integer, Integer>();
@@ -26,7 +26,7 @@ public class RuleBinding {
 	}
 
 	public boolean isThisEvent(String newEventName) {
-		return this.event == GlobalFunctions.hashName(newEventName);
+		return this.event == GlobalFunctions.hash(newEventName);
 	}
 	
 	private String getConsequentRulesString() {

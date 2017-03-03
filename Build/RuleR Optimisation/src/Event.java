@@ -94,13 +94,13 @@ public class Event {
 	}
 
 	public Integer getEventId() {
-		return GlobalFunctions.hashName(getEvent()+getEventParametersSize());
+		return GlobalFunctions.hash(getEvent()+getEventParametersSize());
 	}
 
 	public int getEventParametersHashValue(Integer[] matchingIndexes) {
 		
 		String[] paramArray = getEventParameters(matchingIndexes);
 		String values = GlobalFunctions.getValuesString(paramArray);
-		return GlobalFunctions.hashName(values);
+		return GlobalFunctions.hash(values);
 	}
 }

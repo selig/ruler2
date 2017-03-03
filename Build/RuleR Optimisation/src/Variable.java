@@ -6,7 +6,7 @@ public class Variable {
 	
 	public Variable(String name) {
 		this.name = name;
-		this.key = GlobalFunctions.hashName(name);
+		this.key = GlobalFunctions.hash(name);
 	}
 	
 	public Integer getKey() {

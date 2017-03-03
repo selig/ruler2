@@ -42,7 +42,7 @@ public class Rule {
 		//System.out.println("<< parameters : <<"+ parameter+ ">> size: " +ruleParameterStrings.length);
 		ruleParameters = new HashMap<Integer, Integer>();
 		//System.out.print("Rule Name ID - " + name+ruleParameterStrings.length + " ");
-		ruleNameID = GlobalFunctions.hashName(name+ruleParameterStrings.length);
+		ruleNameID = GlobalFunctions.hash(name+ruleParameterStrings.length);
 		ruleBindings = bindings;
 		ruleVariables = new HashMap<Integer,Variable>();
 		parameters = getParameterArray();
@@ -61,7 +61,7 @@ public class Rule {
 	
 	public boolean containsVariable(String variableName) {
 		
-		Integer key = new Integer(GlobalFunctions.hashName(variableName));
+		Integer key = new Integer(GlobalFunctions.hash(variableName));
 		
 		return ruleVariables.containsKey(key);
 	}
@@ -244,7 +244,7 @@ public class Rule {
 		
 		for(RuleBinding ruleBinding : ruleBindings) {
 			
-			int eventNameID = GlobalFunctions.hashName(ruleBinding.getEventName()+ruleBinding.getNoOfEventParameters());
+			int eventNameID = GlobalFunctions.hash(ruleBinding.getEventName()+ruleBinding.getNoOfEventParameters());
 			
 			StringBuilder allMatchingIndexes = new StringBuilder();
 			
@@ -277,15 +277,18 @@ public class Rule {
 				}
 				
 				if(tempArray == null) {
-					tempArray = tempArray2;
+					tempArray = new int[countRule];
+					for(int i=0;i< countRule;i++) {
+						tempArray[i] = tempArray2[i];
+					}
 				} else {
 					int[] tempArray3 = new int[tempArray.length];
 					int ruleCount = 0;
 					
-					for(Integer ind1 : tempArray) {
-						for(Integer ind2 : tempArray2) {
-							if(ind1 == ind2) {
-								/** We have match*/
+					for(int i=0;i< countRule;i++) {
+						for(Integer ind1 : tempArray) {
+							if(ind1 == tempArray[i]) {
+								/* We have match */
 								tempArray3[ruleCount] = ind1;
 								ruleCount++;
 							}

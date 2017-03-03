@@ -126,7 +126,7 @@ public class Condition {
 	}
 	
 	public int getConditionRuleNameID() {
-		return GlobalFunctions.hashName(this.conditionRuleNameID);
+		return GlobalFunctions.hash(this.conditionRuleNameID);
 	}
 
 	public ConditionType getConditionType() {

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class GlobalFunctions {
 
-	public static int hashName(String ruleName) {
+	public static int hash(String ruleName) {
 		final int prime = 31;
 		final int prime2 = 13;
 		char[] characters = ruleName.toCharArray();

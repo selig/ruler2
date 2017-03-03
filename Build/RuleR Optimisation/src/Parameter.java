@@ -61,12 +61,12 @@ public class Parameter {
 		for(String variableName : splitName){
 			// If array of variables in Rule contains this variable name
 			if(rule.containsVariable(variableName)) {
-				// Assign index as hashName of variable
-				parameterVariables[index] = GlobalFunctions.hashName(variableName);
+				// Assign index as hash of variable
+				parameterVariables[index] = GlobalFunctions.hash(variableName);
 			} else {
 				// Otherwise, create new instance of variable
 				Variable newVariable = createVariableInstance(variableName);
-				// Assign index as hashName of variable
+				// Assign index as hash of variable
 				parameterVariables[index] = newVariable.getKey();
 				// Add variable to the Rule array
 				rule.addVariable(newVariable);
