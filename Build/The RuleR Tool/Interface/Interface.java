@@ -123,7 +123,7 @@ public class Interface {
     }
        
     private void prepareGUI(){
- 	      mainFrame = new JFrame("Java SWING Examples");
+ 	      mainFrame = new JFrame("RuleR Tool - Basic Implementation");
  	      mainFrame.setSize(1000,800);
  	      mainFrame.add(new Tabbed(), BorderLayout.CENTER);
  	      mainFrame.setVisible(true); 

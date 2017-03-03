@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import sun.rmi.server.Activation;
+
 public class ActiveRuleSet {
 	//private final int id;
 	//              RuleID, RuleActivation
@@ -69,13 +71,16 @@ public class ActiveRuleSet {
 	}
 
 	public boolean deleteActivation(RuleActivation activation) {
+		
 		int ruleActivationKey = activation.getRuleActivationID();
-		//System.out.println("Rule Activation key: " + ruleActivationKey); 
-		if(null == ruleActivations.remove(ruleActivationKey)){
-			return false;
-		} else {
-			return true;
-		}
+		
+		int parameterHashValue = activation.getParameterHashValue();
+		
+		int ruleID = activation.getRule().getRuleNameID();
+		
+		boolean result = deleteRuleActivationFromMapping(ruleID,parameterHashValue,ruleActivationKey);
+		
+		return result;
 	}
 
 	public ArrayList<RuleActivation> findMatchingRule(int[] sharedParamIndex, int ruleNameID, Map<Integer, ParameterBinding> parameterValues) {
@@ -163,5 +168,27 @@ public class ActiveRuleSet {
 			return map.get(parameterHash);
 		else 
 			return null;
+	}
+	
+	public boolean deleteRuleActivationFromMapping(int ruleId, int parameterHash, int ruleActivationID) {
+		HashMap<Integer, RuleActivation> map = ruleIDtoRuleActivationMapping.get(ruleId);
+		
+		if(map == null)
+			return false;
+		
+		RuleActivation activation = map.get(parameterHash);
+		
+		if(activation == null)
+			return false;
+		
+		if(activation.getRuleActivationID() != ruleActivationID)
+			return false;
+		
+		map.remove(parameterHash);
+		
+		if(map.size() == 0)
+			ruleIDtoRuleActivationMapping.remove(ruleId);
+		
+		return true;		
 	}
 }

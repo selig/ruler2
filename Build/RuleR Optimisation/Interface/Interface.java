@@ -125,9 +125,10 @@ public class Interface {
     }
        
     private void prepareGUI(){
- 	      mainFrame = new JFrame("Java SWING Examples");
+ 	      mainFrame = new JFrame("RuleR Tool - Optimized");
  	      mainFrame.setSize(1000,800);
  	      mainFrame.add(new Tabbed(), BorderLayout.CENTER);
+ 	      mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  	      mainFrame.setVisible(true); 
  	   }
     
@@ -531,6 +532,8 @@ public class Interface {
 	        super(new GridLayout(1, 1));
 	        
 	        TabbedPane = new JTabbedPane();
+	        TabbedPane.setBackground(Color.darkGray);
+	        TabbedPane.setForeground(Color.white);
 	        ImageIcon icon = null;// = createImageIcon("images/middle.gif");
 	        
 	        panel1 = new AddRules();
@@ -575,17 +578,6 @@ public class Interface {
 	        panel.add(filler);
 	        return panel;
 	    }
-	    
-	    /** Returns an ImageIcon, or null if the path was invalid. */
-	    /*protected static ImageIcon createImageIcon(String path) {
-	        java.net.URL imgURL = Tabbed.class.getResource(path);
-	        if (imgURL != null) {
-	            return new ImageIcon(imgURL);
-	        } else {
-	            System.err.println("Couldn't find file: " + path);
-	            return null;
-	        }
-	    }*/
 	}
 
 	class AddRules extends JPanel {
@@ -593,8 +585,8 @@ public class Interface {
 		private static final long serialVersionUID = 1L;
 
 		public AddRules() {
-			super(new FlowLayout());			
-
+			super(new FlowLayout());
+	        
 			add(new RuleForm());
 			add(new RuleButtons());
 		}
