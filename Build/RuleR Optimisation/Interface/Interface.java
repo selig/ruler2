@@ -35,7 +35,7 @@ public class Interface {
 	public static String TEST_OPTION = null;
 	public static TreeMap<Integer,String> TestResultTable = new TreeMap<Integer, String>();
 	
-	private static int numberOfTestRuns = 1;
+	private static int numberOfTestRuns = 4;
 	
 	private static long startTime = 0;
 	private static long finishTime = 0;
@@ -114,7 +114,12 @@ public class Interface {
     }
     
     public static void main(String[] args){
-         	
+       
+    	/*System.out.println("nh - " + GlobalFunctions.hash("nh") + "\n"
+    			+ "hn - " + GlobalFunctions.hash("hn")  );
+    
+      System.exit(0);*/
+    	
        Interface = new Interface();
        
        ruleSystem = new RuleSystem();
@@ -919,6 +924,8 @@ public class Interface {
 	        	  //File folder = new File("/Users/you/folder/");
 	        	  File[] listOfFiles = folder.listFiles();
 
+	        	  TestResultTable = new TreeMap<Integer, String>();
+	        	  
 	        	  for (File file : listOfFiles) {
 	        	      if (file.isFile()) {
 	        	    	  TEST_OPTION = "CSV";
@@ -1000,7 +1007,7 @@ public class Interface {
 			
 			startTime = System.nanoTime();
 	 			
-	 		for(String[] events : tests){
+	 		tests : for(String[] events : tests){
 	 			
  				eventCount++;
  				
@@ -1010,7 +1017,7 @@ public class Interface {
  				}
 	 				
 	     		for(String event : events) {
-	     			eventLogs += event + ".";
+	     			//eventLogs += event + ".";
 	     			eventsCount++;
 	     			/*if(eventsCount % 100000  == 0) {
 	     				Interface.logNonStatic("Event Count" + eventsCount);
@@ -1022,7 +1029,12 @@ public class Interface {
 					}
 					else {
 						result = false;
-						break;
+						//System.out.println("eventCount: " + eventCount);
+						//System.out.println("event: " + event);
+						/*if(TEST_OPTION.equals("CSV"))
+							break tests;
+						else*/
+							break;
 					} // else
 	     		} // for
 	     		
@@ -1045,7 +1057,7 @@ public class Interface {
 	     			
 		Interface.activeRuleGUI();
 			
-		Interface.logNonStatic("\n***********\n");
+		/*Interface.logNonStatic("\n***********\n");
 		Interface.logNonStatic("*************\n");
 		
 		if(result) {
@@ -1059,36 +1071,37 @@ public class Interface {
 		}
 		
 		Interface.logNonStatic("**  Status : " + result+"\n");
-		Interface.logNonStatic("**  Events Log : " + eventLogs+"\n");
-		Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");
+		//Interface.logNonStatic("**  Events Log : " + eventLogs+"\n");
+		Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");*/
 		long finaltime = ((endTime - startTime) / 1000000);
-		Interface.logNonStatic("**  Total execution time: " + finaltime + "ms\n" );
+		/*Interface.logNonStatic("**  Total execution time: " + finaltime + "ms\n" );
 		Interface.logNonStatic("***********\n");
-		Interface.logNonStatic("***********\n");
+		Interface.logNonStatic("***********\n");*/
 		
 		
 		if (TEST_OPTION.equals("CSV")) {
 			testResults[no] = finaltime;
 			
-			if(numberOfTestRuns == no) {
+			if(numberOfTestRuns == no+1) {
 		 	
-			 	Interface.logNonStatic("___________________________________________________________\n");
+			 	//Interface.logNonStatic("___________________________________________________________\n");
 			 	String text = "";
 			 	long average = 0;
 			 	for(long num : testResults) {
 			 		text += num + ", ";
 			 		average += num;
 			 	}
-			 	Interface.logNonStatic("** events:"+ eventsCount +" **\n");
+			 	/*Interface.logNonStatic("** events:"+ eventsCount +" **\n");
 			 	Interface.logNonStatic("** av: "+ (float)(average/numberOfTestRuns) +","+ text +" **\n");
-			 	Interface.logNonStatic("___________________________________________________________\n");
+			 	Interface.logNonStatic("___________________________________________________________\n");*/
 			 	
 			 	TestResultTable.put(eventsCount,(float)(average/numberOfTestRuns) +","+ text);
 			}
 		}
- 		
- 		tests = null;
- 		eventLog.setText("No Events Left");
+ 		if(no >= numberOfTestRuns) {
+ 			tests = null;
+ 			eventLog.setText("No Events Left");
+ 		}
  		
 	}
 	

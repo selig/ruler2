@@ -4,13 +4,18 @@ import java.util.ArrayList;
 public class GlobalFunctions {
 
 	public static int hash(String ruleName) {
-		final int prime = 31;
-		final int prime2 = 13;
+		final int prime = 911;
+		final int prime2 = 31;
+		final int prime3 = 3571;
 		char[] characters = ruleName.toCharArray();
-		int hashKey = 0;
+		int hashKey = 1;
+		//String hashString = "";
+		int count= 1;
 		for(char character : characters) {
-			hashKey += (int)((character * prime) / prime2);
+			hashKey += (int)(((character * prime3) / prime2) * count);
+			count+=2;
 		}
+		
 		return hashKey;
 	}
 	

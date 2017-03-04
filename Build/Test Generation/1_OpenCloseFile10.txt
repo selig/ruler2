@@ -1,0 +1,10 @@
+open,q
+open,t
+open,b
+open,n
+close,q
+close,b
+close,t
+close,n
+open,j
+open,r

@@ -323,7 +323,13 @@ public class Update {
 		/* Add New Activations */
 		for(RuleActivation activation : tempActivations){
 			Interface.log(NEWLINE +"!! Add New Activation + + " + activation );
-			activeRuleSet.addNewActivation(activation);
+			boolean ruleAdded = activeRuleSet.addNewActivation(activation);
+			
+			/*if(!ruleAdded) {
+				System.out.println(event + " - did not work. Rule not Added");
+				return false;
+			}*/
+			
 		}
 		
 		Interface.log(NEWLINE +"");

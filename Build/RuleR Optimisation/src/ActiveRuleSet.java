@@ -19,18 +19,19 @@ public class ActiveRuleSet {
 		ruleIDtoRuleActivationMapping = new HashMap<Integer,HashMap<Integer, RuleActivation>>();
 	}
 	
-	public void addNewActivation(RuleActivation newRuleActivation){
-		int key = newRuleActivation.getRuleActivationID();
+	public boolean addNewActivation(RuleActivation newRuleActivation){
+		//int key = newRuleActivation.getRuleActivationID();
+		//if(ruleActivations.get(key) == null) {
+			//this.ruleActivations.put(key, newRuleActivation);
+			
+		int ruleId = newRuleActivation.getRule().getRuleNameID();
 		
-		if(ruleActivations.get(key) == null) {
-			this.ruleActivations.put(key, newRuleActivation);
-			
-			int ruleId = newRuleActivation.getRule().getRuleNameID();
-			
-			addRuleIdToRuleIdRuleActivationMapping(ruleId,newRuleActivation);
-			
-			Interface.log("Rule Activated: " + key + " " + newRuleActivation.toString() + "\n");
-		}
+		Interface.log("Rule Activated: " + newRuleActivation.getRuleActivationID() + " " + newRuleActivation.toString() + "\n");
+		
+		return addRuleIdToRuleIdRuleActivationMapping(ruleId,newRuleActivation);
+		
+		
+		//}
 	}
 
 	public RuleActivation[] getArrayOfRuleActivations() {
@@ -139,13 +140,18 @@ public class ActiveRuleSet {
 		return ruleActivations.get(ruleActivationKey);
 	}
 	
-	private void addRuleIdToRuleIdRuleActivationMapping(int ruleId,
+	private boolean addRuleIdToRuleIdRuleActivationMapping(int ruleId,
 			RuleActivation newRuleActivation) {
 		
 		HashMap<Integer, RuleActivation> parameterToActivationMapping;
 		
 		if((parameterToActivationMapping = getRuleIdToRuleActivationMappingMap(ruleId)) != null) {
 			
+			RuleActivation ruleExist;
+			/*if((ruleExist= parameterToActivationMapping.get(newRuleActivation.getParameterHashValue())) != null) {
+				System.out.println("Rule Already exists.. \n" + ruleExist);
+				return false;
+			}*/
 			parameterToActivationMapping.put(newRuleActivation.getParameterHashValue(), newRuleActivation);
 			
 		} else {
@@ -155,6 +161,8 @@ public class ActiveRuleSet {
 			
 			ruleIDtoRuleActivationMapping.put(ruleId, parameterToActivationMapping);
 		}
+		
+		return true;
 	}
 
 	private HashMap<Integer, RuleActivation> getRuleIdToRuleActivationMappingMap(

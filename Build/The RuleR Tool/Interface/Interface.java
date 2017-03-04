@@ -1008,7 +1008,7 @@ public class Interface {
 	 				eventsCount = 0;
 	 				flag = no;
 	 			//}
-	 		for(String[] events : tests){
+	 		test : for(String[] events : tests){
 		        	eventCount++;
 	     		for(String event : events) {
 	     			//eventLogs += event + ".";
@@ -1024,7 +1024,7 @@ public class Interface {
 		 	        	 else {
 		 	        		//System.out.println("false");
 		 	        		result = false;
-		 	        		break;
+		 	        		break test;
 		 	        	 }
 		 	        	 
 		 	        	 Interface.activeRuleGUI();
