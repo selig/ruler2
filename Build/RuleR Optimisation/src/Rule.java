@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 
 public class Rule {
@@ -272,8 +271,14 @@ public class Rule {
 				matchingIndexes = new Integer[strIndex.length];
 				int count= 0;
 				for(String string : strIndex){
-					matchingIndexes[count] = Integer.parseInt(string);
-					count++;
+					if(!string.equals("")) {
+						matchingIndexes[count] = Integer.parseInt(string);
+						count++;
+					}
+				}
+				
+				if(count == 0) {
+					matchingIndexes = new Integer[0];
 				}
 				
 				if(tempArray == null) {

@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import sun.rmi.server.Activation;
-
 public class ActiveRuleSet {
 	//private final int id;
 	//              RuleID, RuleActivation
@@ -20,9 +18,10 @@ public class ActiveRuleSet {
 	}
 	
 	public boolean addNewActivation(RuleActivation newRuleActivation){
-		//int key = newRuleActivation.getRuleActivationID();
-		//if(ruleActivations.get(key) == null) {
-			//this.ruleActivations.put(key, newRuleActivation);
+		int key = newRuleActivation.getRuleActivationID();
+		if(ruleActivations.get(key) == null) {
+			this.ruleActivations.put(key, newRuleActivation);
+		}
 			
 		int ruleId = newRuleActivation.getRule().getRuleNameID();
 		
@@ -63,6 +62,24 @@ public class ActiveRuleSet {
 	       allActivations[index] = "<"+ruleElement.getValue().toString()+">";
 	       index++;
 	    }
+		
+		return allActivations;
+	}
+	
+	public String[] getActivations2() {
+		
+		String[] allActivations = new String[ruleActivations.size()];
+		
+		int count = 0;
+		for(Integer key1 : ruleIDtoRuleActivationMapping.keySet()){
+			HashMap<Integer,RuleActivation> map = ruleIDtoRuleActivationMapping.get(key1);
+			if(map != null) {
+				for(Integer key2 : map.keySet()) {
+					 RuleActivation actRule = map.get(key2);
+					allActivations[count] = "< " + actRule.toString() + " >";
+				}
+			}
+		}
 		
 		return allActivations;
 	}

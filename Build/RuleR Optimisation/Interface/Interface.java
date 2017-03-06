@@ -8,16 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.TreeMap;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
-
-import sun.applet.Main;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -72,6 +64,7 @@ public class Interface {
     private JPanel controlPanel;
     //private JPanel controlPanel2;
     private JPanel controlPanel4;
+    private JPanel controlPanel14;
     private JPanel fieldPanel;
     private JPanel fieldPanel2;
     private JPanel fieldPanel1;
@@ -90,6 +83,7 @@ public class Interface {
     private JTextArea RuleNameArea;
     private JTextArea eventArea;    
     private JTextArea RuleParameterArea;
+    private JComponent panel0;
     private JComponent panel1;
     private JComponent panel2;
     private JComponent panel3;
@@ -130,7 +124,7 @@ public class Interface {
     }
        
     private void prepareGUI(){
- 	      mainFrame = new JFrame("RuleR Tool - Optimized");
+   	      mainFrame = new JFrame("RuleR Tool - Optimized");
  	      mainFrame.setSize(1000,800);
  	      mainFrame.add(new Tabbed(), BorderLayout.CENTER);
  	      mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -142,7 +136,17 @@ public class Interface {
     	activeRuleSet = new ActiveRuleSet();
     	
     	// add Rules
-    	ruleSystem.activateRules(activeRuleSet);
+    	activeRuleSet = ruleSystem.activateRules(activeRuleSet);
+    	
+    	activeRuleGUI();
+    }
+    
+    private void ResetRuleSystem() {
+    	//delete Rule System
+    	ruleSystem = new RuleSystem();
+    	updateRuleSystemGUI();
+    	
+    	ResetActiveRules();
     }
     
 	private void AddRule() {
@@ -249,8 +253,8 @@ public class Interface {
 			ruleSystemInside.add(new RuleString(rule));
 			ruleSystemInside.revalidate();
 			ruleSystemInside.repaint();
-			ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM);
 		}
+		ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM);
 		System.out.println("");
 	}
 	
@@ -260,12 +264,13 @@ public class Interface {
 		activeRuleSetInside.revalidate();
 		activeRuleSetInside.repaint();
 		
-		for(String activation : activeRuleSet.getActivations()) {
+		for(String activation : activeRuleSet.getActivations2()) {
 			activeRuleSetInside.add(new RuleString(activation));
 			activeRuleSetInside.revalidate();
 			activeRuleSetInside.repaint();
-			activeRuleSetGUIHeader.setText(THEREARE + activeRuleSet.getNumberOfActivations() + RULESINACTIVERULESET);
 		}
+		
+		activeRuleSetGUIHeader.setText(THEREARE + activeRuleSet.getNumberOfActivations() + RULESINACTIVERULESET);
 	}
 
 	private String time() {
@@ -541,35 +546,42 @@ public class Interface {
 	        TabbedPane.setForeground(Color.white);
 	        ImageIcon icon = null;// = createImageIcon("images/middle.gif");
 	        
+	        panel0 = new Reset();
+	        TabbedPane.addTab("Reset Tool", icon, panel0,
+	        		"Reset Tool");
+	        TabbedPane.setMnemonicAt(0, KeyEvent.VK_0);
+	        
 	        panel1 = new AddRules();
 	        TabbedPane.addTab("Add Rules", icon, panel1,
 	                "Add Rules");
-	        TabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+	        TabbedPane.setMnemonicAt(1, KeyEvent.VK_1);
 	        
 	        panel2 = new RuleSystemGUI();
 	        TabbedPane.addTab("View Rules", icon, panel2,
 	                "Does twice as much nothing");
-	        TabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
+	        TabbedPane.setMnemonicAt(2, KeyEvent.VK_2);
 	        
 	        panel3 = new ActiveRuleSetGUI();
 	        TabbedPane.addTab("Active Rule Set", icon, panel3,
 	                "Still does nothing");
-	        TabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
+	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_3);
 	        
 	        panel4 = new AddEventGUI();
 	        panel4.setPreferredSize(new Dimension(410, 50));
 	        TabbedPane.addTab("Add Event", icon, panel4,
 	                "Does nothing at all");
-	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
+	        TabbedPane.setMnemonicAt(4, KeyEvent.VK_4);
 	        
 	        panel5 = new LogGUI();
 	        panel5.setPreferredSize(new Dimension(410, 50));
 	        TabbedPane.addTab("Log", icon, panel5,
 	                "Log");
-	        TabbedPane.setMnemonicAt(4, KeyEvent.VK_5);
+	        TabbedPane.setMnemonicAt(5, KeyEvent.VK_5);
 	        
 	        //Add the Tabbed pane to this panel.
 	        add(TabbedPane);
+	        
+	        TabbedPane.setSelectedIndex(1);
 	        
 	        //The following line enables to use scrolling Tabbed.
 	        TabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -583,6 +595,48 @@ public class Interface {
 	        panel.add(filler);
 	        return panel;
 	    }
+	}
+	
+	class Reset extends JPanel {
+		
+		private static final long serialVersionUID = 1L;
+
+		public Reset() {
+			super(new FlowLayout());
+	        
+			//controlPanel4 = new JPanel();
+			
+			JButton resetRS = new JButton("Reset Rule System");
+			resetRS.setActionCommand("resetRS");
+			resetRS.addActionListener(new ActionListener() {
+ 	          public void actionPerformed(ActionEvent e) {
+ 	        	 ResetRuleSystem();
+ 	          }
+			});
+			
+			JButton resetARS = new JButton("Reset Active Rule System");
+			resetARS.setActionCommand("resetARS");
+			resetARS.addActionListener(new ActionListener() {
+ 	          public void actionPerformed(ActionEvent e) {
+ 	        	  ResetActiveRules();
+ 	          }
+			});
+			
+			JButton resetAll = new JButton("Reset All");
+			resetAll.setActionCommand("resetAll");
+			resetAll.addActionListener(new ActionListener() {
+ 	          public void actionPerformed(ActionEvent e) {
+ 	        	  ResetActiveRules();
+ 	        	  ResetRuleSystem();
+ 	          }
+			});
+	 	      
+	 	      	      
+			add(resetAll);
+			add(resetRS);
+	 	    add(resetARS);
+			
+		}
 	}
 
 	class AddRules extends JPanel {
@@ -732,7 +786,7 @@ public class Interface {
 	 	     activateRules.setActionCommand("activate");
 	 	     activateRules.addActionListener(new ActionListener() {
 	 	          public void actionPerformed(ActionEvent e) {
-	 	        	  ruleSystem.activateRules(activeRuleSet);
+	 	        	 activeRuleSet = ruleSystem.activateRules(activeRuleSet);
 	 	          }
 	 	        }); 
 	 	      
@@ -843,10 +897,7 @@ public class Interface {
  	        	 String event = eventArea.getText();
  	        	 
  	        	 System.out.println("Event: " + event);
- 	        	 
- 	        	 /*String eventName = event.split("(")[0];
- 	        	 String[] eventParameters = event.replaceAll(")", "").split("(")[1].split(",");
- 	        	 */
+ 	        	
  	        	 if(Update.update(new Event(event)))
  	        		Interface.success("True");
  	        	 else
@@ -930,6 +981,9 @@ public class Interface {
 	        	      if (file.isFile()) {
 	        	    	  TEST_OPTION = "CSV";
 	        	          System.out.println(file.getName());
+	        	          Interface.logNonStatic("\n-----------------------\n");
+	        	          Interface.logNonStatic("File: " + file.getName());
+	        	          Interface.logNonStatic("\n-----------------------\n");
 	        	          tests = readLine(file);
 	        	          TestRun();
 	        	      }
@@ -1057,7 +1111,7 @@ public class Interface {
 	     			
 		Interface.activeRuleGUI();
 			
-		/*Interface.logNonStatic("\n***********\n");
+		Interface.logNonStatic("\n***********\n");
 		Interface.logNonStatic("*************\n");
 		
 		if(result) {
@@ -1072,11 +1126,11 @@ public class Interface {
 		
 		Interface.logNonStatic("**  Status : " + result+"\n");
 		//Interface.logNonStatic("**  Events Log : " + eventLogs+"\n");
-		Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");*/
+		Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");
 		long finaltime = ((endTime - startTime) / 1000000);
-		/*Interface.logNonStatic("**  Total execution time: " + finaltime + "ms\n" );
+		Interface.logNonStatic("**  Total execution time: " + finaltime + "ms\n" );
 		Interface.logNonStatic("***********\n");
-		Interface.logNonStatic("***********\n");*/
+		Interface.logNonStatic("***********\n");
 		
 		
 		if (TEST_OPTION.equals("CSV")) {

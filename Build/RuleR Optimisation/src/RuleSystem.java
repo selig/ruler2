@@ -15,7 +15,6 @@ public class RuleSystem {
 	private static HashMap<Integer,ArrayList<Integer>> eventToRuleMapping;
 	private static HashMap<Integer,String> eventHashToEventMapping;
 	
-	
 	public RuleSystem() {
 		list = new HashMap<Integer,Rule>();
 		assertList = new HashMap<Integer,Rule>();
@@ -104,7 +103,7 @@ public class RuleSystem {
 		return list.size();
 	}
 	
-	public void activateRules(ActiveRuleSet activeRuleSet) {
+	public ActiveRuleSet activateRules(ActiveRuleSet activeRuleSet) {
 			boolean startRuleFound = false;
 			for(Rule rule : list.values()){
 				if(rule.getRuleModifier() == Rule.Modifier.Always || rule.getExtraModifier()== Rule.ExtraModifier.Start){
@@ -114,12 +113,18 @@ public class RuleSystem {
 			}	
 			if(!startRuleFound) {
 				Rule rule = getFirstRule();
-				activeRuleSet.addNewActivation(new RuleActivation(rule, EMPTY));
+				if(rule != null)
+					activeRuleSet.addNewActivation(new RuleActivation(rule, EMPTY));
 			}
+			
+			return activeRuleSet;
 	}
 	
 	private Rule getFirstRule() {
-		return (Rule) list.values().toArray()[0];
+		if(list.size() > 0)
+			return (Rule) list.values().toArray()[0];
+		else
+			return null;
 	}
 
 	public void addPredifinedRules(String RuleString) {
@@ -263,7 +268,8 @@ public class RuleSystem {
 				String eventName = getEventHashToEventMapping(key);
 				System.out.print("    " + eventName + "[");
 				Integer[] indexes = eventToRule.get(key);
-				
+				if(indexes == null)
+					continue;
 				for(int index : indexes) {
 					System.out.print(index +",");
 				}
