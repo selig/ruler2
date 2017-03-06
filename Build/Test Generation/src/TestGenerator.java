@@ -20,10 +20,10 @@ public class TestGenerator {
 	
 	public static void main(String[] args) {
 		  
-		numberOfEvents = 51200;  
-		worstCase = false;
+		numberOfEvents = 6400;  
+		worstCase = true;
 		System.out.println("Start");
-		for(int i = 0;i<1;i++) {
+		for(int i = 0;i<4;i++) {
 			eventCount = 0;	  
 			
 			File output = new File((i+1)+"_" + "2OpenCloseFile" +(numberOfEvents)+ ".txt");
