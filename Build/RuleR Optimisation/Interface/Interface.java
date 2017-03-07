@@ -20,14 +20,14 @@ import sun.audio.AudioStream;
  */
 
 public class Interface {
-	private static boolean logOn = false;
+	private static boolean logOn = true;
 	public static File RULE_FILE = null;
 	public static File EVENTS_FILE = null;
 	public static File FOLDER = null;
 	public static String TEST_OPTION = null;
 	public static TreeMap<Integer,String> TestResultTable = new TreeMap<Integer, String>();
 	
-	private static int numberOfTestRuns = 4;
+	private static int numberOfTestRuns = 1;
 	
 	private static long startTime = 0;
 	private static long finishTime = 0;
@@ -264,7 +264,9 @@ public class Interface {
 		activeRuleSetInside.revalidate();
 		activeRuleSetInside.repaint();
 		
-		for(String activation : activeRuleSet.getActivations2()) {
+		String[] activeRuleSetArray = activeRuleSet.getActivations2();
+		
+		for(String activation : activeRuleSetArray) {
 			activeRuleSetInside.add(new RuleString(activation));
 			activeRuleSetInside.revalidate();
 			activeRuleSetInside.repaint();
@@ -789,12 +791,19 @@ public class Interface {
 	 	        	 activeRuleSet = ruleSystem.activateRules(activeRuleSet);
 	 	          }
 	 	        }); 
+	 	    JButton saveRules = new JButton("Save Rules");
+	 	    saveRules.setActionCommand("saveRule");
+	 	    saveRules.addActionListener(new ActionListener() {
+	 	          public void actionPerformed(ActionEvent e) {
+	 	          }
+	 	        }); 
 	 	      
 	 	      //controlPanel4.add(newEventButton);
 	 	      controlPanel4.add(new FileChooser("rule"));
 	 	      controlPanel4.add(new JLabel(" OR ",JLabel.LEFT));
 	 	      controlPanel4.add(addButton);
 	 	      controlPanel4.add(activateRules);
+	 	      controlPanel4.add(saveRules);
 	 	      
 	 	      controlPanel4.setPreferredSize(new Dimension(1000, 100));
 	 	      
@@ -941,7 +950,7 @@ public class Interface {
  	        	//System.out.println("Run File");
  	        	 if(tests != null && tests.size() > 0){
  	        		 
- 	        		TabbedPane.setSelectedIndex(4);
+ 	        		TabbedPane.setSelectedIndex(5);
 
  	 	        	//System.out.println("Button pressed. Runing");
  	 	        	

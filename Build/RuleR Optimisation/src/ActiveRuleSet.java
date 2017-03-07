@@ -77,6 +77,7 @@ public class ActiveRuleSet {
 				for(Integer key2 : map.keySet()) {
 					 RuleActivation actRule = map.get(key2);
 					allActivations[count] = "< " + actRule.toString() + " >";
+					count++;
 				}
 			}
 		}

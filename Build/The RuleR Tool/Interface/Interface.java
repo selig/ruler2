@@ -27,7 +27,7 @@ import sun.audio.AudioStream;
  */
 
 public class Interface {
-	private static boolean logOn = false;
+	private static boolean logOn = true;
 	public static File RULE_FILE = null;
 	public static File EVENTS_FILE = null;
 	public static File FOLDER = null;
@@ -1024,7 +1024,7 @@ public class Interface {
 		 	        	 else {
 		 	        		//System.out.println("false");
 		 	        		result = false;
-		 	        		break test;
+		 	        		break;
 		 	        	 }
 		 	        	 
 		 	        	 Interface.activeRuleGUI();
