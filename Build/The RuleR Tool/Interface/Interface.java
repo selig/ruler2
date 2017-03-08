@@ -8,18 +8,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.TreeMap;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
-
-import sun.applet.Main;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
+
 /**
  * Basic implementation
  * 
@@ -88,6 +81,7 @@ public class Interface {
     private JTextArea RuleNameArea;
     private JTextArea eventArea;    
     private JTextArea RuleParameterArea;
+    private JComponent panel0;
     private JComponent panel1;
     private JComponent panel2;
     private JComponent panel3;
@@ -135,6 +129,8 @@ public class Interface {
     	
     	// add Rules
     	ruleSystem.activateRules(activeRuleSet);
+    	
+    	activeRuleGUI();
     }
     
 	private void AddRule() {
@@ -241,9 +237,18 @@ public class Interface {
 			ruleSystemInside.add(new RuleString(rule));
 			ruleSystemInside.revalidate();
 			ruleSystemInside.repaint();
-			ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM);
 		}
+
+		ruleSystemGUIHeader.setText(THEREARE + ruleSystem.getNumberOfRules() + RULESINRULESYSTEM);
 	}
+	
+	 private void ResetRuleSystem() {
+	    	//delete Rule System
+	    	ruleSystem = new RuleSystem();
+	    	updateRuleSystemGUI();
+	    	
+	    	ResetActiveRules();
+	    }
 	
 	public void activeRuleGUI(){
 		
@@ -255,8 +260,9 @@ public class Interface {
 			activeRuleSetInside.add(new RuleString(activation));
 			activeRuleSetInside.revalidate();
 			activeRuleSetInside.repaint();
-			activeRuleSetGUIHeader.setText(THEREARE + activeRuleSet.getNumberOfActivations() + RULESINACTIVERULESET);
 		}
+		
+		activeRuleSetGUIHeader.setText(THEREARE + activeRuleSet.getNumberOfActivations() + RULESINACTIVERULESET);
 	}
 
 	private String time() {
@@ -530,35 +536,42 @@ public class Interface {
 	        TabbedPane = new JTabbedPane();
 	        ImageIcon icon = null;// = createImageIcon("images/middle.gif");
 	        
+	        panel0 = new Reset();
+	        TabbedPane.addTab("Reset Tool", icon, panel0,
+	        		"Reset Tool");
+	        TabbedPane.setMnemonicAt(0, KeyEvent.VK_0);
+	        
 	        panel1 = new AddRules();
 	        TabbedPane.addTab("Add Rules", icon, panel1,
 	                "Add Rules");
-	        TabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+	        TabbedPane.setMnemonicAt(1, KeyEvent.VK_1);
 	        
 	        panel2 = new RuleSystemGUI();
 	        TabbedPane.addTab("View Rules", icon, panel2,
 	                "Does twice as much nothing");
-	        TabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
+	        TabbedPane.setMnemonicAt(2, KeyEvent.VK_2);
 	        
 	        panel3 = new ActiveRuleSetGUI();
 	        TabbedPane.addTab("Active Rule Set", icon, panel3,
 	                "Still does nothing");
-	        TabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
+	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_3);
 	        
 	        panel4 = new AddEventGUI();
 	        panel4.setPreferredSize(new Dimension(410, 50));
 	        TabbedPane.addTab("Add Event", icon, panel4,
 	                "Does nothing at all");
-	        TabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
+	        TabbedPane.setMnemonicAt(4, KeyEvent.VK_4);
 	        
 	        panel5 = new LogGUI();
 	        panel5.setPreferredSize(new Dimension(410, 50));
 	        TabbedPane.addTab("Log", icon, panel5,
 	                "Log");
-	        TabbedPane.setMnemonicAt(4, KeyEvent.VK_5);
+	        TabbedPane.setMnemonicAt(5, KeyEvent.VK_5);
 	        
 	        //Add the Tabbed pane to this panel.
 	        add(TabbedPane);
+
+	        TabbedPane.setSelectedIndex(1);
 	        
 	        //The following line enables to use scrolling Tabbed.
 	        TabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -583,6 +596,48 @@ public class Interface {
 	            return null;
 	        }
 	    }*/
+	}
+	
+class Reset extends JPanel {
+		
+		private static final long serialVersionUID = 1L;
+
+		public Reset() {
+			super(new FlowLayout());
+	        
+			//controlPanel4 = new JPanel();
+			
+			JButton resetRS = new JButton("Reset Rule System");
+			resetRS.setActionCommand("resetRS");
+			resetRS.addActionListener(new ActionListener() {
+ 	          public void actionPerformed(ActionEvent e) {
+ 	        	 ResetRuleSystem();
+ 	          }
+			});
+			
+			JButton resetARS = new JButton("Reset Active Rule System");
+			resetARS.setActionCommand("resetARS");
+			resetARS.addActionListener(new ActionListener() {
+ 	          public void actionPerformed(ActionEvent e) {
+ 	        	  ResetActiveRules();
+ 	          }
+			});
+			
+			JButton resetAll = new JButton("Reset All");
+			resetAll.setActionCommand("resetAll");
+			resetAll.addActionListener(new ActionListener() {
+ 	          public void actionPerformed(ActionEvent e) {
+ 	        	  ResetActiveRules();
+ 	        	  ResetRuleSystem();
+ 	          }
+			});
+	 	      
+	 	      	      
+			add(resetAll);
+			add(resetRS);
+	 	    add(resetARS);
+			
+		}
 	}
 
 	class AddRules extends JPanel {
@@ -735,12 +790,19 @@ public class Interface {
 	 	        	  ruleSystem.activateRules(activeRuleSet);
 	 	          }
 	 	        }); 
+	 	    JButton saveRules = new JButton("Save Rules");
+	 	    saveRules.setActionCommand("saveRule");
+	 	    saveRules.addActionListener(new ActionListener() {
+	 	          public void actionPerformed(ActionEvent e) {
+	 	          }
+	 	        }); 
 	 	      
 	 	      //controlPanel4.add(newEventButton);
 	 	      controlPanel4.add(new FileChooser("rule"));
 	 	      controlPanel4.add(new JLabel(" OR ",JLabel.LEFT));
 	 	      controlPanel4.add(addButton);
 	 	      controlPanel4.add(activateRules);
+	 	      controlPanel4.add(saveRules);
 	 	      
 	 	      controlPanel4.setPreferredSize(new Dimension(1000, 100));
 	 	      
@@ -890,7 +952,7 @@ public class Interface {
  	        	 System.out.println("Run File");
  	        	 if(tests != null && tests.size() > 0){
  	        		 
- 	        		TabbedPane.setSelectedIndex(4);
+ 	        		TabbedPane.setSelectedIndex(5);
 
  	 	        	System.out.println("Button pressed. Runing");
  	 	        	

@@ -1161,7 +1161,7 @@ public class Interface {
 			 	TestResultTable.put(eventsCount,(float)(average/numberOfTestRuns) +","+ text);
 			}
 		}
- 		if(no >= numberOfTestRuns) {
+ 		if(no+1 >= numberOfTestRuns) {
  			tests = null;
  			eventLog.setText("No Events Left");
  		}

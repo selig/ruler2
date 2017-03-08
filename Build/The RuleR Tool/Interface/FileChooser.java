@@ -28,9 +28,9 @@ public class FileChooser extends JPanel
 		fc = new JFileChooser();
 
 		if(type.equals("rule"))
-			fc.setCurrentDirectory(new java.io.File("../Rules&Traces/Rule Systems/."));
+			fc.setCurrentDirectory(new java.io.File("../../Rules&Traces/Rule Systems/."));
 		else
-			fc.setCurrentDirectory(new java.io.File("../Rules&Traces/Traces/."));
+			fc.setCurrentDirectory(new java.io.File("../../Rules&Traces/Traces/."));
 		
 		openButton = new JButton("Import a File...");
 		

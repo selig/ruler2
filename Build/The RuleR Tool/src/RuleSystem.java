@@ -87,22 +87,28 @@ public class RuleSystem {
 		return list.size();
 	}
 	
-	public void activateRules(ActiveRuleSet activeRuleSet) {
-			boolean startRuleFound = false;
-			for(Rule rule : list.values()){
-				if(rule.getRuleModifier() == Rule.Modifier.Always || rule.getExtraModifier()== Rule.ExtraModifier.Start){
-					startRuleFound = true;
-					activeRuleSet.addNewActivation(new RuleActivation(rule, ""));
-				}
-			}	
-			if(!startRuleFound) {
-				Rule rule = getFirstRule();
+	public ActiveRuleSet activateRules(ActiveRuleSet activeRuleSet) {
+		boolean startRuleFound = false;
+		for(Rule rule : list.values()){
+			if(rule.getRuleModifier() == Rule.Modifier.Always || rule.getExtraModifier()== Rule.ExtraModifier.Start){
+				startRuleFound = true;
 				activeRuleSet.addNewActivation(new RuleActivation(rule, ""));
 			}
-	}
+		}	
+		if(!startRuleFound) {
+			Rule rule = getFirstRule();
+			if(rule != null)
+				activeRuleSet.addNewActivation(new RuleActivation(rule, ""));
+		}
+		
+		return activeRuleSet;
+}
 	
 	private Rule getFirstRule() {
-		return (Rule) list.values().toArray()[0];
+		if(list.size() > 0)
+			return (Rule) list.values().toArray()[0];
+		else
+			return null;
 	}
 
 	public void addPredifinedRules(String RuleString) {
