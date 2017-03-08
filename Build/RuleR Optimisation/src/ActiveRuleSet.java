@@ -10,11 +10,13 @@ public class ActiveRuleSet {
 	//              RuleID, RuleActivation
 	private HashMap<Integer,RuleActivation> ruleActivations;
 	private HashMap<Integer,HashMap<Integer, RuleActivation>> ruleIDtoRuleActivationMapping;
+	private int activeRuleCount;
 	
 	public ActiveRuleSet() {
 		//this.id = GlobalVariables.getNextActiveRuleSetID();
 		this.ruleActivations = new HashMap<Integer,RuleActivation>();
 		ruleIDtoRuleActivationMapping = new HashMap<Integer,HashMap<Integer, RuleActivation>>();
+		activeRuleCount = 0;
 	}
 	
 	public boolean addNewActivation(RuleActivation newRuleActivation){
@@ -27,9 +29,12 @@ public class ActiveRuleSet {
 		
 		Interface.log("Rule Activated: " + newRuleActivation.getRuleActivationID() + " " + newRuleActivation.toString() + "\n");
 		
-		return addRuleIdToRuleIdRuleActivationMapping(ruleId,newRuleActivation);
+		boolean result = addRuleIdToRuleIdRuleActivationMapping(ruleId,newRuleActivation);
 		
+		if(result)
+			activeRuleCount++;
 		
+		return result;
 		//}
 	}
 
@@ -86,7 +91,8 @@ public class ActiveRuleSet {
 	}
 
 	public int getNumberOfActivations() {
-		return ruleActivations.size();
+		return activeRuleCount;
+		//return ruleActivations.size();
 	}
 
 	public boolean deleteActivation(RuleActivation activation) {
@@ -98,6 +104,9 @@ public class ActiveRuleSet {
 		int ruleID = activation.getRule().getRuleNameID();
 		
 		boolean result = deleteRuleActivationFromMapping(ruleID,parameterHashValue,ruleActivationKey);
+		
+		if(result)
+			activeRuleCount--;
 		
 		return result;
 	}
