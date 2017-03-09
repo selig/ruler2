@@ -789,6 +789,8 @@ public class Interface {
 	 	     activateRules.addActionListener(new ActionListener() {
 	 	          public void actionPerformed(ActionEvent e) {
 	 	        	 activeRuleSet = ruleSystem.activateRules(activeRuleSet);
+	 	        	activeRuleGUI();
+	 	        	
 	 	          }
 	 	        }); 
 	 	    JButton saveRules = new JButton("Save Rules");

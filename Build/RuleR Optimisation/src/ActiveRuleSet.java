@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 public class ActiveRuleSet {
-	//private final int id;
-	//              RuleID, RuleActivation
 	private HashMap<Integer,RuleActivation> ruleActivations;
 	private HashMap<Integer,HashMap<Integer, RuleActivation>> ruleIDtoRuleActivationMapping;
 	private int activeRuleCount;
@@ -174,12 +172,25 @@ public class ActiveRuleSet {
 		
 		if((parameterToActivationMapping = getRuleIdToRuleActivationMappingMap(ruleId)) != null) {
 			
+			Integer parameterHashValue = newRuleActivation.getParameterHashValue();
+			
 			RuleActivation ruleExist;
-			/*if((ruleExist= parameterToActivationMapping.get(newRuleActivation.getParameterHashValue())) != null) {
+			if((ruleExist= parameterToActivationMapping.get(parameterHashValue)) != null) {
+				/* Hash Clash Solving */
 				System.out.println("Rule Already exists.. \n" + ruleExist);
-				return false;
-			}*/
-			parameterToActivationMapping.put(newRuleActivation.getParameterHashValue(), newRuleActivation);
+				while(!isSame(ruleExist,newRuleActivation)) {
+					/* rehash (Double) Hash */
+					int newHashValue = GlobalFunctions.hash(parameterHashValue+"");
+					
+					if((ruleExist= parameterToActivationMapping.get(newHashValue)) == null){
+						parameterToActivationMapping.put(newHashValue, newRuleActivation);
+						break;
+					}
+				}
+				
+			} else {
+				parameterToActivationMapping.put(parameterHashValue, newRuleActivation);
+			}
 			
 		} else {
 			parameterToActivationMapping = new HashMap<Integer, RuleActivation>();
@@ -189,6 +200,32 @@ public class ActiveRuleSet {
 			ruleIDtoRuleActivationMapping.put(ruleId, parameterToActivationMapping);
 		}
 		
+		return true;
+	}
+
+	private boolean isSame(RuleActivation ruleExist,
+			RuleActivation newRuleActivation) {
+		
+		Map<Integer, ParameterBinding> parameters = ruleExist.getParameterBindings();
+		Map<Integer, ParameterBinding> parameters2 = newRuleActivation.getParameterBindings();
+		
+		boolean parameterMatch;
+		
+		for(Integer key : parameters.keySet()){
+			parameterMatch = false;
+			for(Integer key2 : parameters2.keySet()) {
+				String paramValue1 = parameters.get(key).getParameterValue();
+				String paramValue2 = parameters2.get(key2).getParameterValue();
+				
+				if(paramValue1.equals(paramValue2)) {
+					parameterMatch = true;
+					break;
+				}
+			}
+			if(!parameterMatch) {
+				return false;
+			}
+		}
 		return true;
 	}
 

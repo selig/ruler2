@@ -38,13 +38,13 @@ public class Interface {
 	private static final String RULESINRULESYSTEM = " rules in Rule System";
 	private static final String RULESINACTIVERULESET = " Active Rules in Active Rule Set";
 	
-	private static String RULE_NAME = "";
-	private static String RULE_PARAM = "";
-	private static String EVENT_NAME = "";
+	private static String RULE_NAME = "Open";
+	private static String RULE_PARAM = "file";
+	private static String EVENT_NAME = "open";
 	private static String EVENT_CONDITION = "";
-	private static String EVENT_PARAMETERS = "";
-	private static String CONSEQUENT_NAME = "";
-	private static String CONSEQUENT_PARAM = "";
+	private static String EVENT_PARAMETERS = "file";
+	private static String CONSEQUENT_NAME = "isOpen";
+	private static String CONSEQUENT_PARAM = "file";
 	
 	public static RuleSystem ruleSystem;
 	public static ActiveRuleSet activeRuleSet;
@@ -787,7 +787,8 @@ class Reset extends JPanel {
 	 	     activateRules.setActionCommand("activate");
 	 	     activateRules.addActionListener(new ActionListener() {
 	 	          public void actionPerformed(ActionEvent e) {
-	 	        	  ruleSystem.activateRules(activeRuleSet);
+	 	        	 activeRuleSet = ruleSystem.activateRules(activeRuleSet);
+	 	        	activeRuleGUI();
 	 	          }
 	 	        }); 
 	 	    JButton saveRules = new JButton("Save Rules");
