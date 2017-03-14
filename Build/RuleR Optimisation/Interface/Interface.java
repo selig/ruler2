@@ -1094,11 +1094,11 @@ public class Interface {
 					}
 					else {
 						result = false;
-						//System.out.println("eventCount: " + eventCount);
-						//System.out.println("event: " + event);
-						/*if(TEST_OPTION.equals("CSV"))
+						System.out.println("eventCount: " + eventCount);
+						System.out.println("event: " + event);
+						if(TEST_OPTION.equals("CSV"))
 							break tests;
-						else*/
+						else
 							break;
 					} // else
 	     		} // for

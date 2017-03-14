@@ -101,7 +101,7 @@ public class ActiveRuleSet {
 		
 		int ruleID = activation.getRule().getRuleNameID();
 		
-		boolean result = deleteRuleActivationFromMapping(ruleID,parameterHashValue,ruleActivationKey);
+		boolean result = deleteRuleActivationFromMapping(ruleID,parameterHashValue,ruleActivationKey,activation);
 		
 		if(result)
 			activeRuleCount--;
@@ -177,13 +177,16 @@ public class ActiveRuleSet {
 			RuleActivation ruleExist;
 			if((ruleExist= parameterToActivationMapping.get(parameterHashValue)) != null) {
 				/* Hash Clash Solving */
-				System.out.println("Rule Already exists.. \n" + ruleExist);
+				System.out.println("Rule Already exists.. " + ruleExist + " hash : " + parameterHashValue);
+				System.out.print("Rule New.. " + newRuleActivation);
+
 				while(!isSame(ruleExist,newRuleActivation)) {
 					/* rehash (Double) Hash */
 					int newHashValue = GlobalFunctions.hash(parameterHashValue+"");
 					
 					if((ruleExist= parameterToActivationMapping.get(newHashValue)) == null){
 						parameterToActivationMapping.put(newHashValue, newRuleActivation);
+						System.out.println(" But new Hash Found - " + newHashValue + "\n");
 						break;
 					}
 				}
@@ -205,6 +208,9 @@ public class ActiveRuleSet {
 
 	private boolean isSame(RuleActivation ruleExist,
 			RuleActivation newRuleActivation) {
+		
+		if(ruleExist == null || newRuleActivation == null)
+			return false;
 		
 		Map<Integer, ParameterBinding> parameters = ruleExist.getParameterBindings();
 		Map<Integer, ParameterBinding> parameters2 = newRuleActivation.getParameterBindings();
@@ -234,27 +240,52 @@ public class ActiveRuleSet {
 		return ruleIDtoRuleActivationMapping.get(ruleId);
 	}
 
-	public RuleActivation getRuleActivationFromMapping(int ruleId, int parameterHash) {
+	public RuleActivation getRuleActivationFromMapping(int ruleId, int parameterHash, String[] parameterValues, int eventID) {
 		HashMap<Integer, RuleActivation> map = ruleIDtoRuleActivationMapping.get(ruleId);
-		if(map != null)
-			return map.get(parameterHash);
+		if(map != null) {
+			RuleActivation ruleActivation = null;
+			boolean activationFound = false;
+			int count =0;
+			do {
+				ruleActivation = map.get(parameterHash);
+				
+				if(ruleActivation != null) {				
+					if(ruleActivation.match(parameterValues,eventID)) {
+						activationFound = true;
+					}
+				}
+				/** Double hash */
+				parameterHash = GlobalFunctions.hash(parameterHash+"");
+				
+				count++;
+			} while(!activationFound && count < 100 );
+			return ruleActivation;
+		}
 		else 
 			return null;
 	}
 	
-	public boolean deleteRuleActivationFromMapping(int ruleId, int parameterHash, int ruleActivationID) {
+	public boolean deleteRuleActivationFromMapping(int ruleId, int parameterHash, int ruleActivationID, RuleActivation activationToDelete) {
 		HashMap<Integer, RuleActivation> map = ruleIDtoRuleActivationMapping.get(ruleId);
 		
 		if(map == null)
 			return false;
 		
-		RuleActivation activation = map.get(parameterHash);
+		RuleActivation activation;
 		
-		if(activation == null)
-			return false;
-		
-		if(activation.getRuleActivationID() != ruleActivationID)
-			return false;
+		do{
+			
+			activation = map.get(parameterHash);
+			
+			if(activation == null)
+				return false;
+			
+			if(!isSame(activation,activationToDelete))
+				parameterHash = GlobalFunctions.hash(parameterHash+"");
+			else
+				break;
+		}
+		while(true);
 		
 		map.remove(parameterHash);
 		

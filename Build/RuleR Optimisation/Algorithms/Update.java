@@ -53,8 +53,11 @@ public class Update {
 				/* Get Trace Matching Parameter Hash Value */
 				int eventParameterHashValue = event.getEventParametersHashValue(matchingIndexes);
 				
+				/* Get Trace Matching Parameter Values */
+				String[] eventParameters= event.getEventParameters(matchingIndexes);
+				
 				/* Get Active Rule if Exists */
-				RuleActivation activation = activeRuleSet.getRuleActivationFromMapping(ruleID, eventParameterHashValue);
+				RuleActivation activation = activeRuleSet.getRuleActivationFromMapping(ruleID, eventParameterHashValue, eventParameters, eventId);
 				
 				if(activation == null)
 					continue ruleIdsLoop;
@@ -172,12 +175,14 @@ public class Update {
 										
 										/** Simple Case: just make look up by hashing all the parameters*/
 										if(allKnown) {
+											Interface.log(NEWLINE +"          All Parameters Known");
+											
 											/* Get rid of the comma in the end */
 											String paramValues = GlobalFunctions.subStringLast(values.toString(),1);
 											/* Get parameter hash value */
 											int parameterHash = GlobalFunctions.hash(paramValues);
 											/* Find The rule */
-											RuleActivation activeRule = activeRuleSet.getRuleActivationFromMapping(ruleNameID, parameterHash);
+											RuleActivation activeRule = activeRuleSet.getRuleActivationFromMapping(ruleNameID, parameterHash, paramValues.split(COMMA),0);
 											/* Decision */
 											existanceOfRule = !(activeRule == null);
 										}
@@ -185,6 +190,7 @@ public class Update {
 										 *  Run through the Rule Activations
 										 */
 										else {
+											Interface.log(NEWLINE +"          Not All Parameters Known");
 											
 											matchingRules = activeRuleSet.findMatchingRules(theConditionRule,condIndexes,parameterValues);
 											
@@ -325,10 +331,10 @@ public class Update {
 			Interface.log(NEWLINE +"!! Add New Activation + + " + activation );
 			boolean ruleAdded = activeRuleSet.addNewActivation(activation);
 			
-			/*if(!ruleAdded) {
+			if(!ruleAdded) {
 				System.out.println(event + " - did not work. Rule not Added");
 				return false;
-			}*/
+			}
 			
 		}
 		

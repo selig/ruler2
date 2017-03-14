@@ -18,7 +18,7 @@ public class Rule {
 	private final Modifier ruleModifier;
 	private final Parameter[] parameters;
 	private HashMap<Integer, Variable> ruleVariables;
-	private int[] ruleParameterIndexes;
+	private Integer[] ruleParameterIndexes;
 	private Map<Integer, Integer> ruleParameters;
 	private String[] ruleParameterStrings;
 	private ArrayList<RuleBinding> ruleBindings;
@@ -130,7 +130,7 @@ public class Rule {
 			tempParamArray[i] = parameters.get(i);
 		}
 		
-		ruleParameterIndexes = new int[ruleParameterStrings.length];
+		ruleParameterIndexes = new Integer[ruleParameterStrings.length];
 		
 		//System.out.println("<< " + ruleParameterIndexes.length + " >>");
 		
@@ -213,7 +213,7 @@ public class Rule {
 		return ruleName;
 	}
 	
-	public int[] getRuleParameterIndexes() {
+	public Integer[] getRuleParameterIndexes() {
 		return ruleParameterIndexes;
 	}
 	

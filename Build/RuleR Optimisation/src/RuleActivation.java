@@ -21,7 +21,7 @@ public class RuleActivation {
 		this.parameterBindings = getParameterBindingSet(newRuleName,parameters);
 		String parameterValues = getOnlyRuleParameters();
 		this.parameterHashValue = GlobalFunctions.hash(parameterValues);
-		this.ruleActivationID = GlobalFunctions.hash(this.rule.getRuleNameID() + parameterValues);
+		this.ruleActivationID = GlobalFunctions.hash(this.rule.getRuleNameID() +parameterValues);
 	}
 	
 	public RuleActivation(String ruleName, Map<Integer,ParameterBinding> parameters, int[] consequentIndexes) {
@@ -60,7 +60,7 @@ public class RuleActivation {
 		Map<Integer,ParameterBinding> tempSet = new HashMap<Integer,ParameterBinding>();
 		
 		// Get parameter Array of the rule
-		int[] parameterIndexes = rule.getRuleParameterIndexes();
+		Integer[] parameterIndexes = rule.getRuleParameterIndexes();
 		
 		// Create Array from passed Parameters
 		String[] parametersArray = parameters.split(",");
@@ -90,7 +90,7 @@ public class RuleActivation {
 		Map<Integer,ParameterBinding> tempSet = new HashMap<Integer,ParameterBinding>();
 		
 		// Get parameter Array of the rule
-		int[] parameterIndexes = rule.getRuleParameterIndexes();
+		Integer[] parameterIndexes = rule.getRuleParameterIndexes();
 		
 		int i = 0;
 		// For Each Index
@@ -116,7 +116,7 @@ public class RuleActivation {
 	}
 	
 	public Map<Integer,ParameterBinding> getRuleParameterBindings() {
-		int[] ruleIndexes = this.rule.getRuleParameterIndexes();
+		Integer[] ruleIndexes = this.rule.getRuleParameterIndexes();
 		Map<Integer,ParameterBinding> tempMap = new HashMap<Integer,ParameterBinding>();
 		for(int index : ruleIndexes) {
 			tempMap.put(index, parameterBindings.get(index));
@@ -156,7 +156,7 @@ public class RuleActivation {
 				}
 			}
 		} else {
-			int[] ruleIndexes = this.rule.getRuleParameterIndexes();
+			Integer[] ruleIndexes = this.rule.getRuleParameterIndexes();
 			for(int index : ruleIndexes) {
 				ParameterBinding paramBinding = parameterBindings.get(index);
 				if(paramBinding != null) {
@@ -210,7 +210,7 @@ public class RuleActivation {
 	
 	public static int getRuleActivationKey(Rule rule, Map<Integer,ParameterBinding> parameters) {
 		
-		int[] ruleIndexes = rule.getRuleParameterIndexes();
+		Integer[] ruleIndexes = rule.getRuleParameterIndexes();
 		String finalValue = "";
 		for(int index : ruleIndexes) {
 			finalValue += parameters.get(index).getParameterValue()+",";
@@ -220,5 +220,24 @@ public class RuleActivation {
 		
 		
 		return GlobalFunctions.hash(rule.getRuleNameID() + finalValue);
+	}
+
+	public boolean match(String[] parameterValues, int eventID) {
+		Integer[] matchingIndexes;
+		
+		if(eventID == 0)
+			matchingIndexes = this.rule.getRuleParameterIndexes();
+		else
+			matchingIndexes = this.rule.getEventToRuleParameterMatching(eventID);
+		
+		for(int i=0;i<matchingIndexes.length;i++) {
+			
+			String ruleactivationValue = parameterBindings.get(matchingIndexes[i]).getParameterValue();
+			
+			if(!parameterValues[i].equals(ruleactivationValue))
+				return false;
+		}
+		
+		return true;
 	}
 }
