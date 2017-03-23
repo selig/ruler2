@@ -12,6 +12,7 @@ public class RuleActivation {
 	private final Map<Integer,ParameterBinding> parameterBindings;
 	// The Parameter Values
 	private HashMap<Integer,VariableBinding> variableBinding;
+	private final String parameterValues;
 	private final int parameterHashValue;
 	private final int ruleActivationID;
 	
@@ -19,7 +20,7 @@ public class RuleActivation {
 		this.rule = newRuleName;
 		initialiseVariableBinding();
 		this.parameterBindings = getParameterBindingSet(newRuleName,parameters);
-		String parameterValues = getOnlyRuleParameters();
+		this.parameterValues = getOnlyRuleParameters();
 		this.parameterHashValue = GlobalFunctions.hash(parameterValues);
 		this.ruleActivationID = GlobalFunctions.hash(this.rule.getRuleNameID() +parameterValues);
 	}
@@ -29,7 +30,7 @@ public class RuleActivation {
 		this.rule = Interface.ruleSystem.getRule(ruleName);
 		initialiseVariableBinding();
 		this.parameterBindings = getParameterBindingSet(this.rule,parameters,consequentIndexes);
-		String parameterValues = getOnlyRuleParameters();
+		this.parameterValues = getOnlyRuleParameters();
 		this.parameterHashValue = GlobalFunctions.hash(parameterValues);
 		this.ruleActivationID = GlobalFunctions.hash(this.rule.getRuleNameID() + parameterValues);
 	}
@@ -239,5 +240,9 @@ public class RuleActivation {
 		}
 		
 		return true;
+	}
+
+	public String getParameterValueKey() {
+		return parameterValues;
 	}
 }

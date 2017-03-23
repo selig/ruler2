@@ -12,13 +12,14 @@ public class RuleActivation {
 	private final Map<Integer,ParameterBinding> parameterBindings;
 	// The Parameter Values
 	private HashMap<Integer,VariableBinding> variableBinding;
-	private final int ruleActivationID;
+	private final String ruleActivationID;
 	
 	public RuleActivation(Rule newRuleName, String parameters) {
 		this.rule = newRuleName;
 		initialiseVariableBinding();
 		this.parameterBindings = getParameterBindingSet(newRuleName,parameters);
-		this.ruleActivationID = GlobalFunctions.hashName(this.rule.getRuleNameID() + getOnlyRuleParameters());
+		this.ruleActivationID = this.rule.getRuleNameID() + getOnlyRuleParameters();
+		//this.ruleActivationID = GlobalFunctions.hashName(this.rule.getRuleNameID() + getOnlyRuleParameters());
 	}
 	
 	public RuleActivation(String ruleName, Map<Integer,ParameterBinding> parameters, int[] consequentIndexes) {
@@ -26,7 +27,8 @@ public class RuleActivation {
 		this.rule = Interface.ruleSystem.getRule(ruleName);
 		initialiseVariableBinding();
 		this.parameterBindings = getParameterBindingSet(this.rule,parameters,consequentIndexes);
-		this.ruleActivationID = GlobalFunctions.hashName(this.rule.getRuleNameID() + getOnlyRuleParameters());
+		this.ruleActivationID = this.rule.getRuleNameID() + getOnlyRuleParameters();
+		//this.ruleActivationID = GlobalFunctions.hashName(this.rule.getRuleNameID() + getOnlyRuleParameters());
 	}
 	
 	private void initialiseVariableBinding() {
@@ -179,7 +181,7 @@ public class RuleActivation {
 		return GlobalFunctions.hashName(getParameters());
 	}
 
-	public int getRuleActivationID() {
+	public String getRuleActivationID() {
 		return ruleActivationID;
 	}
 	

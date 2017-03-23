@@ -3,6 +3,7 @@
  * @author Mantas
  *
  */
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class Update {
 		Interface.log(NEWLINE +"");
 		Interface.log(NEWLINE +" The Event - " + event.toString());
 		Interface.log(NEWLINE +"");
-		
+				
 		int eventId = event.getEventId();
 		
 		ActiveRuleSet activeRuleSet = Interface.activeRuleSet;
@@ -50,19 +51,16 @@ public class Update {
 				/* Get Trace and Rule Matching Parameter indexes */
 				Integer[] matchingIndexes = rule.getEventToRuleParameterMatching(eventId);
 				
-				/* Get Trace Matching Parameter Hash Value */
-				int eventParameterHashValue = event.getEventParametersHashValue(matchingIndexes);
-				
 				/* Get Trace Matching Parameter Values */
-				String[] eventParameters= event.getEventParameters(matchingIndexes);
+				String eventParameterValueKey = event.getEventParametersValueKey(matchingIndexes);
 				
 				/* Get Active Rule if Exists */
-				RuleActivation activation = activeRuleSet.getRuleActivationFromMapping(ruleID, eventParameterHashValue, eventParameters, eventId);
+				RuleActivation activation = activeRuleSet.getRuleActivationFromMapping(ruleID, eventParameterValueKey);
 				
 				if(activation == null)
 					continue ruleIdsLoop;
 				
-				Interface.log(NEWLINE +"Rule Activation: " + activation.getRule().getRuleName());
+				Interface.log(NEWLINE +"Rule Activation: " + activation);
 				
 				boolean activationFired = false;
 				
@@ -73,6 +71,7 @@ public class Update {
 						Interface.log(NEWLINE +"    True");						
 							
 /* * * * * * * * * * * * * *  Parameters */
+						Interface.log(NEWLINE + NEWLINE +"* * * * Parameters * * * * * * ");
 						
 						parameterValues = activation.getRuleParameterBindings();
 						/* Get Event Parameters */
@@ -109,6 +108,7 @@ public class Update {
 						}
 								
 /* * * * * * * * * * * * * *  Conditions */
+						Interface.log(NEWLINE +"* * * * Conditions * * * * * * ");
 						
 						int matchingRuleCount = 0;
 						matchingRules = new ArrayList<RuleActivation>();
@@ -122,7 +122,9 @@ public class Update {
 							}
 							
 							for(Condition condition : binding.getEventConditions()){
-								Interface.log(NEWLINE +"      Condition: " + condition.getCondition());
+								String conditionString = condition.getCondition();
+								conditionString = conditionString.equals("") ? "none" : conditionString;
+								Interface.log(NEWLINE +"      Condition: " + conditionString);
 								if(condition.getConditionType() == Condition.ConditionType.rule){
 									if(matchingRules.size() < 2) {
 										Interface.log(NEWLINE +"        Rule");
@@ -178,11 +180,9 @@ public class Update {
 											Interface.log(NEWLINE +"          All Parameters Known");
 											
 											/* Get rid of the comma in the end */
-											String paramValues = GlobalFunctions.subStringLast(values.toString(),1);
-											/* Get parameter hash value */
-											int parameterHash = GlobalFunctions.hash(paramValues);
+											String paramValueKey = GlobalFunctions.subStringLast(values.toString(),1);
 											/* Find The rule */
-											RuleActivation activeRule = activeRuleSet.getRuleActivationFromMapping(ruleNameID, parameterHash, paramValues.split(COMMA),0);
+											RuleActivation activeRule = activeRuleSet.getRuleActivationFromMapping(ruleNameID, paramValueKey);
 											/* Decision */
 											existanceOfRule = !(activeRule == null);
 										}
@@ -232,6 +232,7 @@ public class Update {
 							}
 								
 /* * * * * * * * * * * * * *  Consequent Rules */
+							Interface.log(NEWLINE + NEWLINE +"* * * * Consequent Rules * * * * * * ");
 														
 							for(ConsequentRule consequentRule : binding.getConsequentRules()) {
 								
@@ -268,7 +269,7 @@ public class Update {
 										ruleActivationsToDelete.add(toDeleteRuleActivation);
 									}
 									else {
-										Interface.log(NEWLINE +"++++++++Rule Add");
+										Interface.log(NEWLINE +"+++++ Add Rule To Temp Array");
 										// Add new RuleActivation to tempArray
 										tempActivations.add(new RuleActivation(consequentRule.getRuleName()+consequentRule.getConsequentRuleParameterSize()
 													, parameterValues,consequentIndexes));
@@ -291,6 +292,7 @@ public class Update {
 				}
 				
 /* * * * * * * * * * * * * *  Check (and Delete) Activation */
+Interface.log(NEWLINE + NEWLINE +"* * * * Check/ Delete Activations * * * * * * ");
 				
 				Rule.Modifier modifier = rule.getRuleModifier();
 				Interface.log(NEWLINE +"  Modifier - " + modifier);
@@ -307,7 +309,7 @@ public class Update {
 						ruleActivationsToDelete.add(activation);
 					}
 				} else {
-					Interface.log(NEWLINE +"  Modifier Always"); 
+					Interface.log(NEWLINE +"  Modifier Always - Do not Delete"); 
 				}
 				
 /* * * * * * * * * * * * * *  Check Assert Array of Rules */
@@ -321,14 +323,19 @@ public class Update {
 		for(RuleActivation activation : ruleActivationsToDelete) {
 			if(activeRuleSet.deleteActivation(activation))
 				Interface.log(NEWLINE +"      Deleted - " + activation.toString()+ NEWLINE);
-			else
+			else {
 				Interface.log(NEWLINE +"      Not Deleted - " + activation.toString() + NEWLINE);
+				return false;
+			}
 		}
 		
 		
-		/* Add New Activations */
+/* * * * * * *  * * * * * * Add New Activations */
+
+Interface.log(NEWLINE + NEWLINE +"* * * * Activate Rules * * * * * * ");
+
 		for(RuleActivation activation : tempActivations){
-			Interface.log(NEWLINE +"!! Add New Activation + + " + activation );
+			Interface.log(NEWLINE +"!! Activate New Rule Activation + + " + activation );
 			boolean ruleAdded = activeRuleSet.addNewActivation(activation);
 			
 			if(!ruleAdded) {

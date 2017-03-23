@@ -8,15 +8,15 @@ import java.util.Map.Entry;
 public class ActiveRuleSet {
 	//private final int id;
 	//              RuleID, RuleActivation
-	private HashMap<Integer,RuleActivation> ruleActivations;
+	private HashMap<String,RuleActivation> ruleActivations;
 	
 	public ActiveRuleSet() {
 		//this.id = GlobalVariables.getNextActiveRuleSetID();
-		this.ruleActivations = new HashMap<Integer,RuleActivation>();
+		this.ruleActivations = new HashMap<String,RuleActivation>();
 	}
 	
 	public void addNewActivation(RuleActivation newRuleActivation){
-		int key = newRuleActivation.getRuleActivationID();
+		String key = newRuleActivation.getRuleActivationID();
 
 		if(ruleActivations.get(key) == null) {
 			this.ruleActivations.put(key, newRuleActivation);
@@ -39,10 +39,10 @@ public class ActiveRuleSet {
 		String[] allActivations = new String[ruleActivations.size()];
 		
 		// Get a set of the entries
-	    Set<Entry<Integer, RuleActivation>> set = ruleActivations.entrySet();
+	    Set<Entry<String, RuleActivation>> set = ruleActivations.entrySet();
 	    
 	    // Get an iterator
-	    Iterator<Entry<Integer, RuleActivation>> i = set.iterator();
+	    Iterator<Entry<String, RuleActivation>> i = set.iterator();
 	    
 	    int index = 0;
 	    
@@ -62,7 +62,7 @@ public class ActiveRuleSet {
 	}
 
 	public boolean deleteActivation(RuleActivation activation) {
-		int ruleActivationKey = activation.getRuleActivationID();
+		String ruleActivationKey = activation.getRuleActivationID();
 		//System.out.println("Rule Activation key: " + ruleActivationKey); 
 		if(null == ruleActivations.remove(ruleActivationKey)){
 			return false;

@@ -286,8 +286,10 @@ public class Interface {
 	}
 	
 	public static void log(String message){
-		if(logOn) 
+		if(logOn) {
 			log.append(message);
+			//System.out.println(message);
+		}
 	}
 	
 	public void logNonStatic(String message){

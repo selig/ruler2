@@ -7,13 +7,13 @@ import java.util.Map.Entry;
 
 public class ActiveRuleSet {
 	private HashMap<Integer,RuleActivation> ruleActivations;
-	private HashMap<Integer,HashMap<Integer, RuleActivation>> ruleIDtoRuleActivationMapping;
+	private HashMap<Integer,HashMap<String, RuleActivation>> ruleIDtoRuleActivationMapping;
 	private int activeRuleCount;
 	
 	public ActiveRuleSet() {
 		//this.id = GlobalVariables.getNextActiveRuleSetID();
 		this.ruleActivations = new HashMap<Integer,RuleActivation>();
-		ruleIDtoRuleActivationMapping = new HashMap<Integer,HashMap<Integer, RuleActivation>>();
+		ruleIDtoRuleActivationMapping = new HashMap<Integer,HashMap<String, RuleActivation>>();
 		activeRuleCount = 0;
 	}
 	
@@ -25,12 +25,13 @@ public class ActiveRuleSet {
 			
 		int ruleId = newRuleActivation.getRule().getRuleNameID();
 		
-		Interface.log("Rule Activated: " + newRuleActivation.getRuleActivationID() + " " + newRuleActivation.toString() + "\n");
 		
 		boolean result = addRuleIdToRuleIdRuleActivationMapping(ruleId,newRuleActivation);
 		
-		if(result)
+		if(result) {
+			Interface.log("\n" + "Rule Activated: " + newRuleActivation.getRuleActivationID() + " " + newRuleActivation.toString() + "\n");
 			activeRuleCount++;
+		}
 		
 		return result;
 		//}
@@ -75,9 +76,9 @@ public class ActiveRuleSet {
 		
 		int count = 0;
 		for(Integer key1 : ruleIDtoRuleActivationMapping.keySet()){
-			HashMap<Integer,RuleActivation> map = ruleIDtoRuleActivationMapping.get(key1);
+			HashMap<String,RuleActivation> map = ruleIDtoRuleActivationMapping.get(key1);
 			if(map != null) {
-				for(Integer key2 : map.keySet()) {
+				for(String key2 : map.keySet()) {
 					 RuleActivation actRule = map.get(key2);
 					allActivations[count] = "< " + actRule.toString() + " >";
 					count++;
@@ -95,13 +96,11 @@ public class ActiveRuleSet {
 
 	public boolean deleteActivation(RuleActivation activation) {
 		
-		int ruleActivationKey = activation.getRuleActivationID();
-		
-		int parameterHashValue = activation.getParameterHashValue();
+		String parameterValueKey = activation.getParameterValueKey();
 		
 		int ruleID = activation.getRule().getRuleNameID();
 		
-		boolean result = deleteRuleActivationFromMapping(ruleID,parameterHashValue,ruleActivationKey,activation);
+		boolean result = deleteRuleActivationFromMapping(ruleID,parameterValueKey);
 		
 		if(result)
 			activeRuleCount--;
@@ -168,37 +167,20 @@ public class ActiveRuleSet {
 	private boolean addRuleIdToRuleIdRuleActivationMapping(int ruleId,
 			RuleActivation newRuleActivation) {
 		
-		HashMap<Integer, RuleActivation> parameterToActivationMapping;
+		HashMap<String, RuleActivation> parameterToActivationMapping;
 		
 		if((parameterToActivationMapping = getRuleIdToRuleActivationMappingMap(ruleId)) != null) {
 			
-			Integer parameterHashValue = newRuleActivation.getParameterHashValue();
+			//Integer parameterHashValue = newRuleActivation.getParameterHashValue();
+			String parameterValueKey = newRuleActivation.getParameterValueKey();
 			
-			RuleActivation ruleExist;
-			if((ruleExist= parameterToActivationMapping.get(parameterHashValue)) != null) {
-				/* Hash Clash Solving */
-				System.out.println("Rule Already exists.. " + ruleExist + " hash : " + parameterHashValue);
-				System.out.print("Rule New.. " + newRuleActivation);
-
-				while(!isSame(ruleExist,newRuleActivation)) {
-					/* rehash (Double) Hash */
-					int newHashValue = GlobalFunctions.hash(parameterHashValue+"");
-					
-					if((ruleExist= parameterToActivationMapping.get(newHashValue)) == null){
-						parameterToActivationMapping.put(newHashValue, newRuleActivation);
-						System.out.println(" But new Hash Found - " + newHashValue + "\n");
-						break;
-					}
-				}
-				
-			} else {
-				parameterToActivationMapping.put(parameterHashValue, newRuleActivation);
-			}
+			parameterToActivationMapping.put(parameterValueKey, newRuleActivation);
+			
 			
 		} else {
-			parameterToActivationMapping = new HashMap<Integer, RuleActivation>();
+			parameterToActivationMapping = new HashMap<String, RuleActivation>();
 			
-			parameterToActivationMapping.put(newRuleActivation.getParameterHashValue(), newRuleActivation);
+			parameterToActivationMapping.put(newRuleActivation.getParameterValueKey(), newRuleActivation);
 			
 			ruleIDtoRuleActivationMapping.put(ruleId, parameterToActivationMapping);
 		}
@@ -206,7 +188,7 @@ public class ActiveRuleSet {
 		return true;
 	}
 
-	private boolean isSame(RuleActivation ruleExist,
+	/*private boolean isSame(RuleActivation ruleExist,
 			RuleActivation newRuleActivation) {
 		
 		if(ruleExist == null || newRuleActivation == null)
@@ -233,61 +215,31 @@ public class ActiveRuleSet {
 			}
 		}
 		return true;
-	}
+	}*/
 
-	private HashMap<Integer, RuleActivation> getRuleIdToRuleActivationMappingMap(
+	private HashMap<String, RuleActivation> getRuleIdToRuleActivationMappingMap(
 			int ruleId) {
 		return ruleIDtoRuleActivationMapping.get(ruleId);
 	}
 
-	public RuleActivation getRuleActivationFromMapping(int ruleId, int parameterHash, String[] parameterValues, int eventID) {
-		HashMap<Integer, RuleActivation> map = ruleIDtoRuleActivationMapping.get(ruleId);
-		if(map != null) {
-			RuleActivation ruleActivation = null;
-			boolean activationFound = false;
-			int count =0;
-			do {
-				ruleActivation = map.get(parameterHash);
-				
-				if(ruleActivation != null) {				
-					if(ruleActivation.match(parameterValues,eventID)) {
-						activationFound = true;
-					}
-				}
-				/** Double hash */
-				parameterHash = GlobalFunctions.hash(parameterHash+"");
-				
-				count++;
-			} while(!activationFound && count < 100 );
-			return ruleActivation;
-		}
+	public RuleActivation getRuleActivationFromMapping(int ruleId, String parameterValueKey) {
+		
+		HashMap<String, RuleActivation> map = ruleIDtoRuleActivationMapping.get(ruleId);
+		
+		if(map != null) 
+			return map.get(parameterValueKey);
 		else 
 			return null;
 	}
 	
-	public boolean deleteRuleActivationFromMapping(int ruleId, int parameterHash, int ruleActivationID, RuleActivation activationToDelete) {
-		HashMap<Integer, RuleActivation> map = ruleIDtoRuleActivationMapping.get(ruleId);
+	public boolean deleteRuleActivationFromMapping(int ruleId, String parameterValueKey) {
+		
+		HashMap<String, RuleActivation> map = ruleIDtoRuleActivationMapping.get(ruleId);
 		
 		if(map == null)
 			return false;
-		
-		RuleActivation activation;
-		
-		do{
-			
-			activation = map.get(parameterHash);
-			
-			if(activation == null)
-				return false;
-			
-			if(!isSame(activation,activationToDelete))
-				parameterHash = GlobalFunctions.hash(parameterHash+"");
-			else
-				break;
-		}
-		while(true);
-		
-		map.remove(parameterHash);
+				
+		map.remove(parameterValueKey);
 		
 		if(map.size() == 0)
 			ruleIDtoRuleActivationMapping.remove(ruleId);

@@ -8,6 +8,9 @@ import java.util.Map;
 
 public class Update {
 	
+
+	private static String NEWLINE = "\n";
+	
 	private static Map<Integer, ParameterBinding> parameterValues;
 	private static ArrayList<RuleActivation> matchingRules;
 	private static ArrayList<Integer> missingIndexes;
@@ -73,7 +76,10 @@ public class Update {
 							}
 						}
 						
-	// ---------------- Parameters
+/* * * * * * * * * * * * * * Parameters */
+						
+						Interface.log(NEWLINE + NEWLINE +"* * * * Parameters * * * * * * ");
+						
 						parameterValues = activation.getRuleParameterBindings();
 						// Get Event Parameters
 						String[] eventParam = event.getEventParameters();
@@ -101,7 +107,10 @@ public class Update {
 							}
 						}
 							
-		// ---------------- Conditions
+/* * * * * * * * * * * * * * Conditions */
+
+						Interface.log(NEWLINE +"* * * * Conditions * * * * * * ");
+						
 						int matchingRuleIndex = 0;
 						matchingRules = new ArrayList<RuleActivation>();
 						missingIndexes = new ArrayList<Integer>();
@@ -225,15 +234,8 @@ public class Update {
 								}
 							}
 							
-		// ---------------- Consequent Rules
-							
-							//Parameter[] RuleParameterArray = rule.getParameters();
-										
-						/*	for(Integer key : activation.getVariableBindings().keySet()){
-								VariableBinding var = activation.getVariableBinding(key);
-								//System.out.println("[ "+key+" "+var.getVariableName() + " - " + var.getVariableValue() + " ]");
-							}
-							*/
+/* * * * * * * * * * * * * * Consequent Rules */
+							Interface.log(NEWLINE + NEWLINE +"* * * * Consequent Rules * * * * * * ");
 							
 							for(ConsequentRule consequentRule : binding.getConsequentRules()) {
 								
@@ -291,7 +293,9 @@ public class Update {
 					continue;
 				}
 			}
-//--------- Check (and Delete) Activation
+/* * * * * * * * *  Check (and Delete) Activation */
+			Interface.log(NEWLINE + NEWLINE +"* * * * Check/ Delete Activations * * * * * * ");
+			
 			Rule.Modifier modifier = rule.getRuleModifier();
 			Interface.log("\n" +"  Modifier - " + modifier);
 			if(modifier != Rule.Modifier.Always) {
@@ -309,7 +313,7 @@ public class Update {
 			} else {
 				Interface.log("\n" +"  Modifier Always"); 
 			}
-// -------- Check Assert Array of Rules
+/* * * * * * * * * Check Assert Array of Rules */
 			if(activationFired && rule.isAssert()) {
 				assertAccepted = true;
 			}
@@ -321,9 +325,11 @@ public class Update {
 			else
 				Interface.log("\n" +"      Not Deleted - " + activation.toString() + "\n");
 		}
+				
 		
+/* * * * * * * * * Add New Activations */
+		Interface.log(NEWLINE + NEWLINE +"* * * * Activate Rules * * * * * * ");
 		
-		// Add New Activations
 		for(RuleActivation activation : tempActivations){
 			Interface.log("\n" +"!! Add New Activation + + " + activation );
 			activeRuleSet.addNewActivation(activation);

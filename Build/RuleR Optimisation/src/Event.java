@@ -103,4 +103,10 @@ public class Event {
 		String values = GlobalFunctions.getValuesString(paramArray);
 		return GlobalFunctions.hash(values);
 	}
+
+	public String getEventParametersValueKey(Integer[] matchingIndexes) {
+		String[] paramArray = getEventParameters(matchingIndexes);
+		String values = GlobalFunctions.getValuesString(paramArray);
+		return values;
+	}
 }
