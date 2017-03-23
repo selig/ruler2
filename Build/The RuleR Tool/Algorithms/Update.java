@@ -39,6 +39,7 @@ public class Update {
 		// For all Active rules
 		for(RuleActivation activation : activeRuleSet.getArrayOfRuleActivations()){
 			// search rule with the event() (some fancy efficient way)
+			Interface.log(NEWLINE + NEWLINE +"* * * * Next Rule Activation * * * * * * ");
 			Interface.log("\n" +"Rule Activation: " + activation.getRule().getRuleName());
 			boolean activationFired = false;
 			// Get rule of active rule

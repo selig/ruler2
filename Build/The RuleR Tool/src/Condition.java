@@ -149,6 +149,7 @@ public class Condition {
 		return conditionNegation;
 	}
 
+	@SuppressWarnings("static-access")
 	public boolean isTrue(String parameterValue, String parameterValue2) {
 		
 		boolean result;

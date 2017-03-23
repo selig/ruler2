@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.TreeMap;
+
 import javax.swing.*;
+
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -54,17 +56,11 @@ public class Interface {
 	
 
 	private JFrame mainFrame;
-    //private JLabel ruleModifierLabel;
 	private JLabel ruleNameLabel;
 	private JLabel eventLabel;
-    //private JLabel eventLabel2;
     private JLabel ruleParameterLabel;
-    //private JLabel ruleEventLabel;
-    //private JLabel ruleConseqLabel;
     private JPanel controlPanel;
-    //private JPanel controlPanel2;
     private JPanel controlPanel4;
-    private JPanel controlPanel14;
     private JPanel fieldPanel;
     private JPanel fieldPanel2;
     private JPanel fieldPanel1;
@@ -108,23 +104,16 @@ public class Interface {
     }
     
     public static void main(String[] args){
-       
-    	/*System.out.println("nh - " + GlobalFunctions.hash("nh") + "\n"
-    			+ "hn - " + GlobalFunctions.hash("hn")  );
-    
-      System.exit(0);*/
     	
        Interface = new Interface();
        
        ruleSystem = new RuleSystem();
        
-       activeRuleSet = new ActiveRuleSet();
-       
-       //Interface.showEventDemo();       
+       activeRuleSet = new ActiveRuleSet(); 
     }
        
     private void prepareGUI(){
-   	      mainFrame = new JFrame("RuleR Tool - Optimized");
+   	      mainFrame = new JFrame("RuleR Tool - Basic Implementation");
  	      mainFrame.setSize(1000,800);
  	      mainFrame.add(new Tabbed(), BorderLayout.CENTER);
  	      mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -168,8 +157,6 @@ public class Interface {
   	  			error(START_RULE_PARAMETER);
   	  			return;
   	  		}
-  	  	
-	  		  //headerLabel.setBackground(Color.WHITE);
 	  		  
 	  	  	  String ruleModifier = modifierGroup.getSelection().getActionCommand();	
 	  		  RuleNameArea.setBackground(Color.WHITE);
@@ -177,7 +164,6 @@ public class Interface {
 	      	  ArrayList<RuleBinding> ruleBindigsArrayList = new ArrayList<RuleBinding>();
 	  		  
 	      	  for (Component c : inside.getComponents()) {
-		    	  //System.out.println(">" + c);
 		    	  if (c instanceof EventForm) {
 				  	RuleBinding binding = ((EventForm) c).ruleBinding();
 	    		  	if(binding == null) {
@@ -198,8 +184,6 @@ public class Interface {
 	      		  error(RULE_EXIST);
 	      		  return;
 	  	  	  }
-	      	  
-	          //statusLabel.setText( "Added Rule "+ruleName);
 	      	  success("Rule " + ruleName + " added successfully");
 	      	  updateRuleSystemGUI(myRule.getRuleNameID());
   	  	
@@ -232,8 +216,7 @@ public class Interface {
 	}
 
 	private void updateRuleSystemGUI(Integer ruleNameID){
-	      //headerLabel.setText("Rule Added"); 
-	      //ObjectLabel.setText(/*ObjectLabel.getText() + " | " +*/ ruleSystem.getRules() + "<! "+time() +" !>");      
+		
 		System.out.println(ruleSystem.getOneRule(ruleNameID));
 		ruleSystemInside.add(new RuleString(ruleSystem.getOneRule(ruleNameID)));
 		ruleSystemInside.revalidate();
@@ -288,7 +271,6 @@ public class Interface {
 	public static void log(String message){
 		if(logOn) {
 			log.append(message);
-			//System.out.println(message);
 		}
 	}
 	
@@ -297,7 +279,6 @@ public class Interface {
 	}
 	
 	public static ArrayList<String[]> readLine(File fileName) {
-		//System.out.println("Start Reading file");
 		ArrayList<String[]> lines = new ArrayList<String[]>();
 		FileReader file = null;
 		BufferedReader input = null;
@@ -309,9 +290,7 @@ public class Interface {
 			
 			String line;
 			while((line = input.readLine()) != null) {
-				//System.out.println("Line - " + line);
 				String[] array = line.split("\\.");
-				//System.out.println("Array - " + array.length);
 				lines.add(array);
 			}
 			
@@ -332,9 +311,7 @@ public class Interface {
 				e.printStackTrace();
 			}
 		}
-		
-		//System.out.println("Finish Reading file");
-		
+				
 		return lines;
 	}
 
@@ -376,9 +353,6 @@ public class Interface {
 	}
 	
 	protected static void end() {
-		
-		//System.out.println(time());
-		
 		System.exit(0);	
 	}
 	
@@ -401,7 +375,6 @@ public class Interface {
 		
 	   public EventForm() {
 		    super(new FlowLayout());
-		    //super(new GridLayout(1, 1));
 			
 			eventName = new JLabel("Event Name",JLabel.LEFT);
 			eventCondition = new JLabel("Event Condition",JLabel.LEFT);
@@ -460,12 +433,7 @@ public class Interface {
 			String eventName = eventNameArea.getText();
 			String eventParameterString = eventParameterArea.getText();
 			String eventConditionString = eventConditionArea.getText();
-			
-			/*
-			 * Add Check that parameters are not the same
-			 * isDuplicate(); 
-			 * */
-			
+						
 			String[] eventParameters = GlobalFunctions.removeWhiteSpaces(eventParameterString).split(",");
 			String[] eventConditions = GlobalFunctions.removeWhiteSpaces(eventConditionString).split(",");
 			
@@ -527,10 +495,6 @@ public class Interface {
 			String consequentNameString = eventConsequentArea.getText();
 			String[] eventConsequentParameters = GlobalFunctions.removeWhiteSpaces(eventConsequentParameterArea.getText()).split(",");
 			
-			/*
-			 * Add Check that parameters are not the same 
-			 * */
-			
 			if(!consequentNameString.equals(""))
 				return new ConsequentRule(consequentNameString, eventConsequentParameters);
 			else return null;
@@ -546,9 +510,7 @@ public class Interface {
 	        super(new GridLayout(1, 1));
 	        
 	        TabbedPane = new JTabbedPane();
-	        TabbedPane.setBackground(Color.darkGray);
-	        TabbedPane.setForeground(Color.white);
-	        ImageIcon icon = null;// = createImageIcon("images/middle.gif");
+	        ImageIcon icon = null;
 	        
 	        panel0 = new Reset();
 	        TabbedPane.addTab("Reset Tool", icon, panel0,
@@ -607,9 +569,7 @@ public class Interface {
 
 		public Reset() {
 			super(new FlowLayout());
-	        
-			//controlPanel4 = new JPanel();
-			
+	        			
 			JButton resetRS = new JButton("Reset Rule System");
 			resetRS.setActionCommand("resetRS");
 			resetRS.addActionListener(new ActionListener() {
@@ -660,7 +620,6 @@ public class Interface {
 		private static final long serialVersionUID = 1L;
 
 		public RuleForm() {
-			//super(new GridLayout(1, 1));
 			super(new FlowLayout());
 			
 			ruleNameLabel = new JLabel("Rule Name",JLabel.LEFT);
@@ -670,7 +629,6 @@ public class Interface {
 	 	    RuleParameterArea = new JTextArea(RULE_PARAM,2,10);
 	 	    
 	 	    controlPanel = new JPanel();
-	 	    //controlPanel.setLayout(new GridLayout(1,4));
 	 	    controlPanel.setLayout(new FlowLayout());
 	 	      
 	 	      JRadioButton startButton = new JRadioButton("Start");
@@ -755,7 +713,6 @@ public class Interface {
 	 	      
 	 	      inside = new JPanel();
 	 	      inside.setLayout(new GridLayout(0,1));
-	 	      //inside.setLayout(new FlowLayout());
 	 	      scrollFrame = new JScrollPane(inside);
 	 	      scrollFrame.setPreferredSize(new Dimension(1000,600));
 	 	      inside.setAutoscrolls(true);
@@ -802,7 +759,6 @@ public class Interface {
 	 	          }
 	 	        }); 
 	 	      
-	 	      //controlPanel4.add(newEventButton);
 	 	      controlPanel4.add(new FileChooser("rule"));
 	 	      controlPanel4.add(new JLabel(" OR ",JLabel.LEFT));
 	 	      controlPanel4.add(addButton);
@@ -876,8 +832,6 @@ public class Interface {
 			
 			ruleString = new JLabel(Rule,JLabel.LEFT);
 			
-			//Interface.logNonStatic("Rule Added : " + Rule + "\n");
-			
 			rulePanel = new JPanel();
 			rulePanel.setLayout(new FlowLayout());
 			
@@ -922,9 +876,6 @@ public class Interface {
 	 	      
  	        eventPanel.add(addButton);
  	        
- 	        /*eventLabe2 = new JLabel("Event",JLabel.LEFT);
-			eventArea2 = new JTextArea("open(file)",2,10);
-			*/
 			eventPane2 = new JPanel();
 			eventPane2.setLayout(new FlowLayout());
 			
@@ -951,23 +902,18 @@ public class Interface {
 			runFile.setActionCommand("runFile");
 			runFile.addActionListener(new ActionListener() {
  	          public void actionPerformed(ActionEvent e) {
- 	        	//System.out.println("Run File");
  	        	 if(tests != null && tests.size() > 0){
  	        		 
  	        		TabbedPane.setSelectedIndex(5);
-
- 	 	        	//System.out.println("Button pressed. Runing");
  	 	        	
  	 	        	TestRun();
  	 	        	
- 	        	 }/*else 
- 	 	        	 //System.out.println("Button pressed. not running");*/
+ 	        	 }
  	          }
  	        });  
  	       eventPane2.add(runFile);
  	       
  	      eventLog = new JTextArea(10,85);
-		//log.setMargin(new Insets(5,5,5,5));
  	     eventLog.setEditable(false);
 		JScrollPane logScrollPane = new JScrollPane(eventLog);
 		eventPane2.add(logScrollPane, BorderLayout.CENTER);
@@ -985,7 +931,6 @@ public class Interface {
 	        	  TabbedPane.setSelectedIndex(4);
 	        	  
 	        	  File folder = FOLDER;
-	        	  //File folder = new File("/Users/you/folder/");
 	        	  File[] listOfFiles = folder.listFiles();
 
 	        	  TestResultTable = new TreeMap<Integer, String>();
@@ -1008,7 +953,6 @@ public class Interface {
 			eventPane3.add(runFolder);
 			
 			eventLog2 = new JTextArea(5,60);
-			//log.setMargin(new Insets(5,5,5,5));
 	 	     eventLog2.setEditable(false);
 			JScrollPane logScrollPane2 = new JScrollPane(eventLog2);
 			eventPane3.add(logScrollPane2, BorderLayout.CENTER);
@@ -1026,7 +970,6 @@ public class Interface {
 	  throws Exception
 	  {
 	    // open the sound file as a Java input stream
-	    //String gongFile = "/Users/al/DevDaily/Projects/MeditationApp/resources/gong.au";
 	    InputStream in = new FileInputStream(sound);
 
 	    // create an audiostream from the inputstream
@@ -1040,7 +983,6 @@ public class Interface {
 		try {
 			playSound(successSound);
 	   } catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 	   }
 	}
@@ -1053,11 +995,9 @@ public class Interface {
 
  		Interface.ResetActiveRules();
  		
- 		long startTime;// = System.nanoTime();
+ 		long startTime;
  		long endTime;
  		int eventsCount = 0;
- 		
- 		int flag = 0;
  		
  		long[] testResults = new long[numberOfTestRuns];
  		
@@ -1070,8 +1010,6 @@ public class Interface {
 			Interface.ResetActiveRules();
 			eventLogs = "";
 			eventsCount = 0;
-			flag = no;
-			
 			startTime = System.nanoTime();
 	 			
 	 		tests : for(String[] events : tests){
@@ -1138,7 +1076,6 @@ public class Interface {
 		}
 		
 		Interface.logNonStatic("**  Status : " + result+"\n");
-		//Interface.logNonStatic("**  Events Log : " + eventLogs+"\n");
 		Interface.logNonStatic("**  Event Executed : " + eventsCount+"\n");
 		long finaltime = ((endTime - startTime) / 1000000);
 		Interface.logNonStatic("**  Total execution time: " + finaltime + "ms\n" );
@@ -1151,16 +1088,12 @@ public class Interface {
 			
 			if(numberOfTestRuns == no+1) {
 		 	
-			 	//Interface.logNonStatic("___________________________________________________________\n");
 			 	String text = "";
 			 	long average = 0;
 			 	for(long num : testResults) {
 			 		text += num + ", ";
 			 		average += num;
 			 	}
-			 	/*Interface.logNonStatic("** events:"+ eventsCount +" **\n");
-			 	Interface.logNonStatic("** av: "+ (float)(average/numberOfTestRuns) +","+ text +" **\n");
-			 	Interface.logNonStatic("___________________________________________________________\n");*/
 			 	
 			 	TestResultTable.put(eventsCount,(float)(average/numberOfTestRuns) +","+ text);
 			}
@@ -1180,12 +1113,12 @@ public class Interface {
 		Interface.logNonStatic("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	}
 
+	@SuppressWarnings("serial")
 	class LogGUI extends JPanel {
 		public LogGUI() {
 			super(new GridLayout(0,1));
 			
 			log = new JTextArea(0,1);
-			//log.setMargin(new Insets(5,5,5,5));
 	 	    log.setEditable(false);
 			
 	 	    JScrollPane scroll = new JScrollPane(log);

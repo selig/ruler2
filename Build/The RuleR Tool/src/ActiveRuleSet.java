@@ -28,10 +28,10 @@ public class ActiveRuleSet {
 		return  (RuleActivation[]) ruleActivations.values().toArray(new RuleActivation[0]);
 	}
 	
-	public boolean activeRuleExist(String RuleName){
-		int key = GlobalFunctions.hashName(RuleName);
+	public boolean activeRuleExist(String RuleNameKey){
+		//int key = GlobalFunctions.hashName(RuleName);
 		//System.out.println("-------   Find active rule " + RuleName + " " + key);
-		return this.ruleActivations.get(key) != null;
+		return this.ruleActivations.get(RuleNameKey) != null;
 	}
 	
 	public String[] getActivations() {
